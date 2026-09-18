@@ -8,8 +8,9 @@ Denoising Diffusion Probabilistic Models (Ho, Jain, Abbeel; NeurIPS 2020). 확�
 | 학회 | NeurIPS 2020 · arXiv 2006.11239 |
 | 코드 | github.com/hojonathanho/diffusion (TensorFlow) |
 | 핵심 수치 | CIFAR10 무조건부 FID 3.17, IS 9.46, NLL 3.75 bits/dim |
-| Stored PDF | **아직 `papers/`에 없다.** arXiv 2006.11239에서 받아 `papers/NeurIPS20_DDPM_Denoising_Diffusion_Probabilistic_Models.pdf`로 두면 이름이 맞는다 |
-| 읽은 범위 | 논문 §1~§4와 부록 B. 표 1·2·3·4의 수치와 부록 B의 하이퍼파라미터를 옮겼다 |
+| Stored PDF | `papers/NeurIPS20_DDPM_Denoising_Diffusion_Probabilistic_Models.pdf` (**NeurIPS 발표본 12쪽, 31.5MB.** 8쪽의 보간 그림 하나가 16.1MB다) |
+| 읽은 범위 | 논문 §1~§6과 부록 B. 표 1·2·3·4의 수치와 부록 B의 하이퍼파라미터를 옮겼다 |
+| 저장본의 범위 | **저장한 PDF에는 부록이 없다.** 본문 §1~§6과 Broader Impact, 참고 문헌까지다. **Section 10의 실험 설정은 부록 B의 값이므로 arXiv 2006.11239 판에서 옮긴 것**이고 이 PDF로는 확인할 수 없다 |
 
 > **이 노트의 출처.** 2026-09-17에 만든 아티팩트 「DDPM 논문 해부」를 마크다운으로 옮긴 것이다. 그림 열 개는 그 아티팩트의 SVG를 그대로 떼어 `figures/NeurIPS20_DDPM/`에 두었고, 색만 밝은 판 값으로 고정했다. 원본 그대로의 판은 같은 폴더의 `.artifact.html`에 있다.
 >
@@ -324,7 +325,7 @@ $$p_\theta(\mathbf{x}_0\mid\mathbf{x}_1)=\prod_{i=1}^{D}\int_{\delta_-(x_0^i)}^{
 
 ## 10. 실험 설정
 
-*논문 §4, 부록 B*
+*논문 §4, 부록 B (저장한 PDF에는 부록이 없다. 아래 값은 arXiv 2006.11239 판에서 옮겼다)*
 
 | 항목 | 값 |
 |---|---|
