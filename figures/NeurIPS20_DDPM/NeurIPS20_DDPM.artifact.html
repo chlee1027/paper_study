@@ -1,0 +1,855 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>DDPM 논문 해부</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600&family=Noto+Serif+KR:wght@600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#F6F7F5;
+  --surface:#ECEFEC;
+  --surface-2:#E1E6E3;
+  --ink:#1C232C;
+  --ink-2:#4E5964;
+  --muted:#7A8590;
+  --line:#CFD6D3;
+  --fwd:#2E6B8A;      /* 순방향 q: 잡음을 더하는 과정 */
+  --fwd-soft:#D8E7EE;
+  --rev:#B4552B;      /* 역방향 p_theta: 잡음을 걷는 과정 */
+  --rev-soft:#F2DED2;
+  --code-bg:#E8ECEA;
+  --font-body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --font-head:"Noto Serif KR","Apple Myungjo","Batang",serif;
+  --font-mono:"IBM Plex Mono",Consolas,"D2Coding",monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#151A1F; --surface:#1D242B; --surface-2:#262E36;
+    --ink:#E7EAEC; --ink-2:#B4BCC4; --muted:#8792A0; --line:#37414B;
+    --fwd:#7FB6D3; --fwd-soft:#1F3542; --rev:#E3915F; --rev-soft:#3E2A1F;
+    --code-bg:#20272E;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#151A1F; --surface:#1D242B; --surface-2:#262E36;
+  --ink:#E7EAEC; --ink-2:#B4BCC4; --muted:#8792A0; --line:#37414B;
+  --fwd:#7FB6D3; --fwd-soft:#1F3542; --rev:#E3915F; --rev-soft:#3E2A1F;
+  --code-bg:#20272E;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.75;-webkit-font-smoothing:antialiased}
+a{color:var(--fwd);text-decoration-thickness:1px;text-underline-offset:3px}
+a:focus-visible,button:focus-visible{outline:2px solid var(--rev);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:20px;padding-block:0 80px}
+
+/* 머리 */
+header.masthead{padding-block:40px 28px;border-bottom:1px solid var(--line)}
+.eyebrow{font-family:var(--font-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1{font-family:var(--font-head);font-weight:700;font-size:clamp(30px,4.2vw,44px);line-height:1.2;margin:10px 0 6px;text-wrap:balance}
+.sub{font-size:17px;color:var(--ink-2);max-width:62ch;margin:0 0 20px}
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px 24px;font-size:14px;color:var(--ink-2);border-top:1px solid var(--line);padding-top:16px}
+.meta b{display:block;color:var(--muted);font-family:var(--font-mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;font-weight:500;margin-bottom:2px}
+
+/* 본문 격자 */
+.grid{display:grid;grid-template-columns:1fr;gap:32px;padding-top:28px}
+@media (min-width:1000px){.grid{grid-template-columns:230px minmax(0,1fr);gap:56px}}
+nav.toc{font-size:14px;line-height:1.5}
+@media (min-width:1000px){nav.toc{position:sticky;top:env(safe-area-inset-top,0px);align-self:start;padding-top:8px;max-height:100vh;overflow:auto}}
+nav.toc ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+@media (max-width:999px){nav.toc ol{flex-direction:row;flex-wrap:wrap;gap:6px 14px}}
+nav.toc a{color:var(--ink-2);text-decoration:none;display:flex;gap:8px}
+nav.toc a:hover{color:var(--ink)}
+nav.toc .n{font-family:var(--font-mono);font-size:12px;color:var(--muted);min-width:1.6em}
+nav.toc .h{font-family:var(--font-mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+@media (max-width:999px){nav.toc .h{display:none}}
+
+main{min-width:0;max-width:74ch}
+section{padding-block:22px 10px;border-top:1px solid var(--line)}
+section:first-child{border-top:0;padding-top:0}
+h2{font-family:var(--font-head);font-weight:600;font-size:26px;line-height:1.3;margin:0 0 4px;text-wrap:balance}
+h2 .sec{display:block;font-family:var(--font-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;font-weight:500}
+h3{font-family:var(--font-body);font-weight:600;font-size:17.5px;margin:26px 0 6px}
+p{margin:10px 0}
+ul,ol{padding-left:1.3em;margin:8px 0}
+li{margin:4px 0}
+li::marker{color:var(--muted)}
+strong{font-weight:600}
+.term{border-bottom:1px dotted var(--muted)}
+.note{background:var(--surface);border-left:3px solid var(--line);padding:12px 16px;margin:14px 0;font-size:15px}
+.note.fwd{border-left-color:var(--fwd)}
+.note.rev{border-left-color:var(--rev)}
+.kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin:16px 0}
+.kv div{background:var(--surface);padding:12px 14px}
+.kv b{display:block;font-family:var(--font-mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.kv span{font-family:var(--font-mono);font-size:22px;font-variant-numeric:tabular-nums;line-height:1.3}
+.kv small{display:block;font-size:12.5px;color:var(--ink-2)}
+
+/* 수식 */
+.eq{margin:12px 0;padding:8px 14px;overflow-x:auto;font-size:15.5px}
+.eq.num{display:flex;align-items:center;gap:12px}
+.eq.num .tag{margin-left:auto;font-family:var(--font-mono);font-size:12px;color:var(--muted);white-space:nowrap}
+mjx-container{overflow-x:auto;overflow-y:hidden}
+code{font-family:var(--font-mono);font-size:.9em;background:var(--code-bg);padding:1px 5px;border-radius:3px}
+pre{font-family:var(--font-mono);font-size:13.5px;line-height:1.6;background:var(--code-bg);padding:14px 16px;overflow-x:auto;margin:12px 0;border:1px solid var(--line)}
+pre code{background:none;padding:0;font-size:inherit}
+pre .c{color:var(--muted)}
+pre .h{color:var(--rev);font-weight:500}
+
+/* 표 */
+.tbl{overflow-x:auto;margin:14px 0}
+table{border-collapse:collapse;width:100%;font-size:14px;font-variant-numeric:tabular-nums}
+caption{text-align:left;font-size:13px;color:var(--ink-2);padding:0 0 8px;caption-side:top}
+th,td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font-family:var(--font-mono);font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:500;border-bottom:1px solid var(--ink-2)}
+td.num,th.num{text-align:right;font-family:var(--font-mono);font-size:13.5px}
+tr.ours td{background:var(--surface);font-weight:500}
+td.dash{color:var(--muted)}
+.tbl-note{font-size:13px;color:var(--ink-2);margin:6px 0 0}
+
+/* 그림 */
+figure{margin:20px 0;padding:16px 12px 10px;background:var(--surface);border:1px solid var(--line)}
+figure svg{display:block;max-width:100%;height:auto;margin:0 auto;font-family:var(--font-body)}
+figcaption{font-size:13.5px;color:var(--ink-2);margin-top:10px;line-height:1.55}
+figcaption b{color:var(--ink)}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--ink-2);margin-top:6px}
+.legend i{display:inline-block;width:22px;height:3px;vertical-align:middle;margin-right:6px}
+.legend i.f{background:var(--fwd)}.legend i.r{background:var(--rev)}
+
+/* 알고리즘 2단 */
+.algos{display:grid;grid-template-columns:1fr;gap:14px}
+@media (min-width:720px){.algos{grid-template-columns:1fr 1fr}}
+.algos pre{margin:0;height:100%}
+.algos h4{margin:0 0 6px;font-size:14px;font-family:var(--font-mono);font-weight:500;color:var(--ink-2)}
+
+.refs{font-size:14px;color:var(--ink-2)}
+.refs li{margin:5px 0}
+footer{margin-top:30px;padding-top:14px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+@media (prefers-reduced-motion: reduce){*{scroll-behavior:auto!important}}
+html{scroll-behavior:smooth}
+</style>
+
+<script>
+window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},svg:{fontCache:'global'},options:{skipHtmlTags:['script','noscript','style','textarea','pre','code']}};
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.js"></script>
+
+<div class="wrap">
+<header class="masthead">
+  <div class="eyebrow">논문 분석 · 생성 모델 · 2020</div>
+  <h1>DDPM 논문 해부</h1>
+  <p class="sub">Denoising Diffusion Probabilistic Models (Ho, Jain, Abbeel; NeurIPS 2020). 확산 모델이 왜 이 논문에서부터 "쓸 만한" 생성 모델이 되었는지, 수식 한 줄 한 줄이 무엇을 결정하는지를 따라가는 읽기 안내서다.</p>
+  <div class="meta">
+    <div><b>저자</b>Jonathan Ho, Ajay Jain, Pieter Abbeel (UC Berkeley)</div>
+    <div><b>학회</b>NeurIPS 2020 · arXiv 2006.11239</div>
+    <div><b>코드</b>github.com/hojonathanho/diffusion (TensorFlow)</div>
+    <div><b>핵심 수치</b>CIFAR10 무조건부 FID 3.17, IS 9.46, NLL 3.75 bits/dim</div>
+  </div>
+</header>
+
+<div class="grid">
+<nav class="toc" aria-label="목차">
+  <div class="h">차례</div>
+  <ol>
+    <li><a href="#s1"><span class="n">1</span>한 문단 요약</a></li>
+    <li><a href="#s2"><span class="n">2</span>배경과 문제 설정</a></li>
+    <li><a href="#s3"><span class="n">3</span>순방향 과정 q</a></li>
+    <li><a href="#s4"><span class="n">4</span>역방향 과정 p_θ</a></li>
+    <li><a href="#s5"><span class="n">5</span>변분 하한과 L_{t-1}</a></li>
+    <li><a href="#s6"><span class="n">6</span>ε-예측과 L_simple</a></li>
+    <li><a href="#s7"><span class="n">7</span>학습·샘플링 알고리즘</a></li>
+    <li><a href="#s8"><span class="n">8</span>스코어 매칭과의 연결</a></li>
+    <li><a href="#s9"><span class="n">9</span>마지막 단계 L_0</a></li>
+    <li><a href="#s10"><span class="n">10</span>실험 설정</a></li>
+    <li><a href="#s11"><span class="n">11</span>결과와 소거 실험</a></li>
+    <li><a href="#s12"><span class="n">12</span>점진적 부호화 해석</a></li>
+    <li><a href="#s13"><span class="n">13</span>한계</a></li>
+    <li><a href="#s14"><span class="n">14</span>이후 연구로 이어지는 선</a></li>
+    <li><a href="#s15"><span class="n">15</span>읽을 때 헷갈리는 지점</a></li>
+    <li><a href="#refs"><span class="n">R</span>참고 문헌</a></li>
+  </ol>
+</nav>
+
+<main>
+
+<section id="s1">
+  <h2><span class="sec">Section 1</span>한 문단 요약</h2>
+  <p>이 논문은 <span class="term">확산 모델</span>(데이터에 잡음을 조금씩 더해 완전한 가우시안 잡음으로 만드는 고정된 과정을 정의하고, 그 과정을 거꾸로 되돌리는 신경망을 학습하는 생성 모델. Sohl-Dickstein 등 2015가 제안)을 세 가지 결정으로 다시 짰다. 첫째, 역방향 신경망이 "평균"이 아니라 "더해진 잡음 ε"을 예측하게 했다. 둘째, 변분 하한의 가중치를 버린 단순 손실 <em>L</em><sub>simple</sub>로 학습했다. 셋째, 분산은 학습하지 않고 고정했다. 그 결과 CIFAR10 무조건부 생성에서 FID 3.17로 당시 GAN 계열과 같은 수준에 도달했고, 이 학습식이 <span class="term">잡음 제거 스코어 매칭</span>(잡음이 섞인 데이터의 로그 밀도 기울기를 학습하는 방법)과 같은 것임을 밝혔다. 또한 확산 모델을 점진적 손실 압축기로 읽을 수 있음을 보여, 비트 수 대부분이 눈에 보이지 않는 세부에 쓰인다는 사실도 확인했다.</p>
+  <div class="kv">
+    <div><b>CIFAR10 FID</b><span>3.17</span><small>낮을수록 좋음. 무조건부 모델 중 최저</small></div>
+    <div><b>CIFAR10 IS</b><span>9.46</span><small>높을수록 좋음. ±0.11</small></div>
+    <div><b>NLL (test)</b><span>3.75</span><small>bits/dim. 자기회귀 모델보다 나쁨</small></div>
+    <div><b>샘플링 스텝</b><span>1000</span><small>신경망을 1000번 통과해야 한 장</small></div>
+  </div>
+</section>
+
+<section id="s2">
+  <h2><span class="sec">Section 2 · 논문 §1</span>배경과 문제 설정</h2>
+  <p>2020년 시점의 이미지 생성 모델은 크게 넷이었다. <strong>GAN</strong>(판별기와 생성기를 맞붙이는 방식. 샘플은 좋지만 우도를 계산할 수 없고 학습이 불안정함), <strong>VAE</strong>(잠재 변수를 두고 변분 하한을 최대화. 우도는 있으나 샘플이 흐림), <strong>자기회귀 모델</strong>(픽셀을 하나씩 순서대로 예측. 우도는 가장 좋지만 샘플링이 느림), <strong>흐름 모델</strong>(가역 변환을 쌓아 정확한 우도를 계산. 구조 제약이 큼). 확산 모델은 2015년에 제안되었지만 이 논문 이전에는 위 넷과 겨룰 만한 샘플을 낸 적이 없었다.</p>
+  <p>확산 모델의 뼈대는 <span class="term">마르코프 체인</span>(다음 상태가 바로 앞 상태에만 의존하는 확률 과정) 둘이다.</p>
+  <ul>
+    <li><strong>순방향(확산) 과정 q</strong>: 데이터 \(\mathbf{x}_0\)에서 시작해 \(T\)단계 동안 가우시안 잡음을 더한다. 학습 파라미터가 없다.</li>
+    <li><strong>역방향(생성) 과정 p<sub>θ</sub></strong>: 순수 잡음 \(\mathbf{x}_T\)에서 시작해 한 단계씩 잡음을 걷어 \(\mathbf{x}_0\)로 돌아온다. 각 단계의 가우시안 평균을 신경망이 낸다.</li>
+  </ul>
+  <p>논문의 질문은 "이 역방향 과정을 어떻게 파라미터화하고 어떤 손실로 학습해야 샘플 품질이 나오는가"다. 답이 나온 자리는 §3.2의 ε-예측과 §3.4의 <em>L</em><sub>simple</sub>이다.</p>
+</section>
+
+<section id="s3">
+  <h2><span class="sec">Section 3 · 논문 §2</span>순방향 과정 q</h2>
+  <p>순방향 과정은 미리 정한 분산 스케줄 \(\beta_1,\dots,\beta_T\)에 따라 잡음을 더하는 고정된 가우시안 전이다.</p>
+  <div class="eq">\[ q(\mathbf{x}_t \mid \mathbf{x}_{t-1}) = \mathcal{N}\!\left(\mathbf{x}_t;\ \sqrt{1-\beta_t}\,\mathbf{x}_{t-1},\ \beta_t\mathbf{I}\right),\qquad q(\mathbf{x}_{1:T}\mid\mathbf{x}_0)=\prod_{t=1}^{T} q(\mathbf{x}_t\mid\mathbf{x}_{t-1}) \]</div>
+  <p>평균에 \(\sqrt{1-\beta_t}\)를 곱하는 이유는 신호를 조금 줄이면서 잡음을 더해 <strong>분산을 1 근방으로 유지</strong>하기 위해서다. 그래야 \(T\) 단계 뒤 \(\mathbf{x}_T\)가 표준 정규분포 \(\mathcal{N}(\mathbf{0},\mathbf{I})\)에 닿는다.</p>
+  <p>가우시안을 여러 번 합성한 결과도 가우시안이므로, 중간 단계를 거치지 않고 \(\mathbf{x}_0\)에서 임의의 \(\mathbf{x}_t\)를 한 번에 뽑을 수 있다. 이것이 논문 전체에서 가장 자주 쓰이는 식이다.</p>
+  <div class="eq">\[ \alpha_t := 1-\beta_t,\qquad \bar\alpha_t := \prod_{s=1}^{t}\alpha_s,\qquad q(\mathbf{x}_t\mid\mathbf{x}_0)=\mathcal{N}\!\left(\mathbf{x}_t;\ \sqrt{\bar\alpha_t}\,\mathbf{x}_0,\ (1-\bar\alpha_t)\mathbf{I}\right) \]</div>
+  <div class="eq">\[ \text{즉}\quad \mathbf{x}_t = \sqrt{\bar\alpha_t}\,\mathbf{x}_0 + \sqrt{1-\bar\alpha_t}\,\boldsymbol\epsilon,\qquad \boldsymbol\epsilon\sim\mathcal{N}(\mathbf{0},\mathbf{I}) \]</div>
+  <p>논문은 \(T=1000\), \(\beta_1=10^{-4}\)에서 \(\beta_T=0.02\)까지 선형으로 늘리는 스케줄을 썼다. 이 스케줄을 실제로 곱해 보면 신호 계수 \(\sqrt{\bar\alpha_t}\)가 어떻게 사라지는지 보인다.</p>
+  <div class="tbl">
+  <table>
+    <caption>선형 스케줄(T=1000, β 10⁻⁴에서 0.02)에서 계산한 값. 신호 계수와 잡음 계수는 x_t = (신호 계수)·x_0 + (잡음 계수)·ε의 두 계수다.</caption>
+    <thead><tr><th class="num">t</th><th class="num">β_t</th><th class="num">ᾱ_t</th><th class="num">신호 계수 √ᾱ_t</th><th class="num">잡음 계수 √(1-ᾱ_t)</th><th>상태</th></tr></thead>
+    <tbody>
+      <tr><td class="num">1</td><td class="num">0.0001</td><td class="num">0.9999</td><td class="num">0.9999</td><td class="num">0.0100</td><td>원본과 구별 불가</td></tr>
+      <tr><td class="num">100</td><td class="num">0.0021</td><td class="num">0.8970</td><td class="num">0.9471</td><td class="num">0.3209</td><td>세부가 흐려짐</td></tr>
+      <tr><td class="num">300</td><td class="num">0.0061</td><td class="num">0.3964</td><td class="num">0.6296</td><td class="num">0.7769</td><td>큰 구조만 남음</td></tr>
+      <tr><td class="num">500</td><td class="num">0.0100</td><td class="num">0.0786</td><td class="num">0.2803</td><td class="num">0.9599</td><td>잡음이 주가 됨</td></tr>
+      <tr><td class="num">700</td><td class="num">0.0140</td><td class="num">0.0070</td><td class="num">0.0835</td><td class="num">0.9965</td><td>신호 계수 1/12</td></tr>
+      <tr><td class="num">1000</td><td class="num">0.0200</td><td class="num">0.00004</td><td class="num">0.0064</td><td class="num">1.0000</td><td>표준 정규분포와 판정 한계 안</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>\(\bar\alpha_T\approx 4\times10^{-5}\)이므로 \(q(\mathbf{x}_T\mid\mathbf{x}_0)\)는 \(\mathcal{N}(\mathbf{0},\mathbf{I})\)와 KL 발산으로 거의 구별되지 않는다. 이 사실이 §5에서 \(L_T\)를 상수로 버리는 근거가 된다.</p>
+
+  <figure>
+    <svg viewBox="0 0 760 210" role="img" aria-label="순방향 과정 q는 x0에서 xT로 잡음을 더하며 오른쪽으로 진행하고, 역방향 과정 p_theta는 xT에서 x0로 잡음을 걷으며 왼쪽으로 진행한다. 순방향은 고정, 역방향만 학습한다.">
+      <defs>
+        <marker id="af" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--fwd)"/></marker>
+        <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--rev)"/></marker>
+      </defs>
+      <!-- 상태 노드 -->
+      <g font-size="15" text-anchor="middle" fill="currentColor">
+        <rect x="30" y="80" width="70" height="46" rx="6" fill="var(--bg)" stroke="currentColor" stroke-width="1.2"/>
+        <text x="65" y="109">x₀</text>
+        <rect x="170" y="80" width="70" height="46" rx="6" fill="var(--bg)" stroke="currentColor" stroke-width="1.2"/>
+        <text x="205" y="109">x₁</text>
+        <text x="300" y="109" fill="var(--muted)" font-size="18">…</text>
+        <rect x="360" y="80" width="80" height="46" rx="6" fill="var(--bg)" stroke="currentColor" stroke-width="1.2"/>
+        <text x="400" y="109">xₜ₋₁</text>
+        <rect x="510" y="80" width="70" height="46" rx="6" fill="var(--bg)" stroke="currentColor" stroke-width="1.2"/>
+        <text x="545" y="109">xₜ</text>
+        <text x="615" y="109" fill="var(--muted)" font-size="18">…</text>
+        <rect x="660" y="80" width="70" height="46" rx="6" fill="var(--bg)" stroke="currentColor" stroke-width="1.2"/>
+        <text x="695" y="109">x_T</text>
+      </g>
+      <!-- 상단: 순방향 -->
+      <g stroke="var(--fwd)" stroke-width="1.8" fill="none">
+        <path d="M100,86 C130,60 140,60 170,86" marker-end="url(#af)"/>
+        <path d="M440,86 C465,60 485,60 510,86" marker-end="url(#af)"/>
+      </g>
+      <g font-size="12" fill="var(--fwd)" text-anchor="middle">
+        <text x="135" y="58">q(x₁|x₀)</text>
+        <text x="475" y="58">q(xₜ|xₜ₋₁)</text>
+        <text x="380" y="26" font-size="13" font-weight="600">순방향: √(1−βₜ)·xₜ₋₁ + √βₜ·ε 로 잡음 추가. 고정, 학습 없음</text>
+      </g>
+      <!-- 하단: 역방향 -->
+      <g stroke="var(--rev)" stroke-width="1.8" fill="none">
+        <path d="M510,120 C485,146 465,146 440,120" marker-end="url(#ar)"/>
+        <path d="M170,120 C140,146 130,146 100,120" marker-end="url(#ar)"/>
+      </g>
+      <g font-size="12" fill="var(--rev)" text-anchor="middle">
+        <text x="475" y="162">p_θ(xₜ₋₁|xₜ)</text>
+        <text x="135" y="162">p_θ(x₀|x₁)</text>
+        <text x="380" y="192" font-size="13" font-weight="600">역방향: 평균 μ_θ(xₜ, t)를 신경망이 예측. 학습 대상</text>
+      </g>
+      <!-- 끝점 설명 -->
+      <g font-size="11.5" fill="var(--muted)" text-anchor="middle">
+        <text x="65" y="142">데이터</text>
+        <text x="695" y="142">N(0, I)</text>
+      </g>
+    </svg>
+    <figcaption><b>그림 1.</b> 같은 사슬을 두 방향으로 읽는다. 위쪽 화살표(순방향 q)는 식으로 완전히 정해져 있고, 아래쪽 화살표(역방향 p<sub>θ</sub>)만 학습한다. 두 방향의 전이가 모두 가우시안이라는 점이 뒤에 나오는 모든 닫힌 형태 계산의 근거다.</figcaption>
+    <div class="legend"><span><i class="f"></i>순방향 q (고정)</span><span><i class="r"></i>역방향 p<sub>θ</sub> (학습)</span></div>
+  </figure>
+</section>
+
+<section id="s4">
+  <h2><span class="sec">Section 4 · 논문 §2, §3.2</span>역방향 과정 p<sub>θ</sub></h2>
+  <p>역방향은 \(p(\mathbf{x}_T)=\mathcal{N}(\mathbf{0},\mathbf{I})\)에서 출발하는 가우시안 전이의 사슬이다. 순방향의 \(\beta_t\)가 작으면 역방향 전이도 가우시안으로 근사할 수 있다는 것이 확산 모델의 기초 사실이다(Sohl-Dickstein 등 2015, 그 원리는 Feller 1949).</p>
+  <div class="eq">\[ p_\theta(\mathbf{x}_{0:T}) = p(\mathbf{x}_T)\prod_{t=1}^{T} p_\theta(\mathbf{x}_{t-1}\mid\mathbf{x}_t),\qquad p_\theta(\mathbf{x}_{t-1}\mid\mathbf{x}_t)=\mathcal{N}\!\left(\mathbf{x}_{t-1};\ \boldsymbol\mu_\theta(\mathbf{x}_t,t),\ \boldsymbol\Sigma_\theta(\mathbf{x}_t,t)\right) \]</div>
+  <h3>결정 1: 분산은 학습하지 않는다</h3>
+  <p>논문은 \(\boldsymbol\Sigma_\theta(\mathbf{x}_t,t)=\sigma_t^2\mathbf{I}\)로 고정한다. 후보는 둘이고, 실험에서 두 후보의 결과 차이는 판정 한계 안이었다.</p>
+  <ul>
+    <li>\(\sigma_t^2=\beta_t\): \(\mathbf{x}_0\)가 \(\mathcal{N}(\mathbf{0},\mathbf{I})\)를 따를 때 최적.</li>
+    <li>\(\sigma_t^2=\tilde\beta_t=\frac{1-\bar\alpha_{t-1}}{1-\bar\alpha_t}\beta_t\): \(\mathbf{x}_0\)가 한 점에 고정되어 있을 때 최적. 아래 사후분포의 분산과 같다.</li>
+  </ul>
+  <p>분산을 학습하면(표 2의 "learned diagonal Σ") 학습이 불안정해지고 샘플이 나빠졌다. 이 결정은 뒤에 Nichol과 Dhariwal(2021)이 다시 뒤집는다.</p>
+  <h3>학습 표적이 되는 사후분포</h3>
+  <p>\(\mathbf{x}_0\)를 알고 있다면 순방향 사슬을 거꾸로 가는 분포 \(q(\mathbf{x}_{t-1}\mid\mathbf{x}_t,\mathbf{x}_0)\)는 베이즈 정리로 닫힌 형태가 나온다. 학습은 신경망의 \(p_\theta(\mathbf{x}_{t-1}\mid\mathbf{x}_t)\)를 이 분포에 맞추는 일이다.</p>
+  <div class="eq">\[ q(\mathbf{x}_{t-1}\mid\mathbf{x}_t,\mathbf{x}_0)=\mathcal{N}\!\left(\mathbf{x}_{t-1};\ \tilde{\boldsymbol\mu}_t(\mathbf{x}_t,\mathbf{x}_0),\ \tilde\beta_t\mathbf{I}\right) \]</div>
+  <div class="eq">\[ \tilde{\boldsymbol\mu}_t(\mathbf{x}_t,\mathbf{x}_0)=\frac{\sqrt{\bar\alpha_{t-1}}\,\beta_t}{1-\bar\alpha_t}\,\mathbf{x}_0+\frac{\sqrt{\alpha_t}\,(1-\bar\alpha_{t-1})}{1-\bar\alpha_t}\,\mathbf{x}_t,\qquad \tilde\beta_t=\frac{1-\bar\alpha_{t-1}}{1-\bar\alpha_t}\,\beta_t \]</div>
+  <div class="note fwd">사후 평균은 \(\mathbf{x}_0\)와 \(\mathbf{x}_t\)의 가중 평균이다. \(t\)가 작으면 \(\mathbf{x}_t\) 쪽 계수가 1에 가깝고(이미 거의 깨끗하니 조금만 움직임), \(t\)가 크면 \(\mathbf{x}_0\) 쪽으로 더 끌린다.</div>
+</section>
+
+<section id="s5">
+  <h2><span class="sec">Section 5 · 논문 §2, §3.1</span>변분 하한과 <em>L</em><sub>t-1</sub></h2>
+  <p>학습은 음의 로그 우도의 <span class="term">변분 하한</span> \(L\)을 최소화한다. 논문은 이를 \(T+1\)개 KL 항으로 쪼갠다. 이 식을 읽으려면 기호 넷(종 모양 분포, 세로 막대 \(\mid\), 기대값 \(\mathbb{E}_q\), KL 발산)과 "하한"이라는 말이 무엇을 뜻하는지 알아야 한다. 먼저 그 넷을 그림으로 본 다음 식으로 돌아온다.</p>
+  <div class="eq">\[ L=\mathbb{E}_q\Big[\underbrace{D_{\mathrm{KL}}\big(q(\mathbf{x}_T\mid\mathbf{x}_0)\,\|\,p(\mathbf{x}_T)\big)}_{L_T}+\sum_{t>1}\underbrace{D_{\mathrm{KL}}\big(q(\mathbf{x}_{t-1}\mid\mathbf{x}_t,\mathbf{x}_0)\,\|\,p_\theta(\mathbf{x}_{t-1}\mid\mathbf{x}_t)\big)}_{L_{t-1}}\ \underbrace{-\log p_\theta(\mathbf{x}_0\mid\mathbf{x}_1)}_{L_0}\Big] \]</div>
+
+  <h3>준비 1: 이 논문의 분포는 전부 "종 모양"이다</h3>
+  <p><span class="term">확률 분포</span>는 "어떤 값이 나올 가능성이 어디에 얼마나 몰려 있는가"를 그린 곡선이다. 곡선이 높은 자리의 값이 자주 나온다. 이 논문에 나오는 분포는 \(q\)든 \(p_\theta\)든 모두 <span class="term">가우시안</span>(정규분포)이고, 가우시안은 종 모양 곡선 하나로 완전히 정해진다. 그 종을 정하는 숫자는 둘뿐이다. <strong>중심</strong>(평균 \(\mu\), 종의 꼭대기가 어디에 있는가)과 <strong>폭</strong>(표준편차 \(\sigma\), 종이 얼마나 퍼져 있는가). 그래서 이 논문에서 "분포를 학습한다"는 말은 결국 "종의 중심을 어디에 둘지 정한다"는 말로 줄어든다.</p>
+  <figure>
+    <svg viewBox="0 0 760 200" role="img" aria-label="왼쪽: 가우시안 종 곡선 하나는 중심 μ와 폭 σ 두 값으로 정해진다. 오른쪽: 잡음 분산 β가 작으면 좁은 종, 크면 넓은 종이 된다.">
+      <defs>
+        <path id="g30" d="M-105,-0.2 L-99,-0.3 L-93,-0.7 L-87,-1.2 L-81,-2.1 L-75,-3.5 L-69,-5.7 L-63,-8.8 L-57,-13.2 L-51,-18.9 L-45,-26 L-39,-34.4 L-33,-43.7 L-27,-53.4 L-21,-62.6 L-15,-70.6 L-9,-76.5 L-3,-79.6 L0,-80 L3,-79.6 L9,-76.5 L15,-70.6 L21,-62.6 L27,-53.4 L33,-43.7 L39,-34.4 L45,-26 L51,-18.9 L57,-13.2 L63,-8.8 L69,-5.7 L75,-3.5 L81,-2.1 L87,-1.2 L93,-0.7 L99,-0.3 L105,-0.2"/>
+        <path id="g22" d="M-77,-0.2 L-72.6,-0.3 L-68.2,-0.7 L-63.8,-1.2 L-59.4,-2.1 L-55,-3.5 L-50.6,-5.7 L-46.2,-8.8 L-41.8,-13.2 L-37.4,-18.9 L-33,-26 L-28.6,-34.4 L-24.2,-43.7 L-19.8,-53.4 L-15.4,-62.6 L-11,-70.6 L-6.6,-76.5 L-2.2,-79.6 L0,-80 L2.2,-79.6 L6.6,-76.5 L11,-70.6 L15.4,-62.6 L19.8,-53.4 L24.2,-43.7 L28.6,-34.4 L33,-26 L37.4,-18.9 L41.8,-13.2 L46.2,-8.8 L50.6,-5.7 L55,-3.5 L59.4,-2.1 L63.8,-1.2 L68.2,-0.7 L72.6,-0.3 L77,-0.2"/>
+        <path id="g45" d="M-157.5,-0.1 L-148.5,-0.2 L-139.5,-0.4 L-130.5,-0.8 L-121.5,-1.4 L-112.5,-2.4 L-103.5,-3.8 L-94.5,-6 L-85.5,-8.9 L-76.5,-12.7 L-67.5,-17.5 L-58.5,-23.2 L-49.5,-29.5 L-40.5,-36 L-31.5,-42.3 L-22.5,-47.7 L-13.5,-51.6 L-4.5,-53.7 L0,-54 L4.5,-53.7 L13.5,-51.6 L22.5,-47.7 L31.5,-42.3 L40.5,-36 L49.5,-29.5 L58.5,-23.2 L67.5,-17.5 L76.5,-12.7 L85.5,-8.9 L94.5,-6 L103.5,-3.8 L112.5,-2.4 L121.5,-1.4 L130.5,-0.8 L139.5,-0.4 L148.5,-0.2 L157.5,-0.1"/>
+      </defs>
+      <g font-size="13" fill="currentColor" text-anchor="middle">
+        <text x="180" y="30" font-weight="600">종 하나 = 중심 하나 + 폭 하나</text>
+        <text x="560" y="30" font-weight="600">폭은 잡음의 크기 β가 정한다</text>
+      </g>
+      <!-- 왼쪽 -->
+      <line x1="50" y1="160" x2="320" y2="160" stroke="currentColor" stroke-width="1"/>
+      <use href="#g30" transform="translate(180,160)" fill="var(--fwd-soft)" stroke="var(--fwd)" stroke-width="2"/>
+      <line x1="180" y1="80" x2="180" y2="160" stroke="var(--fwd)" stroke-width="1" stroke-dasharray="3 3"/>
+      <line x1="180" y1="128" x2="210" y2="128" stroke="currentColor" stroke-width="1.4"/>
+      <line x1="210" y1="123" x2="210" y2="133" stroke="currentColor" stroke-width="1.4"/>
+      <g font-size="12" fill="currentColor" text-anchor="middle">
+        <text x="180" y="178">중심 μ (어디에 몰리나)</text>
+        <text x="250" y="126">폭 σ</text>
+        <text x="100" y="100" fill="var(--muted)" font-size="11.5">높을수록</text>
+        <text x="100" y="114" fill="var(--muted)" font-size="11.5">자주 나오는 값</text>
+      </g>
+      <!-- 오른쪽 -->
+      <line x1="400" y1="160" x2="730" y2="160" stroke="currentColor" stroke-width="1"/>
+      <use href="#g45" transform="translate(560,160)" fill="none" stroke="var(--muted)" stroke-width="2"/>
+      <use href="#g22" transform="translate(560,160)" fill="var(--fwd-soft)" stroke="var(--fwd)" stroke-width="2"/>
+      <g font-size="12" text-anchor="middle">
+        <text x="560" y="68" fill="var(--fwd)">β 작음: 좁은 종 (값이 거의 정해짐)</text>
+        <text x="670" y="118" fill="var(--muted)">β 큼: 넓은 종</text>
+        <text x="560" y="178" fill="currentColor">같은 중심, 다른 폭</text>
+      </g>
+    </svg>
+    <figcaption><b>그림 2.</b> 종 하나가 분포 하나다. 이미지는 픽셀 수만큼 차원이 있으므로 실제로는 픽셀마다 이런 종이 하나씩 있지만, 논문의 모든 계산은 픽셀 단위로 갈라져 1차원 종 그림으로 생각해도 틀리지 않는다.</figcaption>
+  </figure>
+
+  <h3>준비 2: 세로 막대 "|"와 기대값 E</h3>
+  <p>\(q(\mathbf{x}_{t-1}\mid\mathbf{x}_t)\)의 세로 막대는 "\(\mathbf{x}_t\)를 이미 알고 있을 때"라는 뜻이다. 막대 오른쪽 값을 하나로 고정하면, 막대 왼쪽 값의 종이 하나 그려진다. 오른쪽 값을 바꾸면 종도 옮겨진다. 기대값 \(\mathbb{E}_q[\cdot]\)는 "\(q\)에서 여러 번 뽑아 괄호 안 값을 평균하라"는 지시다. 실제 학습에서는 미니배치의 평균이 그 역할을 한다.</p>
+  <figure>
+    <svg viewBox="0 0 760 200" role="img" aria-label="왼쪽: x_t를 한 값으로 고정하면 x_{t-1}의 종 하나가 그려진다. 오른쪽: 기대값은 데이터 여러 장에서 나온 값들의 평균이다.">
+      <defs>
+        <path id="h30" d="M-105,-0.2 L-99,-0.3 L-93,-0.7 L-87,-1.2 L-81,-2.1 L-75,-3.5 L-69,-5.7 L-63,-8.8 L-57,-13.2 L-51,-18.9 L-45,-26 L-39,-34.4 L-33,-43.7 L-27,-53.4 L-21,-62.6 L-15,-70.6 L-9,-76.5 L-3,-79.6 L0,-80 L3,-79.6 L9,-76.5 L15,-70.6 L21,-62.6 L27,-53.4 L33,-43.7 L39,-34.4 L45,-26 L51,-18.9 L57,-13.2 L63,-8.8 L69,-5.7 L75,-3.5 L81,-2.1 L87,-1.2 L93,-0.7 L99,-0.3 L105,-0.2"/>
+        <marker id="ak" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker>
+      </defs>
+      <g font-size="13" fill="currentColor" text-anchor="middle">
+        <text x="190" y="30" font-weight="600">막대 | 는 "이 값을 알 때"</text>
+        <text x="570" y="30" font-weight="600">E[ · ] 는 "여러 장 뽑아 평균"</text>
+      </g>
+      <!-- 왼쪽: 조건부 -->
+      <line x1="40" y1="160" x2="350" y2="160" stroke="currentColor" stroke-width="1"/>
+      <use href="#h30" transform="translate(190,160)" fill="var(--fwd-soft)" stroke="var(--fwd)" stroke-width="2"/>
+      <circle cx="240" cy="160" r="5" fill="currentColor"/>
+      <line x1="240" y1="160" x2="240" y2="56" stroke="currentColor" stroke-width="1" stroke-dasharray="3 3"/>
+      <g font-size="12" text-anchor="middle">
+        <text x="240" y="50" fill="currentColor">조건: xₜ 는 이 값으로 고정</text>
+        <text x="130" y="72" fill="var(--fwd)">그때 xₜ₋₁ 의 종</text>
+        <text x="130" y="86" fill="var(--fwd)">q(xₜ₋₁ | xₜ)</text>
+        <text x="190" y="180" fill="var(--muted)" font-size="11.5">xₜ 값을 바꾸면 종이 따라 움직인다</text>
+      </g>
+      <!-- 오른쪽: 기대값 -->
+      <line x1="430" y1="160" x2="730" y2="160" stroke="currentColor" stroke-width="1"/>
+      <g stroke="var(--muted)" stroke-width="1">
+        <line x1="460" y1="160" x2="460" y2="100"/><line x1="508" y1="160" x2="508" y2="130"/><line x1="556" y1="160" x2="556" y2="80"/>
+        <line x1="604" y1="160" x2="604" y2="120"/><line x1="652" y1="160" x2="652" y2="140"/><line x1="700" y1="160" x2="700" y2="95"/>
+      </g>
+      <g fill="var(--rev)">
+        <circle cx="460" cy="100" r="5"/><circle cx="508" cy="130" r="5"/><circle cx="556" cy="80" r="5"/>
+        <circle cx="604" cy="120" r="5"/><circle cx="652" cy="140" r="5"/><circle cx="700" cy="95" r="5"/>
+      </g>
+      <line x1="440" y1="111" x2="725" y2="111" stroke="currentColor" stroke-width="1.6" stroke-dasharray="6 3"/>
+      <g font-size="12" text-anchor="middle">
+        <text x="580" y="60" fill="var(--rev)">데이터 한 장마다 값 하나 (점)</text>
+        <text x="710" y="126" fill="currentColor" text-anchor="end">평균 = 기대값</text>
+        <text x="580" y="180" fill="var(--muted)" font-size="11.5">x₀, t, ε 를 뽑을 때마다 점 하나</text>
+      </g>
+    </svg>
+    <figcaption><b>그림 3.</b> 왼쪽은 조건부 분포, 오른쪽은 기대값. 논문의 \(\mathbb{E}_q\)는 데이터 \(\mathbf{x}_0\)와 순방향 사슬 전체를 뽑아 평균하라는 뜻이고, 학습 코드에서는 배치 평균 한 줄이다.</figcaption>
+  </figure>
+
+  <h3>준비 3: KL 발산은 "두 종이 얼마나 다른가"</h3>
+  <p><span class="term">KL 발산</span> \(D_{\mathrm{KL}}(q\,\|\,p)\)는 분포 \(q\)를 분포 \(p\)로 흉내 낼 때 생기는 어긋남을 하나의 숫자로 잰 것이다. 두 종이 완전히 겹치면 0이고, 멀어질수록 커지며, 음수가 되지 않는다. 폭이 같은 두 가우시안이라면 식이 아주 단순해진다. 중심 사이 거리를 \(d\)라 할 때 \(D_{\mathrm{KL}}=d^2/(2\sigma^2)\)이다. 즉 <strong>폭이 같으면 KL은 중심 거리의 제곱</strong>이다. 이 한 줄이 \(L_{t-1}\)이 왜 "평균 차의 제곱"으로 줄어드는지를 설명한다.</p>
+  <figure>
+    <svg viewBox="0 0 760 210" role="img" aria-label="폭이 같은 두 종 곡선을 세 가지 거리로 놓았다. 겹치면 KL 0, 중심이 d 떨어지면 d²/2σ², 거리가 2배면 KL은 4배.">
+      <defs>
+        <path id="k30" d="M-105,-0.2 L-99,-0.3 L-93,-0.7 L-87,-1.2 L-81,-2.1 L-75,-3.5 L-69,-5.7 L-63,-8.8 L-57,-13.2 L-51,-18.9 L-45,-26 L-39,-34.4 L-33,-43.7 L-27,-53.4 L-21,-62.6 L-15,-70.6 L-9,-76.5 L-3,-79.6 L0,-80 L3,-79.6 L9,-76.5 L15,-70.6 L21,-62.6 L27,-53.4 L33,-43.7 L39,-34.4 L45,-26 L51,-18.9 L57,-13.2 L63,-8.8 L69,-5.7 L75,-3.5 L81,-2.1 L87,-1.2 L93,-0.7 L99,-0.3 L105,-0.2"/>
+        <marker id="akl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker>
+      </defs>
+      <text x="380" y="26" font-size="13" font-weight="600" fill="currentColor" text-anchor="middle">KL 발산: 폭이 같으면 중심 거리만 남는다</text>
+      <!-- 패널 1 -->
+      <line x1="20" y1="150" x2="240" y2="150" stroke="currentColor" stroke-width="1"/>
+      <use href="#k30" transform="translate(130,150)" fill="var(--fwd-soft)" stroke="var(--fwd)" stroke-width="2"/>
+      <use href="#k30" transform="translate(130,150)" fill="none" stroke="var(--rev)" stroke-width="2" stroke-dasharray="5 3"/>
+      <text x="130" y="172" font-size="12" fill="currentColor" text-anchor="middle">완전히 겹침</text>
+      <text x="130" y="192" font-size="13" fill="currentColor" text-anchor="middle" font-weight="600">KL = 0</text>
+      <!-- 패널 2 -->
+      <line x1="270" y1="150" x2="490" y2="150" stroke="currentColor" stroke-width="1"/>
+      <use href="#k30" transform="translate(365,150)" fill="var(--fwd-soft)" stroke="var(--fwd)" stroke-width="2"/>
+      <use href="#k30" transform="translate(395,150)" fill="none" stroke="var(--rev)" stroke-width="2" stroke-dasharray="5 3"/>
+      <line x1="365" y1="60" x2="395" y2="60" stroke="currentColor" stroke-width="1.4" marker-start="url(#akl)" marker-end="url(#akl)"/>
+      <text x="380" y="52" font-size="12" fill="currentColor" text-anchor="middle">d</text>
+      <text x="380" y="172" font-size="12" fill="currentColor" text-anchor="middle">중심이 d 만큼 어긋남</text>
+      <text x="380" y="192" font-size="13" fill="currentColor" text-anchor="middle" font-weight="600">KL = d² / 2σ²</text>
+      <!-- 패널 3 -->
+      <line x1="520" y1="150" x2="740" y2="150" stroke="currentColor" stroke-width="1"/>
+      <use href="#k30" transform="translate(600,150)" fill="var(--fwd-soft)" stroke="var(--fwd)" stroke-width="2"/>
+      <use href="#k30" transform="translate(660,150)" fill="none" stroke="var(--rev)" stroke-width="2" stroke-dasharray="5 3"/>
+      <line x1="600" y1="60" x2="660" y2="60" stroke="currentColor" stroke-width="1.4" marker-start="url(#akl)" marker-end="url(#akl)"/>
+      <text x="630" y="52" font-size="12" fill="currentColor" text-anchor="middle">2d</text>
+      <text x="630" y="172" font-size="12" fill="currentColor" text-anchor="middle">거리가 2배</text>
+      <text x="630" y="192" font-size="13" fill="currentColor" text-anchor="middle" font-weight="600">KL = 4 × (d² / 2σ²)</text>
+    </svg>
+    <figcaption><b>그림 4.</b> 실선(파랑)이 정답 쪽 분포 \(q\), 점선(주황)이 모델 쪽 분포 \(p_\theta\). 폭이 같으므로 두 종을 겹치게 만드는 방법은 중심을 옮기는 것뿐이고, 어긋난 정도는 거리의 제곱으로 벌을 받는다.</figcaption>
+    <div class="legend"><span><i class="f"></i>정답 쪽 q</span><span><i class="r"></i>모델 쪽 p<sub>θ</sub></span></div>
+  </figure>
+
+  <h3>준비 4: "하한"을 왜 최소화하나</h3>
+  <p>정말 낮추고 싶은 값은 \(-\log p_\theta(\mathbf{x}_0)\), 즉 "모델이 실제 데이터에 매기는 확률"의 음의 로그다. 그런데 이 값은 \(\mathbf{x}_{1:T}\)에 대한 적분이 들어 있어 계산할 수 없다. 대신 <strong>언제나 그 값보다 크거나 같은</strong> 계산 가능한 양 \(L\)을 만들 수 있다. 이것이 <span class="term">변분 하한</span>이다(우도 쪽에서 보면 아래에서 받치는 하한, 손실 쪽에서 보면 위에서 누르는 상한. VAE와 같은 원리). \(L\)을 밀어 내리면 그 아래에 있는 참값도 함께 내려간다.</p>
+  <figure>
+    <svg viewBox="0 0 760 220" role="img" aria-label="계산할 수 없는 참값 위에 계산할 수 있는 L이 항상 놓여 있다. 학습으로 L을 내리면 그 아래의 참값도 같이 내려간다.">
+      <defs><marker id="av" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
+      <line x1="70" y1="190" x2="70" y2="40" stroke="currentColor" stroke-width="1.2" marker-end="url(#av)"/>
+      <text x="62" y="120" font-size="11.5" fill="var(--muted)" text-anchor="middle" transform="rotate(-90 62 120)">손실 값 (아래가 좋음)</text>
+      <!-- 학습 전 -->
+      <text x="230" y="36" font-size="13" font-weight="600" fill="currentColor" text-anchor="middle">학습 전</text>
+      <line x1="140" y1="70" x2="320" y2="70" stroke="var(--rev)" stroke-width="3"/>
+      <text x="230" y="60" font-size="12" fill="var(--rev)" text-anchor="middle">L (계산 가능, 실선)</text>
+      <line x1="140" y1="140" x2="320" y2="140" stroke="currentColor" stroke-width="2" stroke-dasharray="6 4"/>
+      <text x="230" y="160" font-size="12" fill="currentColor" text-anchor="middle">참값 −log p_θ(x₀) (계산 불가, 점선)</text>
+      <line x1="330" y1="74" x2="330" y2="136" stroke="var(--muted)" stroke-width="1.2" marker-start="url(#av)" marker-end="url(#av)"/>
+      <text x="340" y="109" font-size="11.5" fill="var(--muted)">틈 ≥ 0</text>
+      <!-- 학습 후 -->
+      <text x="560" y="36" font-size="13" font-weight="600" fill="currentColor" text-anchor="middle">학습 후</text>
+      <line x1="470" y1="125" x2="650" y2="125" stroke="var(--rev)" stroke-width="3"/>
+      <text x="560" y="115" font-size="12" fill="var(--rev)" text-anchor="middle">L 이 내려감</text>
+      <line x1="470" y1="170" x2="650" y2="170" stroke="currentColor" stroke-width="2" stroke-dasharray="6 4"/>
+      <text x="560" y="190" font-size="12" fill="currentColor" text-anchor="middle">참값은 늘 L 아래이므로 따라 내려감</text>
+      <!-- 화살 -->
+      <path d="M330,70 C400,70 420,120 465,124" fill="none" stroke="var(--rev)" stroke-width="1.6" marker-end="url(#av)"/>
+      <text x="405" y="86" font-size="11.5" fill="var(--rev)" text-anchor="middle">경사 하강</text>
+      <line x1="70" y1="190" x2="740" y2="190" stroke="var(--line)" stroke-width="1"/>
+    </svg>
+    <figcaption><b>그림 5.</b> 참값에 손을 댈 수 없어도 그 위에 얹힌 \(L\)을 낮추면 참값을 위에서 눌러 내릴 수 있다. 논문 §3.4의 \(L_{\text{simple}}\)은 이 \(L\)의 각 항에 붙은 계수를 바꾼 것이므로 엄밀한 상한은 아니지만, 같은 방향으로 미는 양이다.</figcaption>
+  </figure>
+
+  <h3>세 종류의 항은 사슬의 어디에 있나</h3>
+  <p>이제 식으로 돌아온다. \(L\)은 사슬의 마디마다 항 하나씩, 모두 \(T+1\)개의 합이다. 양 끝의 마디 둘만 모양이 다르고, 가운데 \(T-1\)개는 전부 같은 꼴이다.</p>
+  <figure>
+    <svg viewBox="0 0 760 230" role="img" aria-label="사슬 x0부터 xT까지에서 L0는 왼쪽 끝 마디, L_{t-1}은 가운데 모든 마디, L_T는 오른쪽 끝에서 xT와 표준 정규분포를 비교하는 항이다.">
+      <text x="380" y="30" font-size="13.5" font-weight="600" fill="currentColor" text-anchor="middle">L = L_T + L_{T−1} + … + L₁ + L₀   (마디 하나에 항 하나, 모두 T+1개)</text>
+      <g font-size="14" text-anchor="middle" fill="currentColor">
+        <rect x="40" y="80" width="60" height="44" rx="6" fill="var(--bg)" stroke="currentColor" stroke-width="1.2"/><text x="70" y="108">x₀</text>
+        <rect x="140" y="80" width="60" height="44" rx="6" fill="var(--bg)" stroke="currentColor" stroke-width="1.2"/><text x="170" y="108">x₁</text>
+        <text x="250" y="108" fill="var(--muted)" font-size="18">…</text>
+        <rect x="300" y="80" width="70" height="44" rx="6" fill="var(--bg)" stroke="currentColor" stroke-width="1.2"/><text x="335" y="108">xₜ₋₁</text>
+        <rect x="410" y="80" width="60" height="44" rx="6" fill="var(--bg)" stroke="currentColor" stroke-width="1.2"/><text x="440" y="108">xₜ</text>
+        <text x="515" y="108" fill="var(--muted)" font-size="18">…</text>
+        <rect x="560" y="80" width="60" height="44" rx="6" fill="var(--bg)" stroke="currentColor" stroke-width="1.2"/><text x="590" y="108">x_T</text>
+        <circle cx="700" cy="102" r="30" fill="var(--fwd-soft)" stroke="var(--fwd)" stroke-width="1.2"/><text x="700" y="107" font-size="12.5" fill="var(--fwd)">N(0, I)</text>
+      </g>
+      <g stroke="currentColor" stroke-width="1.2" fill="none">
+        <line x1="100" y1="102" x2="140" y2="102"/><line x1="200" y1="102" x2="230" y2="102"/><line x1="270" y1="102" x2="300" y2="102"/>
+        <line x1="370" y1="102" x2="410" y2="102"/><line x1="470" y1="102" x2="500" y2="102"/><line x1="530" y1="102" x2="560" y2="102"/>
+      </g>
+      <line x1="620" y1="102" x2="670" y2="102" stroke="var(--fwd)" stroke-width="1.2" stroke-dasharray="4 3"/>
+      <!-- L0 -->
+      <path d="M40,140 L40,150 L200,150 L200,140" fill="none" stroke="var(--rev)" stroke-width="1.6"/>
+      <text x="120" y="170" font-size="12.5" fill="var(--rev)" text-anchor="middle" font-weight="600">L₀</text>
+      <text x="120" y="186" font-size="11.5" fill="var(--rev)" text-anchor="middle">x₁에서 정수 픽셀 x₀의 확률</text>
+      <text x="120" y="202" font-size="11.5" fill="var(--muted)" text-anchor="middle">학습 대상 · 항 1개</text>
+      <!-- Lt-1 -->
+      <path d="M300,140 L300,150 L470,150 L470,140" fill="none" stroke="var(--rev)" stroke-width="1.6"/>
+      <text x="385" y="170" font-size="12.5" fill="var(--rev)" text-anchor="middle" font-weight="600">Lₜ₋₁</text>
+      <text x="385" y="186" font-size="11.5" fill="var(--rev)" text-anchor="middle">정답 종과 모델 종의 KL</text>
+      <text x="385" y="202" font-size="11.5" fill="var(--muted)" text-anchor="middle">학습 대상 · 항 T−1개, 전부 같은 꼴</text>
+      <!-- LT -->
+      <path d="M560,140 L560,150 L730,150 L730,140" fill="none" stroke="var(--fwd)" stroke-width="1.6"/>
+      <text x="645" y="170" font-size="12.5" fill="var(--fwd)" text-anchor="middle" font-weight="600">L_T</text>
+      <text x="645" y="186" font-size="11.5" fill="var(--fwd)" text-anchor="middle">x_T 의 종과 N(0, I)의 KL</text>
+      <text x="645" y="202" font-size="11.5" fill="var(--muted)" text-anchor="middle">θ 없음 · 상수로 버림</text>
+    </svg>
+    <figcaption><b>그림 6.</b> 세 항의 자리. 주황 두 항만 신경망 \(\theta\)가 들어 있어 학습이 움직이고, 파랑 항은 순방향 사슬만으로 정해져 학습과 무관하다. 아래 세 소절이 각 항을 종 그림으로 푼다.</figcaption>
+  </figure>
+
+  <h3>L<sub>T</sub>: 오른쪽 끝, 겹쳐 버린 두 종</h3>
+  <p>\(L_T\)는 데이터에서 출발해 \(T\)단계 잡음을 더한 결과 \(q(\mathbf{x}_T\mid\mathbf{x}_0)\)의 종과, 생성을 시작할 때 쓰는 \(p(\mathbf{x}_T)=\mathcal{N}(\mathbf{0},\mathbf{I})\)의 종을 비교한다. 첫 종의 중심은 \(\sqrt{\bar\alpha_T}\,\mathbf{x}_0\)인데, §3의 표에서 본 대로 \(\sqrt{\bar\alpha_T}=0.0064\)이므로 중심이 0에서 거의 움직이지 않고 폭은 \(\sqrt{1-\bar\alpha_T}=1.0000\)이다. 두 종은 사실상 같은 자리에 있어 KL이 0에 가깝다. 더 결정적으로 이 항에는 신경망 파라미터가 하나도 없다(\(\beta_t\)는 고정 스케줄). 어떻게 학습해도 값이 바뀌지 않으므로 상수로 버린다.</p>
+  <figure>
+    <svg viewBox="0 0 760 190" role="img" aria-label="q(x_T|x_0)의 종과 표준 정규분포 N(0,I)의 종이 같은 자리에 겹쳐 있어 KL이 0에 가깝고, 이 항에는 학습 파라미터가 없다.">
+      <defs>
+        <path id="t30" d="M-105,-0.2 L-99,-0.3 L-93,-0.7 L-87,-1.2 L-81,-2.1 L-75,-3.5 L-69,-5.7 L-63,-8.8 L-57,-13.2 L-51,-18.9 L-45,-26 L-39,-34.4 L-33,-43.7 L-27,-53.4 L-21,-62.6 L-15,-70.6 L-9,-76.5 L-3,-79.6 L0,-80 L3,-79.6 L9,-76.5 L15,-70.6 L21,-62.6 L27,-53.4 L33,-43.7 L39,-34.4 L45,-26 L51,-18.9 L57,-13.2 L63,-8.8 L69,-5.7 L75,-3.5 L81,-2.1 L87,-1.2 L93,-0.7 L99,-0.3 L105,-0.2"/>
+      </defs>
+      <line x1="120" y1="150" x2="640" y2="150" stroke="currentColor" stroke-width="1"/>
+      <use href="#t30" transform="translate(380,150)" fill="var(--fwd-soft)" stroke="var(--fwd)" stroke-width="2"/>
+      <use href="#t30" transform="translate(381,150)" fill="none" stroke="var(--rev)" stroke-width="2" stroke-dasharray="5 3"/>
+      <line x1="380" y1="150" x2="380" y2="160" stroke="currentColor" stroke-width="1"/>
+      <text x="380" y="176" font-size="12" fill="currentColor" text-anchor="middle">0</text>
+      <g font-size="12">
+        <text x="250" y="60" fill="var(--fwd)" text-anchor="end">q(x_T | x₀): 데이터에 잡음 1000번</text>
+        <text x="250" y="76" fill="var(--fwd)" text-anchor="end">중심 0.0064·x₀, 폭 1.0000</text>
+        <text x="510" y="60" fill="var(--rev)">p(x_T) = N(0, I): 생성의 출발점</text>
+        <text x="510" y="76" fill="var(--rev)">중심 0, 폭 1</text>
+      </g>
+      <text x="380" y="36" font-size="13" font-weight="600" fill="currentColor" text-anchor="middle">두 종이 판정 한계 안에서 겹침, 그리고 θ가 없음</text>
+    </svg>
+    <figcaption><b>그림 7.</b> \(L_T\). 파랑 종(데이터를 끝까지 흐린 것)과 주황 점선 종(순수 잡음)이 겹쳐 있다. 선형 스케줄을 \(T=1000\)으로 잡은 이유가 바로 이 겹침을 만들기 위해서다.</figcaption>
+  </figure>
+
+  <h3>L<sub>t-1</sub>: 가운데 모든 마디, 정답 종에 모델 종 맞추기</h3>
+  <p>가운데 마디 하나를 떼어 보자. \(\mathbf{x}_t\)가 주어져 있을 때 한 단계 전 \(\mathbf{x}_{t-1}\)이 어디에 있었을지에 대해 종이 둘 있다.</p>
+  <ul>
+    <li><strong>정답 종</strong> \(q(\mathbf{x}_{t-1}\mid\mathbf{x}_t,\mathbf{x}_0)\): 원본 \(\mathbf{x}_0\)까지 알고 있는 쪽이 계산한 종. §4의 \(\tilde{\boldsymbol\mu}_t\)가 중심, \(\tilde\beta_t\)가 폭이다. 학습 중에는 \(\mathbf{x}_0\)를 알고 있으니 그릴 수 있고, 생성 중에는 \(\mathbf{x}_0\)가 없으니 그릴 수 없다.</li>
+    <li><strong>모델 종</strong> \(p_\theta(\mathbf{x}_{t-1}\mid\mathbf{x}_t)\): \(\mathbf{x}_0\) 없이 \(\mathbf{x}_t\)만 보고 신경망이 중심 \(\boldsymbol\mu_\theta(\mathbf{x}_t,t)\)를 낸 종. 폭은 \(\sigma_t\)로 고정.</li>
+  </ul>
+  <p>\(L_{t-1}\)은 이 둘의 KL이다. 폭을 둘 다 고정했으므로(준비 3) 남는 것은 중심 사이 거리의 제곱뿐이다. 학습이 하는 일은 매 마디에서 <strong>모델 종의 중심을 정답 종의 중심 쪽으로 옮기는 것</strong>이고, 그것이 전부다.</p>
+  <figure>
+    <svg viewBox="0 0 760 250" role="img" aria-label="한 마디 t에서 x0를 아는 정답 종과 x0를 모르는 모델 종이 폭은 같고 중심만 다르다. 학습은 모델 종의 중심 μ_θ를 정답 종의 중심 μ̃_t 쪽으로 옮긴다.">
+      <defs>
+        <path id="m30" d="M-105,-0.2 L-99,-0.3 L-93,-0.7 L-87,-1.2 L-81,-2.1 L-75,-3.5 L-69,-5.7 L-63,-8.8 L-57,-13.2 L-51,-18.9 L-45,-26 L-39,-34.4 L-33,-43.7 L-27,-53.4 L-21,-62.6 L-15,-70.6 L-9,-76.5 L-3,-79.6 L0,-80 L3,-79.6 L9,-76.5 L15,-70.6 L21,-62.6 L27,-53.4 L33,-43.7 L39,-34.4 L45,-26 L51,-18.9 L57,-13.2 L63,-8.8 L69,-5.7 L75,-3.5 L81,-2.1 L87,-1.2 L93,-0.7 L99,-0.3 L105,-0.2"/>
+        <marker id="am" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--rev)"/></marker>
+        <marker id="am2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker>
+      </defs>
+      <text x="380" y="26" font-size="13" font-weight="600" fill="currentColor" text-anchor="middle">마디 t 하나에서 벌어지는 일 (xₜ 는 주어짐)</text>
+      <line x1="120" y1="170" x2="660" y2="170" stroke="currentColor" stroke-width="1"/>
+      <use href="#m30" transform="translate(330,170)" fill="var(--fwd-soft)" stroke="var(--fwd)" stroke-width="2"/>
+      <use href="#m30" transform="translate(450,170)" fill="none" stroke="var(--rev)" stroke-width="2" stroke-dasharray="5 3"/>
+      <line x1="330" y1="90" x2="330" y2="170" stroke="var(--fwd)" stroke-width="1" stroke-dasharray="3 3"/>
+      <line x1="450" y1="90" x2="450" y2="170" stroke="var(--rev)" stroke-width="1" stroke-dasharray="3 3"/>
+      <path d="M445,62 L335,62" fill="none" stroke="var(--rev)" stroke-width="1.8" marker-end="url(#am)"/>
+      <text x="390" y="54" font-size="12" fill="var(--rev)" text-anchor="middle" font-weight="600">학습: 중심을 이쪽으로 옮긴다</text>
+      <g font-size="12">
+        <text x="215" y="100" fill="var(--fwd)" text-anchor="end">정답 종 q(xₜ₋₁ | xₜ, x₀)</text>
+        <text x="215" y="116" fill="var(--fwd)" text-anchor="end">x₀ 를 아는 쪽이 그림</text>
+        <text x="215" y="132" fill="var(--fwd)" text-anchor="end">중심 μ̃ₜ, 폭 √β̃ₜ</text>
+        <text x="565" y="100" fill="var(--rev)">모델 종 p_θ(xₜ₋₁ | xₜ)</text>
+        <text x="565" y="116" fill="var(--rev)">x₀ 없이 신경망이 그림</text>
+        <text x="565" y="132" fill="var(--rev)">중심 μ_θ(xₜ, t), 폭 σₜ (고정)</text>
+      </g>
+      <text x="330" y="190" font-size="12.5" fill="var(--fwd)" text-anchor="middle">μ̃ₜ</text>
+      <text x="450" y="190" font-size="12.5" fill="var(--rev)" text-anchor="middle">μ_θ</text>
+      <line x1="330" y1="208" x2="450" y2="208" stroke="currentColor" stroke-width="1.3" marker-start="url(#am2)" marker-end="url(#am2)"/>
+      <text x="390" y="232" font-size="13" fill="currentColor" text-anchor="middle" font-weight="600">Lₜ₋₁ = ‖μ̃ₜ − μ_θ‖² / 2σₜ²  (거리의 제곱)</text>
+    </svg>
+    <figcaption><b>그림 8.</b> \(L_{t-1}\). 두 종의 폭은 같으므로 KL은 그림 4의 두 번째 경우와 같다. 정답 종의 중심 \(\tilde{\boldsymbol\mu}_t\)는 \(\mathbf{x}_t\)와 \(\boldsymbol\epsilon\)으로 다시 쓸 수 있고, 그래서 §6에서 "중심 맞추기"가 "잡음 \(\boldsymbol\epsilon\) 맞추기"로 바뀐다.</figcaption>
+    <div class="legend"><span><i class="f"></i>정답 종 (x₀를 앎)</span><span><i class="r"></i>모델 종 (x₀를 모름)</span></div>
+  </figure>
+  <div class="eq">\[ L_{t-1}=\mathbb{E}_q\Big[\frac{1}{2\sigma_t^2}\big\|\tilde{\boldsymbol\mu}_t(\mathbf{x}_t,\mathbf{x}_0)-\boldsymbol\mu_\theta(\mathbf{x}_t,t)\big\|^2\Big]+C \]</div>
+  <p>\(C\)는 \(\theta\)와 무관한 상수(폭이 서로 다른 데서 오는 항)다. 그림 3의 오른쪽처럼 \(\mathbb{E}_q\)는 데이터와 잡음을 여러 번 뽑아 평균하라는 뜻이다.</p>
+
+  <h3>L<sub>0</sub>: 왼쪽 끝, 종을 잘라 정수 한 칸의 확률로</h3>
+  <p>마지막 마디에서는 \(\mathbf{x}_1\)로부터 실제 이미지 \(\mathbf{x}_0\)가 나올 확률을 직접 매긴다. 문제는 픽셀값이 0부터 255까지의 정수인데 모델 종은 연속 곡선이라는 점이다. 논문은 픽셀값을 \([-1,1]\)로 옮긴 뒤, 종 곡선에서 실제 픽셀값이 차지하는 폭 \(2/255\)의 구간을 잘라 그 <strong>면적</strong>을 확률로 삼는다. \(L_0\)는 그 면적의 음의 로그다. 면적이 클수록(신경망이 낸 중심이 실제 픽셀값에 가까울수록) 손실이 작다. 정확한 식은 §9에 있다.</p>
+  <figure>
+    <svg viewBox="0 0 760 240" role="img" aria-label="신경망이 낸 중심의 종 곡선 아래에서 실제 픽셀값이 차지하는 좁은 구간의 면적이 그 픽셀의 확률이고, L0는 그 면적의 음의 로그다.">
+      <defs>
+        <path id="d60" d="M-210,-0.2 L-198,-0.3 L-186,-0.6 L-174,-1 L-162,-1.8 L-150,-3.1 L-138,-5 L-126,-7.7 L-114,-11.5 L-102,-16.5 L-90,-22.7 L-78,-30.1 L-66,-38.2 L-54,-46.7 L-42,-54.8 L-30,-61.8 L-18,-66.9 L-6,-69.7 L0,-70 L6,-69.7 L18,-66.9 L30,-61.8 L42,-54.8 L54,-46.7 L66,-38.2 L78,-30.1 L90,-22.7 L102,-16.5 L114,-11.5 L126,-7.7 L138,-5 L150,-3.1 L162,-1.8 L174,-1 L186,-0.6 L198,-0.3 L210,-0.2"/>
+        <path id="dbin" d="M14,0 L14,-68.1 L16,-67.6 L18,-66.9 L20,-66.2 L22,-65.4 L24,-64.6 L26,-63.7 L28,-62.8 L30,-61.8 L30,0 Z"/>
+        <marker id="ad" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker>
+      </defs>
+      <text x="380" y="26" font-size="13" font-weight="600" fill="currentColor" text-anchor="middle">마지막 마디: 픽셀 하나의 종에서 정수 한 칸을 잘라 낸다</text>
+      <line x1="120" y1="170" x2="640" y2="170" stroke="currentColor" stroke-width="1"/>
+      <use href="#dbin" transform="translate(380,170)" fill="var(--rev-soft)" stroke="none"/>
+      <use href="#d60" transform="translate(380,170)" fill="none" stroke="var(--rev)" stroke-width="2"/>
+      <use href="#dbin" transform="translate(380,170)" fill="none" stroke="var(--rev)" stroke-width="1.4"/>
+      <!-- 눈금: 2/255 간격 -->
+      <g stroke="currentColor" stroke-width="1">
+        <line x1="298" y1="170" x2="298" y2="178"/><line x1="314" y1="170" x2="314" y2="178"/><line x1="330" y1="170" x2="330" y2="178"/><line x1="346" y1="170" x2="346" y2="178"/>
+        <line x1="362" y1="170" x2="362" y2="178"/><line x1="378" y1="170" x2="378" y2="178"/><line x1="394" y1="170" x2="394" y2="178"/><line x1="410" y1="170" x2="410" y2="178"/>
+        <line x1="426" y1="170" x2="426" y2="178"/><line x1="442" y1="170" x2="442" y2="178"/><line x1="458" y1="170" x2="458" y2="178"/>
+      </g>
+      <text x="380" y="192" font-size="11.5" fill="var(--muted)" text-anchor="middle">정수 픽셀값 눈금 (한 칸 = 2/255, 예: 127 · 128 · 129 …)</text>
+      <line x1="380" y1="100" x2="380" y2="170" stroke="var(--rev)" stroke-width="1" stroke-dasharray="3 3"/>
+      <text x="300" y="92" font-size="12" fill="var(--rev)" text-anchor="middle">신경망이 낸 중심 μ_θ(x₁, 1)ⁱ</text>
+      <line x1="402" y1="215" x2="402" y2="172" stroke="currentColor" stroke-width="1.2" marker-end="url(#ad)"/>
+      <text x="402" y="230" font-size="12" fill="currentColor" text-anchor="middle">실제 픽셀값 x₀ⁱ 의 칸 [x₀ⁱ − 1/255, x₀ⁱ + 1/255]</text>
+      <path d="M560,70 C520,70 470,90 412,110" fill="none" stroke="currentColor" stroke-width="1.2" marker-end="url(#ad)"/>
+      <text x="565" y="66" font-size="12" fill="currentColor">확률 = 색칠한 면적</text>
+      <text x="565" y="82" font-size="12" fill="currentColor">L₀ 의 이 픽셀 몫 = −log(면적)</text>
+    </svg>
+    <figcaption><b>그림 9.</b> \(L_0\). 픽셀 하나에 대한 그림이고, 실제로는 모든 픽셀의 면적을 곱한다(로그를 취하면 합). 종의 중심이 실제 픽셀 칸 위에 오면 면적이 가장 커지고, 멀어질수록 종의 꼬리에서 잘라 내게 되어 면적이 급격히 준다.</figcaption>
+  </figure>
+
+  <h3>정리</h3>
+  <div class="tbl">
+  <table>
+    <thead><tr><th>항</th><th>뜻</th><th>논문의 처리</th></tr></thead>
+    <tbody>
+      <tr><td><em>L</em><sub>T</sub></td><td>잡음 끝점이 표준 정규분포와 얼마나 다른가</td><td>\(\beta_t\)가 고정이라 파라미터가 없음. 상수로 무시 (§3.1)</td></tr>
+      <tr><td><em>L</em><sub>t-1</sub> (t = 2 … T)</td><td>중간 단계마다 사후분포와 신경망 전이의 KL</td><td>두 가우시안의 KL이라 평균 차의 제곱으로 닫힘. 이 항이 ε-예측으로 바뀜 (§3.2)</td></tr>
+      <tr><td><em>L</em><sub>0</sub></td><td>마지막 한 단계에서 실제 픽셀값의 우도</td><td>이산 픽셀용 디코더를 따로 정의 (§3.3)</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>여기까지는 2015년 논문과 같다. 이 식을 그대로 학습하면(표 2의 "μ̃ 예측") 결과가 FID 13.22에 머문다. 차이는 다음 절에서 생긴다.</p>
+</section>
+
+<section id="s6">
+  <h2><span class="sec">Section 6 · 논문 §3.2, §3.4</span>ε-예측과 <em>L</em><sub>simple</sub></h2>
+  <h3>결정 2: 평균 대신 잡음을 예측한다</h3>
+  <p>\(\mathbf{x}_t=\sqrt{\bar\alpha_t}\mathbf{x}_0+\sqrt{1-\bar\alpha_t}\boldsymbol\epsilon\)을 \(\tilde{\boldsymbol\mu}_t\)에 대입해 \(\mathbf{x}_0\)를 지우면, 사후 평균은 \(\mathbf{x}_t\)와 \(\boldsymbol\epsilon\)만으로 적힌다.</p>
+  <div class="eq">\[ \tilde{\boldsymbol\mu}_t=\frac{1}{\sqrt{\alpha_t}}\Big(\mathbf{x}_t-\frac{\beta_t}{\sqrt{1-\bar\alpha_t}}\,\boldsymbol\epsilon\Big) \]</div>
+  <p>신경망은 \(\mathbf{x}_t\)를 이미 입력으로 받으므로, 모르는 것은 \(\boldsymbol\epsilon\)뿐이다. 그래서 신경망 \(\boldsymbol\epsilon_\theta(\mathbf{x}_t,t)\)가 \(\boldsymbol\epsilon\)을 맞히게 하고, 평균은 같은 꼴로 조립한다.</p>
+  <div class="eq">\[ \boldsymbol\mu_\theta(\mathbf{x}_t,t)=\frac{1}{\sqrt{\alpha_t}}\Big(\mathbf{x}_t-\frac{\beta_t}{\sqrt{1-\bar\alpha_t}}\,\boldsymbol\epsilon_\theta(\mathbf{x}_t,t)\Big) \]</div>
+  <p>이를 \(L_{t-1}\)에 넣으면 손실은 잡음 예측 오차의 가중 제곱이 된다.</p>
+  <div class="eq num"><span>\[ L_{t-1}-C=\mathbb{E}_{\mathbf{x}_0,\boldsymbol\epsilon}\Big[\frac{\beta_t^2}{2\sigma_t^2\alpha_t(1-\bar\alpha_t)}\big\|\boldsymbol\epsilon-\boldsymbol\epsilon_\theta\big(\sqrt{\bar\alpha_t}\mathbf{x}_0+\sqrt{1-\bar\alpha_t}\boldsymbol\epsilon,\ t\big)\big\|^2\Big] \]</span><span class="tag">논문 식 (12)</span></div>
+
+  <h3>결정 3: 가중치를 버린다</h3>
+  <p>논문은 앞의 계수 \(\frac{\beta_t^2}{2\sigma_t^2\alpha_t(1-\bar\alpha_t)}\)를 떼어 내고, \(t\)를 \(\{1,\dots,T\}\)에서 균등하게 뽑아 하나의 손실로 만든다.</p>
+  <div class="eq num"><span>\[ L_{\text{simple}}(\theta):=\mathbb{E}_{t,\mathbf{x}_0,\boldsymbol\epsilon}\Big[\big\|\boldsymbol\epsilon-\boldsymbol\epsilon_\theta\big(\sqrt{\bar\alpha_t}\mathbf{x}_0+\sqrt{1-\bar\alpha_t}\boldsymbol\epsilon,\ t\big)\big\|^2\Big] \]</span><span class="tag">논문 식 (14)</span></div>
+  <p>이것은 변분 하한을 <strong>다시 가중치 매긴</strong> 것이지 다른 목적 함수가 아니다. 버린 계수는 \(t\)가 작을수록 크다. 즉 원래 하한은 "거의 깨끗한 이미지에서 아주 작은 잡음을 걷는" 쉬운 단계에 큰 무게를 두었고, <em>L</em><sub>simple</sub>은 그 무게를 걷어 큰 \(t\)의 어려운 단계에 상대적으로 집중하게 만든다. 논문은 이 재가중치가 샘플 품질에 도움이 된다고 실험으로 확인했다(표 2, FID 13.51에서 3.17). 반대로 우도(NLL)는 원래 하한으로 학습할 때가 더 좋다(3.70 대 3.75).</p>
+  <div class="note rev">한 줄로 줄이면, DDPM의 학습은 <strong>"잡음 섞인 이미지와 시각 t를 주면, 어떤 잡음이 섞였는지 맞혀라"</strong>라는 회귀 문제다. 확률 모델의 유도는 이 회귀 문제가 어디서 왔는지를 설명하는 역할이다.</div>
+
+  <figure>
+    <svg viewBox="0 0 760 200" role="img" aria-label="학습 한 스텝: 데이터 x0, 잡음 ε, 시각 t를 뽑아 x_t를 만들고, 신경망 ε_θ가 x_t와 t로부터 잡음을 예측하며, 예측과 실제 ε의 제곱 오차를 손실로 쓴다.">
+      <defs>
+        <marker id="ac" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker>
+      </defs>
+      <g font-size="13" fill="currentColor" text-anchor="middle">
+        <!-- 입력 셋 -->
+        <rect x="20" y="20" width="130" height="40" rx="5" fill="var(--bg)" stroke="currentColor" stroke-width="1.1"/>
+        <text x="85" y="45">x₀ ~ 데이터</text>
+        <rect x="20" y="80" width="130" height="40" rx="5" fill="var(--bg)" stroke="currentColor" stroke-width="1.1"/>
+        <text x="85" y="105">ε ~ N(0, I)</text>
+        <rect x="20" y="140" width="130" height="40" rx="5" fill="var(--bg)" stroke="currentColor" stroke-width="1.1"/>
+        <text x="85" y="165">t ~ U{1 … T}</text>
+        <!-- 합성 -->
+        <rect x="220" y="60" width="180" height="80" rx="5" fill="var(--fwd-soft)" stroke="var(--fwd)" stroke-width="1.3"/>
+        <text x="310" y="92" fill="var(--fwd)" font-weight="600">잡음 섞기 (순방향)</text>
+        <text x="310" y="114" fill="var(--fwd)" font-size="12">xₜ = √ᾱₜ·x₀ + √(1−ᾱₜ)·ε</text>
+        <!-- 신경망 -->
+        <rect x="460" y="60" width="130" height="80" rx="5" fill="var(--rev-soft)" stroke="var(--rev)" stroke-width="1.3"/>
+        <text x="525" y="92" fill="var(--rev)" font-weight="600">U-Net ε_θ</text>
+        <text x="525" y="114" fill="var(--rev)" font-size="12">입력 (xₜ, t)</text>
+        <!-- 손실 -->
+        <rect x="640" y="60" width="105" height="80" rx="5" fill="var(--bg)" stroke="currentColor" stroke-width="1.1"/>
+        <text x="692" y="92" font-weight="600">손실</text>
+        <text x="692" y="114" font-size="12">‖ε − ε_θ‖²</text>
+      </g>
+      <g stroke="currentColor" stroke-width="1.4" fill="none">
+        <path d="M150,40 L185,40 L185,85 L220,85" marker-end="url(#ac)"/>
+        <path d="M150,100 L220,100" marker-end="url(#ac)"/>
+        <path d="M150,160 L185,160 L185,115 L220,115" marker-end="url(#ac)"/>
+        <path d="M400,100 L460,100" marker-end="url(#ac)"/>
+        <path d="M590,100 L640,100" marker-end="url(#ac)"/>
+        <!-- t가 신경망으로도 -->
+        <path d="M185,160 L430,160 L430,130 L460,130" marker-end="url(#ac)" stroke-dasharray="4 3"/>
+        <!-- ε가 손실로도 -->
+        <path d="M100,80 L100,10 L692,10 L692,60" marker-end="url(#ac)" stroke-dasharray="4 3"/>
+      </g>
+      <g font-size="11.5" fill="var(--muted)" text-anchor="middle">
+        <text x="420" y="92">xₜ</text>
+        <text x="615" y="92">ε_θ(xₜ, t)</text>
+        <text x="310" y="176">t는 신경망에도 들어감</text>
+        <text x="400" y="26">같은 ε가 정답으로 손실에 들어감</text>
+      </g>
+    </svg>
+    <figcaption><b>그림 10.</b> 학습 한 스텝의 데이터 흐름(알고리즘 1). 순방향 사슬을 실제로 1000번 돌리지 않고 닫힌 형태로 \(\mathbf{x}_t\)를 한 번에 만든다. 신경망의 정답은 픽셀이 아니라 방금 뽑은 잡음 \(\boldsymbol\epsilon\)이다.</figcaption>
+  </figure>
+</section>
+
+<section id="s7">
+  <h2><span class="sec">Section 7 · 논문 Algorithm 1, 2</span>학습·샘플링 알고리즘</h2>
+  <p>논문의 두 알고리즘을 그대로 옮긴다. 학습은 한 스텝에 시각 하나만 뽑고, 샘플링은 \(T\)스텝을 전부 돈다.</p>
+  <div class="algos">
+    <div>
+      <h4>Algorithm 1 · 학습</h4>
+<pre><code>repeat
+  x₀ ~ q(x₀)                    <span class="c">데이터 한 장</span>
+  t  ~ Uniform({1, …, T})
+  ε  ~ N(0, I)
+  <span class="h">경사 하강 on</span>
+    ∇_θ ‖ε − ε_θ(√ᾱₜ x₀ + √(1−ᾱₜ) ε, t)‖²
+until converged</code></pre>
+    </div>
+    <div>
+      <h4>Algorithm 2 · 샘플링</h4>
+<pre><code>x_T ~ N(0, I)
+for t = T, …, 1:
+  z ~ N(0, I) if t &gt; 1 else z = 0
+  x_{t−1} = 1/√αₜ · ( xₜ − (1−αₜ)/√(1−ᾱₜ) · ε_θ(xₜ, t) )
+            + σₜ z
+return x₀</code></pre>
+    </div>
+  </div>
+  <p>샘플링 한 스텝은 §6의 \(\boldsymbol\mu_\theta\)에 \(\sigma_t\mathbf{z}\)를 더한 것이다(\(1-\alpha_t=\beta_t\)). 마지막 스텝 \(t=1\)에서는 잡음을 더하지 않는다. 논문 부록 B 기준으로 CIFAR10 256장 한 묶음을 뽑는 데 17초, 256×256 이미지 128장에는 300초가 걸렸다(TPU v3-8).</p>
+  <p>중간 상태 \(\mathbf{x}_t\)에서 깨끗한 이미지의 추정치를 바로 얻는 식도 자주 쓰인다. 순방향 식을 \(\mathbf{x}_0\)에 대해 풀고 \(\boldsymbol\epsilon\) 자리에 예측을 넣은 것이다.</p>
+  <div class="eq">\[ \hat{\mathbf{x}}_0(\mathbf{x}_t,t)=\frac{1}{\sqrt{\bar\alpha_t}}\Big(\mathbf{x}_t-\sqrt{1-\bar\alpha_t}\,\boldsymbol\epsilon_\theta(\mathbf{x}_t,t)\Big) \]</div>
+  <p>논문 §4.3의 점진적 생성 그림과 뒤에 나온 DDIM의 결정적 샘플러가 이 식을 쓴다.</p>
+</section>
+
+<section id="s8">
+  <h2><span class="sec">Section 8 · 논문 §3.2</span>스코어 매칭과의 연결</h2>
+  <p>\(q(\mathbf{x}_t\mid\mathbf{x}_0)\)가 가우시안이므로 로그 밀도의 기울기(<span class="term">스코어</span>)는 잡음 방향의 반대다.</p>
+  <div class="eq">\[ \nabla_{\mathbf{x}_t}\log q(\mathbf{x}_t\mid\mathbf{x}_0)=-\frac{\mathbf{x}_t-\sqrt{\bar\alpha_t}\mathbf{x}_0}{1-\bar\alpha_t}=-\frac{\boldsymbol\epsilon}{\sqrt{1-\bar\alpha_t}} \]</div>
+  <p>따라서 \(\boldsymbol\epsilon_\theta\)를 학습하는 것은 \(-\sqrt{1-\bar\alpha_t}\)를 곱한 스코어를 학습하는 것과 같다. 이것이 Song과 Ermon(2019)의 <span class="term">잡음 제거 스코어 매칭</span>(여러 잡음 크기에서 스코어를 배우는 방법)이고, 알고리즘 2의 한 스텝은 그들의 <span class="term">Langevin 동역학</span>(스코어 방향으로 조금 움직이고 잡음을 더하는 샘플러)과 같은 꼴이다. 논문은 이 대응을 "우연히 같아진 것"이 아니라 변분 하한의 ε-파라미터화가 낳는 필연으로 제시한다. 두 흐름(확산 모델과 스코어 모델)이 여기서 하나로 합쳐졌고, 이후 Song 등(2021)이 연속 시간 SDE로 통합한다.</p>
+</section>
+
+<section id="s9">
+  <h2><span class="sec">Section 9 · 논문 §3.3</span>마지막 단계 <em>L</em><sub>0</sub>: 이산 픽셀 디코더</h2>
+  <p>이미지 픽셀은 \(\{0,\dots,255\}\)의 정수인데, 모델은 연속 가우시안이다. 논문은 픽셀을 \([-1,1]\)로 선형 변환한 뒤, 마지막 전이 \(p_\theta(\mathbf{x}_0\mid\mathbf{x}_1)\)를 각 픽셀값이 차지하는 구간의 가우시안 확률로 정의한다. 그래야 이산 데이터에 대한 우도가 제대로 정의되고 다른 모델의 bits/dim과 비교할 수 있다.</p>
+  <div class="eq">\[ p_\theta(\mathbf{x}_0\mid\mathbf{x}_1)=\prod_{i=1}^{D}\int_{\delta_-(x_0^i)}^{\delta_+(x_0^i)}\mathcal{N}\big(x;\ \mu_\theta^i(\mathbf{x}_1,1),\ \sigma_1^2\big)\,dx,\qquad \delta_\pm(x)=\begin{cases}\pm\infty & x=\pm1\\ x\pm\tfrac{1}{255} & \text{otherwise}\end{cases} \]</div>
+  <p>구간 폭이 \(2/255\)인 이유는 \([-1,1]\) 구간에 256개 값이 놓이기 때문이다. 샘플링 끝에서 잡음을 더하지 않고 \(\boldsymbol\mu_\theta(\mathbf{x}_1,1)\)를 그대로 출력하는 것도 이 디코더와 짝을 이룬다.</p>
+</section>
+
+<section id="s10">
+  <h2><span class="sec">Section 10 · 논문 §4, 부록 B</span>실험 설정</h2>
+  <div class="tbl">
+  <table>
+    <thead><tr><th>항목</th><th>값</th></tr></thead>
+    <tbody>
+      <tr><td>확산 단계 수 T</td><td class="num">1000</td></tr>
+      <tr><td>분산 스케줄</td><td>선형, β₁ = 10⁻⁴ … β_T = 0.02</td></tr>
+      <tr><td>신경망</td><td>U-Net (PixelCNN++ 계열 구조, 그룹 정규화, 16×16 해상도에 자기 주의). 시각 t는 Transformer의 사인 위치 임베딩으로 넣고, 모든 t가 가중치를 공유</td></tr>
+      <tr><td>파라미터 수</td><td>CIFAR10 35.7M · CelebA-HQ/LSUN 114M · LSUN 큰 모델 약 256M</td></tr>
+      <tr><td>드롭아웃</td><td>CIFAR10 0.1, 그 외 0</td></tr>
+      <tr><td>학습률 · 배치</td><td>CIFAR10 2×10⁻⁴ / 128 · 256×256 이미지 2×10⁻⁵ / 64</td></tr>
+      <tr><td>EMA</td><td>가중치 지수 이동 평균, 감쇠 0.9999 (샘플링에 EMA 가중치 사용)</td></tr>
+      <tr><td>학습 스텝</td><td>CIFAR10 800k · CelebA-HQ 0.5M · LSUN Bedroom 2.4M(작은 모델) / 1.15M(큰 모델) · LSUN Church 1.2M · LSUN Cat 1.8M</td></tr>
+      <tr><td>데이터 증강</td><td>가로 뒤집기 (LSUN Bedroom 제외)</td></tr>
+      <tr><td>하드웨어</td><td>TPU v3-8</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>주목할 점은 신경망이 시각 \(t\)마다 다른 모델이 아니라 <strong>하나의 U-Net이 \(t\)를 입력으로 받는다</strong>는 것이다. 1000개의 잡음 제거기를 하나의 가중치로 공유하므로, 서로 다른 잡음 크기에서 배운 것이 전이된다.</p>
+</section>
+
+<section id="s11">
+  <h2><span class="sec">Section 11 · 논문 §4.1, 표 1·2·3</span>결과와 소거 실험</h2>
+  <h3>표 1: CIFAR10</h3>
+  <p><span class="term">IS</span>(Inception Score, 분류기가 샘플을 얼마나 확신 있게 여러 클래스로 나누는가. 높을수록 좋음)와 <span class="term">FID</span>(Fréchet Inception Distance, 샘플과 실제 데이터의 특징 분포 거리. 낮을수록 좋음), <span class="term">NLL</span>(음의 로그 우도, bits/dim. 낮을수록 좋음)을 함께 보고했다. 확산 모델의 NLL은 변분 하한이므로 "≤"가 붙는다.</p>
+  <div class="tbl">
+  <table>
+    <caption>CIFAR10. 위 묶음은 클래스 조건부, 아래 묶음은 무조건부. DDPM은 무조건부다.</caption>
+    <thead><tr><th>모델</th><th class="num">IS</th><th class="num">FID</th><th class="num">NLL test (train)</th></tr></thead>
+    <tbody>
+      <tr><td>BigGAN (조건부)</td><td class="num">9.22</td><td class="num">14.73</td><td class="num dash">–</td></tr>
+      <tr><td>StyleGAN2 + ADA (조건부)</td><td class="num">10.06</td><td class="num">2.67</td><td class="num dash">–</td></tr>
+      <tr><td>Gated PixelCNN</td><td class="num">4.60</td><td class="num">65.93</td><td class="num">3.03 (2.90)</td></tr>
+      <tr><td>Sparse Transformer</td><td class="num dash">–</td><td class="num dash">–</td><td class="num">2.80</td></tr>
+      <tr><td>NCSN (스코어 모델)</td><td class="num">8.87 ± 0.12</td><td class="num">25.32</td><td class="num dash">–</td></tr>
+      <tr><td>NCSNv2</td><td class="num dash">–</td><td class="num">31.75</td><td class="num dash">–</td></tr>
+      <tr><td>SNGAN-DDLS</td><td class="num">9.09 ± 0.10</td><td class="num">15.42</td><td class="num dash">–</td></tr>
+      <tr><td>StyleGAN2 + ADA (무조건부)</td><td class="num">9.74 ± 0.05</td><td class="num">3.26</td><td class="num dash">–</td></tr>
+      <tr class="ours"><td>DDPM (L, 고정 등방 Σ)</td><td class="num">7.67 ± 0.13</td><td class="num">13.51</td><td class="num">≤ 3.70 (3.69)</td></tr>
+      <tr class="ours"><td>DDPM (L_simple)</td><td class="num">9.46 ± 0.11</td><td class="num">3.17</td><td class="num">≤ 3.75 (3.72)</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>읽을 것 세 가지다. 첫째, 같은 스코어 계열인 NCSN의 FID 25.32에서 3.17로 내려왔다. 둘째, 우도는 Sparse Transformer의 2.80에 미치지 못한다. 셋째, <em>L</em>과 <em>L</em><sub>simple</sub>은 우도와 샘플 품질을 맞바꾼다(NLL 3.70 대 3.75, FID 13.51 대 3.17).</p>
+
+  <h3>표 2: 무엇이 효과를 냈는가 (소거 실험)</h3>
+  <div class="tbl">
+  <table>
+    <caption>CIFAR10. 빈 칸은 논문이 "학습 불안정, 샘플 품질 나쁨"으로 적은 조합.</caption>
+    <thead><tr><th>신경망 출력</th><th>목적 함수 · 분산</th><th class="num">IS</th><th class="num">FID</th></tr></thead>
+    <tbody>
+      <tr><td rowspan="3">μ̃ 예측 (2015년 방식)</td><td>L, 학습된 대각 Σ</td><td class="num">7.28 ± 0.10</td><td class="num">23.69</td></tr>
+      <tr><td>L, 고정 등방 Σ</td><td class="num">8.06 ± 0.09</td><td class="num">13.22</td></tr>
+      <tr><td>‖μ̃ − μ_θ‖² (가중치 없음)</td><td class="num dash">–</td><td class="num dash">–</td></tr>
+      <tr><td rowspan="3">ε 예측 (이 논문)</td><td>L, 학습된 대각 Σ</td><td class="num dash">–</td><td class="num dash">–</td></tr>
+      <tr><td>L, 고정 등방 Σ</td><td class="num">7.67 ± 0.13</td><td class="num">13.51</td></tr>
+      <tr class="ours"><td>‖ε − ε_θ‖² (L_simple)</td><td class="num">9.46 ± 0.11</td><td class="num">3.17</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>이 표가 논문의 핵심 주장을 지탱한다. ε-예측만으로는 μ̃-예측과 판정 한계 안(13.51 대 13.22)이고, <strong>ε-예측과 가중치 제거를 함께 써야</strong> FID가 13.51에서 3.17로 떨어진다. 반면 μ̃-예측에서 가중치를 빼면 학습이 되지 않았다. 즉 "잡음을 맞힌다"는 표적과 "쉬운 단계의 무게를 뺀다"는 재가중치가 짝을 이룰 때만 효과가 난다.</p>
+
+  <h3>표 3: LSUN 256×256</h3>
+  <div class="tbl">
+  <table>
+    <thead><tr><th>모델</th><th class="num">Bedroom FID</th><th class="num">Church FID</th></tr></thead>
+    <tbody>
+      <tr><td>ProgressiveGAN</td><td class="num">8.34</td><td class="num">6.42</td></tr>
+      <tr><td>StyleGAN</td><td class="num">2.65</td><td class="num">4.21</td></tr>
+      <tr><td>StyleGAN2</td><td class="num dash">–</td><td class="num">3.86</td></tr>
+      <tr class="ours"><td>DDPM (L_simple)</td><td class="num">6.36</td><td class="num">7.89</td></tr>
+      <tr class="ours"><td>DDPM (L_simple, 큰 모델)</td><td class="num">4.90</td><td class="num dash">–</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>고해상도에서는 ProgressiveGAN과 같은 급이고 StyleGAN 계열에는 미치지 못한다. 논문 초록의 "ProgressiveGAN과 비슷한 샘플 품질"이라는 표현이 이 표를 가리킨다. CelebA-HQ 256×256은 샘플 그림만 제시하고 수치 비교는 하지 않았다.</p>
+</section>
+
+<section id="s12">
+  <h2><span class="sec">Section 12 · 논문 §4.3, 표 4</span>점진적 부호화: 확산 모델을 압축기로 읽기</h2>
+  <p>변분 하한의 각 항 \(L_{t-1}\)은 KL 발산이므로 "정보량"으로 읽을 수 있다. 송신자가 \(\mathbf{x}_T\)부터 \(\mathbf{x}_0\)까지 차례로 보내는 상황을 가정하면, \(t\)번째까지 보낸 뒤 수신자가 \(\hat{\mathbf{x}}_0\)로 복원했을 때의 <span class="term">율</span>(rate, 지금까지 쓴 비트)과 <span class="term">왜곡</span>(distortion, 원본과의 RMSE)을 곡선으로 그릴 수 있다.</p>
+  <div class="tbl">
+  <table>
+    <caption>CIFAR10 test. 역방향 진행 단계 수(T−t+1)에 따른 누적 율과 왜곡. 왜곡은 0~255 스케일 RMSE.</caption>
+    <thead><tr><th class="num">진행 단계</th><th class="num">율 (bits/dim)</th><th class="num">왜곡 (RMSE)</th></tr></thead>
+    <tbody>
+      <tr><td class="num">100</td><td class="num">0.00000</td><td class="num">67.60</td></tr>
+      <tr><td class="num">300</td><td class="num">0.00081</td><td class="num">54.19</td></tr>
+      <tr><td class="num">500</td><td class="num">0.00716</td><td class="num">38.03</td></tr>
+      <tr><td class="num">700</td><td class="num">0.02866</td><td class="num">24.44</td></tr>
+      <tr><td class="num">900</td><td class="num">0.11994</td><td class="num">12.02</td></tr>
+      <tr><td class="num">1000</td><td class="num">1.77581</td><td class="num">0.95</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>마지막 100단계에서 율이 0.12에서 1.78 bits/dim으로 뛰는데, 그 대가로 줄어드는 왜곡은 RMSE 12.02에서 0.95다. 전체 무손실 부호 길이 3.75 bits/dim 가운데 율 1.78, 나머지 1.97 bits/dim은 마지막 왜곡(RMSE 0.95)을 무손실로 메우는 데 든다. 논문의 결론은 <strong>"무손실 부호 길이의 절반 이상이 지각되지 않는 왜곡을 설명하는 데 쓰인다"</strong>는 것이다. 이는 확산 모델의 NLL이 자기회귀 모델보다 나쁜 이유를 설명한다. 우도는 눈에 보이지 않는 세부까지 세지만, 샘플 품질은 그것과 무관하다.</p>
+  <h3>점진적 생성과 보간</h3>
+  <p>같은 관점에서, 역방향 과정을 큰 \(t\)에서 멈추고 \(\hat{\mathbf{x}}_0\)를 보면 큰 구조(배경, 물체 위치)가 먼저 정해지고 세부는 뒤에 채워진다. 또 두 이미지를 순방향으로 \(t\)까지 보낸 뒤 잠재 공간에서 보간하고 역방향으로 복원하면 이미지 보간이 된다. \(t\)가 클수록 보간이 자유롭고 원본에서 멀어진다.</p>
+</section>
+
+<section id="s13">
+  <h2><span class="sec">Section 13</span>한계</h2>
+  <ul>
+    <li><strong>샘플링 비용.</strong> 한 장에 신경망 통과 1000번. CIFAR10 256장에 17초, 256×256 128장에 300초(TPU v3-8). GAN은 한 번 통과다. DDIM(2020)과 이후 증류 연구가 이 문제를 다룬다.</li>
+    <li><strong>우도.</strong> 3.75 bits/dim으로 자기회귀 모델(2.80)에 미치지 못한다. §12가 이유를 설명하지만 해결하지는 않는다.</li>
+    <li><strong>고해상도 품질.</strong> LSUN에서 StyleGAN 계열보다 FID가 높다(Bedroom 4.90 대 2.65).</li>
+    <li><strong>조건부 생성 없음.</strong> 클래스나 텍스트 조건이 없다. 조건부 확산은 Dhariwal과 Nichol(2021)의 분류기 안내에서 시작한다.</li>
+    <li><strong>분산 학습 실패.</strong> Σ를 학습하면 불안정했고, 왜 그런지는 설명하지 않았다. Nichol과 Dhariwal(2021)이 β_t와 β̃_t 사이의 보간으로 풀었다.</li>
+    <li><strong>스케줄 선택.</strong> 선형 β 스케줄은 32×32에서는 괜찮았지만, 뒤에 저해상도에서 마지막 단계들이 정보를 너무 빨리 잃는다는 지적(코사인 스케줄)이 나왔다.</li>
+  </ul>
+</section>
+
+<section id="s14">
+  <h2><span class="sec">Section 14 · 논문 밖의 연결</span>이후 연구로 이어지는 선</h2>
+  <p>아래는 논문 내용이 아니라 이 논문을 어디에 이어 붙여 읽을지에 대한 안내다.</p>
+  <ul>
+    <li><strong>DDIM</strong> (Song, Meng, Ermon 2020): 같은 학습 모델을 비마르코프 과정으로 다시 해석해 결정적 샘플러를 만들고, 10~50스텝으로 줄인다. §7의 \(\hat{\mathbf{x}}_0\) 식을 그대로 쓴다.</li>
+    <li><strong>Improved DDPM</strong> (Nichol, Dhariwal 2021): 코사인 스케줄, Σ 학습 복원, 하이브리드 손실로 NLL을 개선한다. §4의 "결정 1"을 뒤집는 논문.</li>
+    <li><strong>Score SDE</strong> (Song 등 2021): DDPM과 NCSN을 연속 시간 확률 미분 방정식으로 통합한다. §8의 연결을 일반화한 것.</li>
+    <li><strong>Diffusion beats GANs</strong> (Dhariwal, Nichol 2021): 구조 개선과 분류기 안내로 ImageNet에서 GAN을 넘는다.</li>
+    <li><strong>Latent Diffusion</strong> (Rombach 등 2022): 픽셀이 아니라 오토인코더 잠재 공간에서 확산을 돌려 비용을 줄인다. Stable Diffusion의 바탕.</li>
+  </ul>
+  <h3>이상 탐지 관점에서 읽을 때</h3>
+  <p>재구성 기반 이상 탐지에 확산 모델을 쓰는 연구(AnoDDPM, Wyatt 등 2022 등)는 이 논문의 두 식을 직접 가져다 쓴다. 정상 데이터로만 \(\boldsymbol\epsilon_\theta\)를 학습한 뒤, 검사 이미지를 순방향으로 어떤 \(t_0\)까지만 보내고(§3의 닫힌 형태 식) 역방향으로 복원해(알고리즘 2, 또는 \(\hat{\mathbf{x}}_0\)) 원본과의 차이를 이상 점수로 삼는다. 여기서 \(t_0\)의 선택이 §3의 표와 바로 연결된다. \(t_0\)가 작으면 결함까지 그대로 복원되고, 크면 정상 구조까지 바뀐다. 표에서 신호 계수가 0.63(t=300)에서 0.28(t=500)로 떨어지는 구간이 그 맞바꿈이 일어나는 자리다. 또 이 방식은 한 장을 검사할 때마다 역방향 스텝 수만큼 신경망을 통과하므로, §13의 샘플링 비용이 그대로 추론 지연으로 옮겨진다.</p>
+</section>
+
+<section id="s15">
+  <h2><span class="sec">Section 15</span>읽을 때 헷갈리는 지점</h2>
+  <ul>
+    <li><strong>β, α, ᾱ 셋의 관계.</strong> \(\beta_t\)는 한 단계에서 더하는 잡음 분산, \(\alpha_t=1-\beta_t\)는 한 단계의 신호 유지 비율, \(\bar\alpha_t\)는 그것을 \(t\)단계 누적한 값이다. 학습·샘플링 식에는 셋이 다 나오고, 어느 것이 누적인지 놓치면 식이 맞지 않는다.</li>
+    <li><strong>\(\sigma_t\)는 학습 대상이 아니다.</strong> 샘플링 때 더하는 잡음의 크기이며 \(\beta_t\) 또는 \(\tilde\beta_t\) 중 하나로 정한다.</li>
+    <li><strong>\(L_{\text{simple}}\)은 새로운 목적 함수가 아니다.</strong> 변분 하한에서 \(t\)마다 다른 계수를 뗀 것이다. 그래서 논문은 "재가중치된 변분 하한"이라고 부른다.</li>
+    <li><strong>학습 중에는 사슬을 돌지 않는다.</strong> \(\mathbf{x}_t\)는 닫힌 형태로 한 번에 만든다. 1000번 반복은 샘플링에만 있다.</li>
+    <li><strong>ε-예측과 \(\mathbf{x}_0\)-예측은 서로 바꿔 쓸 수 있다.</strong> §7의 \(\hat{\mathbf{x}}_0\) 식이 그 변환이다. 무엇을 출력하게 하느냐는 손실의 가중치를 바꾸는 것과 같은 효과를 낸다.</li>
+    <li><strong>무조건부 결과다.</strong> 표 1의 조건부 모델(BigGAN, 조건부 StyleGAN2)과 직접 비교하면 안 된다. 논문도 묶음을 나누어 적었다.</li>
+  </ul>
+</section>
+
+<section id="refs">
+  <h2><span class="sec">References</span>참고 문헌</h2>
+  <ol class="refs">
+    <li>Ho, J., Jain, A., Abbeel, P. Denoising Diffusion Probabilistic Models. NeurIPS 2020. arXiv:2006.11239. 코드: github.com/hojonathanho/diffusion</li>
+    <li>Sohl-Dickstein, J. 등. Deep Unsupervised Learning using Nonequilibrium Thermodynamics. ICML 2015. (확산 모델의 원 출처)</li>
+    <li>Song, Y., Ermon, S. Generative Modeling by Estimating Gradients of the Data Distribution. NeurIPS 2019. (NCSN, 잡음 제거 스코어 매칭)</li>
+    <li>Song, J., Meng, C., Ermon, S. Denoising Diffusion Implicit Models. ICLR 2021. (DDIM)</li>
+    <li>Nichol, A., Dhariwal, P. Improved Denoising Diffusion Probabilistic Models. ICML 2021.</li>
+    <li>Song, Y. 등. Score-Based Generative Modeling through Stochastic Differential Equations. ICLR 2021.</li>
+    <li>Dhariwal, P., Nichol, A. Diffusion Models Beat GANs on Image Synthesis. NeurIPS 2021.</li>
+    <li>Rombach, R. 등. High-Resolution Image Synthesis with Latent Diffusion Models. CVPR 2022.</li>
+    <li>Wyatt, J. 등. AnoDDPM: Anomaly Detection with Denoising Diffusion Probabilistic Models using Simplex Noise. CVPR Workshops 2022.</li>
+  </ol>
+  <footer>표 1·2·3·4의 수치와 부록 B의 하이퍼파라미터는 arXiv 2006.11239 원문에서 옮겼다. §3의 ᾱ_t 표는 논문의 선형 스케줄을 직접 계산한 값이다. §14는 논문 밖의 해설이다.</footer>
+</section>
+
+</main>
+</div>
+</div>
+
+</body></html>

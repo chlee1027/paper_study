@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="220" font-family="IBM Plex Sans KR, Malgun Gothic, Apple SD Gothic Neo, sans-serif" viewBox="0 0 760 220" role="img" aria-label="계산할 수 없는 참값 위에 계산할 수 있는 L이 항상 놓여 있다. 학습으로 L을 내리면 그 아래의 참값도 같이 내려간다."><rect x="0" y="0" width="100%" height="100%" fill="#ECEFEC"/>
+      <defs><marker id="av" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1C232C"/></marker></defs>
+      <line x1="70" y1="190" x2="70" y2="40" stroke="#1C232C" stroke-width="1.2" marker-end="url(#av)"/>
+      <text x="62" y="120" font-size="11.5" fill="#7A8590" text-anchor="middle" transform="rotate(-90 62 120)">손실 값 (아래가 좋음)</text>
+      <!-- 학습 전 -->
+      <text x="230" y="36" font-size="13" font-weight="600" fill="#1C232C" text-anchor="middle">학습 전</text>
+      <line x1="140" y1="70" x2="320" y2="70" stroke="#B4552B" stroke-width="3"/>
+      <text x="230" y="60" font-size="12" fill="#B4552B" text-anchor="middle">L (계산 가능, 실선)</text>
+      <line x1="140" y1="140" x2="320" y2="140" stroke="#1C232C" stroke-width="2" stroke-dasharray="6 4"/>
+      <text x="230" y="160" font-size="12" fill="#1C232C" text-anchor="middle">참값 −log p_θ(x₀) (계산 불가, 점선)</text>
+      <line x1="330" y1="74" x2="330" y2="136" stroke="#7A8590" stroke-width="1.2" marker-start="url(#av)" marker-end="url(#av)"/>
+      <text x="340" y="109" font-size="11.5" fill="#7A8590">틈 ≥ 0</text>
+      <!-- 학습 후 -->
+      <text x="560" y="36" font-size="13" font-weight="600" fill="#1C232C" text-anchor="middle">학습 후</text>
+      <line x1="470" y1="125" x2="650" y2="125" stroke="#B4552B" stroke-width="3"/>
+      <text x="560" y="115" font-size="12" fill="#B4552B" text-anchor="middle">L 이 내려감</text>
+      <line x1="470" y1="170" x2="650" y2="170" stroke="#1C232C" stroke-width="2" stroke-dasharray="6 4"/>
+      <text x="560" y="190" font-size="12" fill="#1C232C" text-anchor="middle">참값은 늘 L 아래이므로 따라 내려감</text>
+      <!-- 화살 -->
+      <path d="M330,70 C400,70 420,120 465,124" fill="none" stroke="#B4552B" stroke-width="1.6" marker-end="url(#av)"/>
+      <text x="405" y="86" font-size="11.5" fill="#B4552B" text-anchor="middle">경사 하강</text>
+      <line x1="70" y1="190" x2="740" y2="190" stroke="#CFD6D3" stroke-width="1"/>
+    </svg>

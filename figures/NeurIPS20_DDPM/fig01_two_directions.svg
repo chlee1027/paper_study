@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="210" font-family="IBM Plex Sans KR, Malgun Gothic, Apple SD Gothic Neo, sans-serif" viewBox="0 0 760 210" role="img" aria-label="순방향 과정 q는 x0에서 xT로 잡음을 더하며 오른쪽으로 진행하고, 역방향 과정 p_theta는 xT에서 x0로 잡음을 걷으며 왼쪽으로 진행한다. 순방향은 고정, 역방향만 학습한다."><rect x="0" y="0" width="100%" height="100%" fill="#ECEFEC"/>
+      <defs>
+        <marker id="af" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2E6B8A"/></marker>
+        <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#B4552B"/></marker>
+      </defs>
+      <!-- 상태 노드 -->
+      <g font-size="15" text-anchor="middle" fill="#1C232C">
+        <rect x="30" y="80" width="70" height="46" rx="6" fill="#F6F7F5" stroke="#1C232C" stroke-width="1.2"/>
+        <text x="65" y="109">x₀</text>
+        <rect x="170" y="80" width="70" height="46" rx="6" fill="#F6F7F5" stroke="#1C232C" stroke-width="1.2"/>
+        <text x="205" y="109">x₁</text>
+        <text x="300" y="109" fill="#7A8590" font-size="18">…</text>
+        <rect x="360" y="80" width="80" height="46" rx="6" fill="#F6F7F5" stroke="#1C232C" stroke-width="1.2"/>
+        <text x="400" y="109">xₜ₋₁</text>
+        <rect x="510" y="80" width="70" height="46" rx="6" fill="#F6F7F5" stroke="#1C232C" stroke-width="1.2"/>
+        <text x="545" y="109">xₜ</text>
+        <text x="615" y="109" fill="#7A8590" font-size="18">…</text>
+        <rect x="660" y="80" width="70" height="46" rx="6" fill="#F6F7F5" stroke="#1C232C" stroke-width="1.2"/>
+        <text x="695" y="109">x_T</text>
+      </g>
+      <!-- 상단: 순방향 -->
+      <g stroke="#2E6B8A" stroke-width="1.8" fill="none">
+        <path d="M100,86 C130,60 140,60 170,86" marker-end="url(#af)"/>
+        <path d="M440,86 C465,60 485,60 510,86" marker-end="url(#af)"/>
+      </g>
+      <g font-size="12" fill="#2E6B8A" text-anchor="middle">
+        <text x="135" y="58">q(x₁|x₀)</text>
+        <text x="475" y="58">q(xₜ|xₜ₋₁)</text>
+        <text x="380" y="26" font-size="13" font-weight="600">순방향: √(1−βₜ)·xₜ₋₁ + √βₜ·ε 로 잡음 추가. 고정, 학습 없음</text>
+      </g>
+      <!-- 하단: 역방향 -->
+      <g stroke="#B4552B" stroke-width="1.8" fill="none">
+        <path d="M510,120 C485,146 465,146 440,120" marker-end="url(#ar)"/>
+        <path d="M170,120 C140,146 130,146 100,120" marker-end="url(#ar)"/>
+      </g>
+      <g font-size="12" fill="#B4552B" text-anchor="middle">
+        <text x="475" y="162">p_θ(xₜ₋₁|xₜ)</text>
+        <text x="135" y="162">p_θ(x₀|x₁)</text>
+        <text x="380" y="192" font-size="13" font-weight="600">역방향: 평균 μ_θ(xₜ, t)를 신경망이 예측. 학습 대상</text>
+      </g>
+      <!-- 끝점 설명 -->
+      <g font-size="11.5" fill="#7A8590" text-anchor="middle">
+        <text x="65" y="142">데이터</text>
+        <text x="695" y="142">N(0, I)</text>
+      </g>
+    </svg>

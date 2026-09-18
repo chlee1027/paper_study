@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="250" font-family="IBM Plex Sans KR, Malgun Gothic, Apple SD Gothic Neo, sans-serif" viewBox="0 0 760 250" role="img" aria-label="한 마디 t에서 x0를 아는 정답 종과 x0를 모르는 모델 종이 폭은 같고 중심만 다르다. 학습은 모델 종의 중심 μ_θ를 정답 종의 중심 μ̃_t 쪽으로 옮긴다."><rect x="0" y="0" width="100%" height="100%" fill="#ECEFEC"/>
+      <defs>
+        <path id="m30" d="M-105,-0.2 L-99,-0.3 L-93,-0.7 L-87,-1.2 L-81,-2.1 L-75,-3.5 L-69,-5.7 L-63,-8.8 L-57,-13.2 L-51,-18.9 L-45,-26 L-39,-34.4 L-33,-43.7 L-27,-53.4 L-21,-62.6 L-15,-70.6 L-9,-76.5 L-3,-79.6 L0,-80 L3,-79.6 L9,-76.5 L15,-70.6 L21,-62.6 L27,-53.4 L33,-43.7 L39,-34.4 L45,-26 L51,-18.9 L57,-13.2 L63,-8.8 L69,-5.7 L75,-3.5 L81,-2.1 L87,-1.2 L93,-0.7 L99,-0.3 L105,-0.2"/>
+        <marker id="am" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#B4552B"/></marker>
+        <marker id="am2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1C232C"/></marker>
+      </defs>
+      <text x="380" y="26" font-size="13" font-weight="600" fill="#1C232C" text-anchor="middle">마디 t 하나에서 벌어지는 일 (xₜ 는 주어짐)</text>
+      <line x1="120" y1="170" x2="660" y2="170" stroke="#1C232C" stroke-width="1"/>
+      <use href="#m30" transform="translate(330,170)" fill="#D8E7EE" stroke="#2E6B8A" stroke-width="2"/>
+      <use href="#m30" transform="translate(450,170)" fill="none" stroke="#B4552B" stroke-width="2" stroke-dasharray="5 3"/>
+      <line x1="330" y1="90" x2="330" y2="170" stroke="#2E6B8A" stroke-width="1" stroke-dasharray="3 3"/>
+      <line x1="450" y1="90" x2="450" y2="170" stroke="#B4552B" stroke-width="1" stroke-dasharray="3 3"/>
+      <path d="M445,62 L335,62" fill="none" stroke="#B4552B" stroke-width="1.8" marker-end="url(#am)"/>
+      <text x="390" y="54" font-size="12" fill="#B4552B" text-anchor="middle" font-weight="600">학습: 중심을 이쪽으로 옮긴다</text>
+      <g font-size="12">
+        <text x="215" y="100" fill="#2E6B8A" text-anchor="end">정답 종 q(xₜ₋₁ | xₜ, x₀)</text>
+        <text x="215" y="116" fill="#2E6B8A" text-anchor="end">x₀ 를 아는 쪽이 그림</text>
+        <text x="215" y="132" fill="#2E6B8A" text-anchor="end">중심 μ̃ₜ, 폭 √β̃ₜ</text>
+        <text x="565" y="100" fill="#B4552B">모델 종 p_θ(xₜ₋₁ | xₜ)</text>
+        <text x="565" y="116" fill="#B4552B">x₀ 없이 신경망이 그림</text>
+        <text x="565" y="132" fill="#B4552B">중심 μ_θ(xₜ, t), 폭 σₜ (고정)</text>
+      </g>
+      <text x="330" y="190" font-size="12.5" fill="#2E6B8A" text-anchor="middle">μ̃ₜ</text>
+      <text x="450" y="190" font-size="12.5" fill="#B4552B" text-anchor="middle">μ_θ</text>
+      <line x1="330" y1="208" x2="450" y2="208" stroke="#1C232C" stroke-width="1.3" marker-start="url(#am2)" marker-end="url(#am2)"/>
+      <text x="390" y="232" font-size="13" fill="#1C232C" text-anchor="middle" font-weight="600">Lₜ₋₁ = ‖μ̃ₜ − μ_θ‖² / 2σₜ²  (거리의 제곱)</text>
+    </svg>

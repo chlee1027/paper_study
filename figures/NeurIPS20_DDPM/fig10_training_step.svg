@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="200" font-family="IBM Plex Sans KR, Malgun Gothic, Apple SD Gothic Neo, sans-serif" viewBox="0 0 760 200" role="img" aria-label="학습 한 스텝: 데이터 x0, 잡음 ε, 시각 t를 뽑아 x_t를 만들고, 신경망 ε_θ가 x_t와 t로부터 잡음을 예측하며, 예측과 실제 ε의 제곱 오차를 손실로 쓴다."><rect x="0" y="0" width="100%" height="100%" fill="#ECEFEC"/>
+      <defs>
+        <marker id="ac" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1C232C"/></marker>
+      </defs>
+      <g font-size="13" fill="#1C232C" text-anchor="middle">
+        <!-- 입력 셋 -->
+        <rect x="20" y="20" width="130" height="40" rx="5" fill="#F6F7F5" stroke="#1C232C" stroke-width="1.1"/>
+        <text x="85" y="45">x₀ ~ 데이터</text>
+        <rect x="20" y="80" width="130" height="40" rx="5" fill="#F6F7F5" stroke="#1C232C" stroke-width="1.1"/>
+        <text x="85" y="105">ε ~ N(0, I)</text>
+        <rect x="20" y="140" width="130" height="40" rx="5" fill="#F6F7F5" stroke="#1C232C" stroke-width="1.1"/>
+        <text x="85" y="165">t ~ U{1 … T}</text>
+        <!-- 합성 -->
+        <rect x="220" y="60" width="180" height="80" rx="5" fill="#D8E7EE" stroke="#2E6B8A" stroke-width="1.3"/>
+        <text x="310" y="92" fill="#2E6B8A" font-weight="600">잡음 섞기 (순방향)</text>
+        <text x="310" y="114" fill="#2E6B8A" font-size="12">xₜ = √ᾱₜ·x₀ + √(1−ᾱₜ)·ε</text>
+        <!-- 신경망 -->
+        <rect x="460" y="60" width="130" height="80" rx="5" fill="#F2DED2" stroke="#B4552B" stroke-width="1.3"/>
+        <text x="525" y="92" fill="#B4552B" font-weight="600">U-Net ε_θ</text>
+        <text x="525" y="114" fill="#B4552B" font-size="12">입력 (xₜ, t)</text>
+        <!-- 손실 -->
+        <rect x="640" y="60" width="105" height="80" rx="5" fill="#F6F7F5" stroke="#1C232C" stroke-width="1.1"/>
+        <text x="692" y="92" font-weight="600">손실</text>
+        <text x="692" y="114" font-size="12">‖ε − ε_θ‖²</text>
+      </g>
+      <g stroke="#1C232C" stroke-width="1.4" fill="none">
+        <path d="M150,40 L185,40 L185,85 L220,85" marker-end="url(#ac)"/>
+        <path d="M150,100 L220,100" marker-end="url(#ac)"/>
+        <path d="M150,160 L185,160 L185,115 L220,115" marker-end="url(#ac)"/>
+        <path d="M400,100 L460,100" marker-end="url(#ac)"/>
+        <path d="M590,100 L640,100" marker-end="url(#ac)"/>
+        <!-- t가 신경망으로도 -->
+        <path d="M185,160 L430,160 L430,130 L460,130" marker-end="url(#ac)" stroke-dasharray="4 3"/>
+        <!-- ε가 손실로도 -->
+        <path d="M100,80 L100,10 L692,10 L692,60" marker-end="url(#ac)" stroke-dasharray="4 3"/>
+      </g>
+      <g font-size="11.5" fill="#7A8590" text-anchor="middle">
+        <text x="420" y="92">xₜ</text>
+        <text x="615" y="92">ε_θ(xₜ, t)</text>
+        <text x="310" y="176">t는 신경망에도 들어감</text>
+        <text x="400" y="26">같은 ε가 정답으로 손실에 들어감</text>
+      </g>
+    </svg>

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="240" font-family="IBM Plex Sans KR, Malgun Gothic, Apple SD Gothic Neo, sans-serif" viewBox="0 0 760 240" role="img" aria-label="신경망이 낸 중심의 종 곡선 아래에서 실제 픽셀값이 차지하는 좁은 구간의 면적이 그 픽셀의 확률이고, L0는 그 면적의 음의 로그다."><rect x="0" y="0" width="100%" height="100%" fill="#ECEFEC"/>
+      <defs>
+        <path id="d60" d="M-210,-0.2 L-198,-0.3 L-186,-0.6 L-174,-1 L-162,-1.8 L-150,-3.1 L-138,-5 L-126,-7.7 L-114,-11.5 L-102,-16.5 L-90,-22.7 L-78,-30.1 L-66,-38.2 L-54,-46.7 L-42,-54.8 L-30,-61.8 L-18,-66.9 L-6,-69.7 L0,-70 L6,-69.7 L18,-66.9 L30,-61.8 L42,-54.8 L54,-46.7 L66,-38.2 L78,-30.1 L90,-22.7 L102,-16.5 L114,-11.5 L126,-7.7 L138,-5 L150,-3.1 L162,-1.8 L174,-1 L186,-0.6 L198,-0.3 L210,-0.2"/>
+        <path id="dbin" d="M14,0 L14,-68.1 L16,-67.6 L18,-66.9 L20,-66.2 L22,-65.4 L24,-64.6 L26,-63.7 L28,-62.8 L30,-61.8 L30,0 Z"/>
+        <marker id="ad" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1C232C"/></marker>
+      </defs>
+      <text x="380" y="26" font-size="13" font-weight="600" fill="#1C232C" text-anchor="middle">마지막 마디: 픽셀 하나의 종에서 정수 한 칸을 잘라 낸다</text>
+      <line x1="120" y1="170" x2="640" y2="170" stroke="#1C232C" stroke-width="1"/>
+      <use href="#dbin" transform="translate(380,170)" fill="#F2DED2" stroke="none"/>
+      <use href="#d60" transform="translate(380,170)" fill="none" stroke="#B4552B" stroke-width="2"/>
+      <use href="#dbin" transform="translate(380,170)" fill="none" stroke="#B4552B" stroke-width="1.4"/>
+      <!-- 눈금: 2/255 간격 -->
+      <g stroke="#1C232C" stroke-width="1">
+        <line x1="298" y1="170" x2="298" y2="178"/><line x1="314" y1="170" x2="314" y2="178"/><line x1="330" y1="170" x2="330" y2="178"/><line x1="346" y1="170" x2="346" y2="178"/>
+        <line x1="362" y1="170" x2="362" y2="178"/><line x1="378" y1="170" x2="378" y2="178"/><line x1="394" y1="170" x2="394" y2="178"/><line x1="410" y1="170" x2="410" y2="178"/>
+        <line x1="426" y1="170" x2="426" y2="178"/><line x1="442" y1="170" x2="442" y2="178"/><line x1="458" y1="170" x2="458" y2="178"/>
+      </g>
+      <text x="380" y="192" font-size="11.5" fill="#7A8590" text-anchor="middle">정수 픽셀값 눈금 (한 칸 = 2/255, 예: 127 · 128 · 129 …)</text>
+      <line x1="380" y1="100" x2="380" y2="170" stroke="#B4552B" stroke-width="1" stroke-dasharray="3 3"/>
+      <text x="300" y="92" font-size="12" fill="#B4552B" text-anchor="middle">신경망이 낸 중심 μ_θ(x₁, 1)ⁱ</text>
+      <line x1="402" y1="215" x2="402" y2="172" stroke="#1C232C" stroke-width="1.2" marker-end="url(#ad)"/>
+      <text x="402" y="230" font-size="12" fill="#1C232C" text-anchor="middle">실제 픽셀값 x₀ⁱ 의 칸 [x₀ⁱ − 1/255, x₀ⁱ + 1/255]</text>
+      <path d="M560,70 C520,70 470,90 412,110" fill="none" stroke="#1C232C" stroke-width="1.2" marker-end="url(#ad)"/>
+      <text x="565" y="66" font-size="12" fill="#1C232C">확률 = 색칠한 면적</text>
+      <text x="565" y="82" font-size="12" fill="#1C232C">L₀ 의 이 픽셀 몫 = −log(면적)</text>
+    </svg>

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="210" font-family="IBM Plex Sans KR, Malgun Gothic, Apple SD Gothic Neo, sans-serif" viewBox="0 0 760 210" role="img" aria-label="폭이 같은 두 종 곡선을 세 가지 거리로 놓았다. 겹치면 KL 0, 중심이 d 떨어지면 d²/2σ², 거리가 2배면 KL은 4배."><rect x="0" y="0" width="100%" height="100%" fill="#ECEFEC"/>
+      <defs>
+        <path id="k30" d="M-105,-0.2 L-99,-0.3 L-93,-0.7 L-87,-1.2 L-81,-2.1 L-75,-3.5 L-69,-5.7 L-63,-8.8 L-57,-13.2 L-51,-18.9 L-45,-26 L-39,-34.4 L-33,-43.7 L-27,-53.4 L-21,-62.6 L-15,-70.6 L-9,-76.5 L-3,-79.6 L0,-80 L3,-79.6 L9,-76.5 L15,-70.6 L21,-62.6 L27,-53.4 L33,-43.7 L39,-34.4 L45,-26 L51,-18.9 L57,-13.2 L63,-8.8 L69,-5.7 L75,-3.5 L81,-2.1 L87,-1.2 L93,-0.7 L99,-0.3 L105,-0.2"/>
+        <marker id="akl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1C232C"/></marker>
+      </defs>
+      <text x="380" y="26" font-size="13" font-weight="600" fill="#1C232C" text-anchor="middle">KL 발산: 폭이 같으면 중심 거리만 남는다</text>
+      <!-- 패널 1 -->
+      <line x1="20" y1="150" x2="240" y2="150" stroke="#1C232C" stroke-width="1"/>
+      <use href="#k30" transform="translate(130,150)" fill="#D8E7EE" stroke="#2E6B8A" stroke-width="2"/>
+      <use href="#k30" transform="translate(130,150)" fill="none" stroke="#B4552B" stroke-width="2" stroke-dasharray="5 3"/>
+      <text x="130" y="172" font-size="12" fill="#1C232C" text-anchor="middle">완전히 겹침</text>
+      <text x="130" y="192" font-size="13" fill="#1C232C" text-anchor="middle" font-weight="600">KL = 0</text>
+      <!-- 패널 2 -->
+      <line x1="270" y1="150" x2="490" y2="150" stroke="#1C232C" stroke-width="1"/>
+      <use href="#k30" transform="translate(365,150)" fill="#D8E7EE" stroke="#2E6B8A" stroke-width="2"/>
+      <use href="#k30" transform="translate(395,150)" fill="none" stroke="#B4552B" stroke-width="2" stroke-dasharray="5 3"/>
+      <line x1="365" y1="60" x2="395" y2="60" stroke="#1C232C" stroke-width="1.4" marker-start="url(#akl)" marker-end="url(#akl)"/>
+      <text x="380" y="52" font-size="12" fill="#1C232C" text-anchor="middle">d</text>
+      <text x="380" y="172" font-size="12" fill="#1C232C" text-anchor="middle">중심이 d 만큼 어긋남</text>
+      <text x="380" y="192" font-size="13" fill="#1C232C" text-anchor="middle" font-weight="600">KL = d² / 2σ²</text>
+      <!-- 패널 3 -->
+      <line x1="520" y1="150" x2="740" y2="150" stroke="#1C232C" stroke-width="1"/>
+      <use href="#k30" transform="translate(600,150)" fill="#D8E7EE" stroke="#2E6B8A" stroke-width="2"/>
+      <use href="#k30" transform="translate(660,150)" fill="none" stroke="#B4552B" stroke-width="2" stroke-dasharray="5 3"/>
+      <line x1="600" y1="60" x2="660" y2="60" stroke="#1C232C" stroke-width="1.4" marker-start="url(#akl)" marker-end="url(#akl)"/>
+      <text x="630" y="52" font-size="12" fill="#1C232C" text-anchor="middle">2d</text>
+      <text x="630" y="172" font-size="12" fill="#1C232C" text-anchor="middle">거리가 2배</text>
+      <text x="630" y="192" font-size="13" fill="#1C232C" text-anchor="middle" font-weight="600">KL = 4 × (d² / 2σ²)</text>
+    </svg>
