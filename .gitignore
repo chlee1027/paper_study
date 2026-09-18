@@ -1,0 +1,41 @@
+# 모델 가중치
+*.pth
+*.pt
+*.ckpt
+*.safetensors
+*.bin
+*.onnx
+
+# 데이터셋과 큰 파일
+data/
+datasets/
+*.h5
+*.npz
+*.zip
+*.tar
+*.tar.gz
+*.7z
+# 예외: 그림을 다시 그리는 데 필요한 작은 배열은 손으로 풀어 추적한다
+#   git add -f experiments/<이름>/<파일>.npy
+
+# 결과는 추적한다. 아래 둘만 뺀다
+*.log
+checkpoints/
+
+# 파이썬
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.venv/
+venv/
+env/
+
+# 운영체제와 편집기
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# 노트북 실행 흔적 중 큰 것
+*.nbconvert.ipynb
