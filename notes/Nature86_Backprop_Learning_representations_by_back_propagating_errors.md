@@ -77,9 +77,9 @@
 
 **그림 2.** 아래 유닛들의 출력에 가중치를 곱해 더하고(선형), 그 값을 로지스틱 함수에 통과시킨다(비선형).
 
-$$x_j = \sum_i y_i\, w_{ji} \tag{1}$$
+$$x_j = \sum_i y_i\, w_{ji} \qquad (1)$$
 
-$$y_j = \frac{1}{1 + e^{-x_j}} \tag{2}$$
+$$y_j = \frac{1}{1 + e^{-x_j}} \qquad (2)$$
 
 **작은 예시.** 아래 유닛 셋의 출력이 $(1.0,\ 0.5,\ 0.0)$이고 가중치가 $(0.4,\ -0.6,\ 2.0)$, 편향이 $-0.2$라면 $x_j = 0.4 - 0.3 + 0 - 0.2 = -0.1$이고 $y_j = 1/(1+e^{0.1}) = 0.475$다.
 
@@ -115,7 +115,7 @@ $$\frac{dy}{dx} = \frac{e^{-x}}{(1+e^{-x})^2} = y\,(1-y)$$
 
 ### 5.1 오차 (식 3)
 
-$$E = \frac{1}{2} \sum_c \sum_j \left( y_{j,c} - d_{j,c} \right)^2 \tag{3}$$
+$$E = \frac{1}{2} \sum_c \sum_j \left( y_{j,c} - d_{j,c} \right)^2 \qquad (3)$$
 
 $c$는 입출력 쌍(학습 예)의 번호, $j$는 출력 유닛의 번호, $y$가 실제 출력, $d$가 목표 출력이다. **앞의 1/2은 미분하면 사라지라고 붙인 것이다** — 식 (4)가 $y_j - d_j$로 깔끔하게 떨어진다.
 
@@ -129,19 +129,19 @@ $c$는 입출력 쌍(학습 예)의 번호, $j$는 출력 유닛의 번호, $y$�
 
 **① 출력 유닛에서 시작한다.** 식 (3)을 $y_j$로 미분하면
 
-$$\partial E / \partial y_j = y_j - d_j \tag{4}$$
+$$\partial E / \partial y_j = y_j - d_j \qquad (4)$$
 
 **② 활성 함수를 거슬러 올라간다.** 연쇄 법칙으로 $\partial E/\partial x_j = (\partial E/\partial y_j)(dy_j/dx_j)$이고, 여기에 4.2절의 $dy/dx = y(1-y)$를 넣으면
 
-$$\partial E / \partial x_j = \frac{\partial E}{\partial y_j} \cdot y_j (1 - y_j) \tag{5}$$
+$$\partial E / \partial x_j = \frac{\partial E}{\partial y_j} \cdot y_j (1 - y_j) \qquad (5)$$
 
 **③ 가중치의 몫을 뗀다.** $x_j = \sum_i y_i w_{ji}$이므로 $\partial x_j / \partial w_{ji} = y_i$다. 따라서
 
-$$\partial E / \partial w_{ji} = \frac{\partial E}{\partial x_j} \cdot \frac{\partial x_j}{\partial w_{ji}} = \frac{\partial E}{\partial x_j} \cdot y_i \tag{6}$$
+$$\partial E / \partial w_{ji} = \frac{\partial E}{\partial x_j} \cdot \frac{\partial x_j}{\partial w_{ji}} = \frac{\partial E}{\partial x_j} \cdot y_i \qquad (6)$$
 
 **④ 한 층 아래로 넘긴다.** 아래 유닛 $i$의 출력은 위 유닛 $j$ 여럿에 들어간다. $i$가 $j$ 하나에 미치는 몫은 $\partial E/\partial x_j \cdot w_{ji}$이고, $i$에서 나가는 연결 전부를 더하면
 
-$$\partial E / \partial y_i = \sum_j \frac{\partial E}{\partial x_j} \cdot w_{ji} \tag{7}$$
+$$\partial E / \partial y_i = \sum_j \frac{\partial E}{\partial x_j} \cdot w_{ji} \qquad (7)$$
 
 이렇게 얻은 $\partial E/\partial y_i$가 **한 층 아래에서 다시 ①의 자리**에 들어간다. 그래서 층이 몇이든 같은 네 걸음을 되풀이하면 된다. 논문의 말로, 마지막 층의 $\partial E/\partial y$를 알면 그 아래 층의 $\partial E/\partial y$를 구할 수 있고, **이 절차를 앞선 층들에 대해 되풀이하면서 지나는 길에 $\partial E/\partial w$를 함께 구한다.**
 
@@ -183,11 +183,11 @@ $$\partial E / \partial y_i = \sum_j \frac{\partial E}{\partial x_j} \cdot w_{ji
 
 **얼마나 바꾸는가.**
 
-$$\Delta w = -\varepsilon \frac{\partial E}{\partial w} \tag{8}$$
+$$\Delta w = -\varepsilon \frac{\partial E}{\partial w} \qquad (8)$$
 
 논문은 이것을 **가장 단순한 형태의 기울기 하강**이라 부르면서, **2차 미분을 쓰는 방법만큼 빠르게 수렴하지는 않지만 훨씬 간단하고 병렬 하드웨어의 국소 계산으로 쉽게 구현된다**고 적었다. 이어서 단순함과 국소성을 해치지 않고 크게 개선할 수 있다며 가속 항을 붙인다.
 
-$$\Delta w(t) = -\varepsilon \frac{\partial E}{\partial w(t)} + \alpha\, \Delta w(t-1) \tag{9}$$
+$$\Delta w(t) = -\varepsilon \frac{\partial E}{\partial w(t)} + \alpha\, \Delta w(t-1) \qquad (9)$$
 
 $t$는 **훑기 한 번마다 1씩** 늘어난다. α는 0과 1 사이의 값으로, **지금의 기울기와 앞선 기울기들이 각각 얼마나 들어갈지**를 정한다. 논문의 설명은 **기울기로 점의 위치가 아니라 속도를 고치는 것**이다.
 

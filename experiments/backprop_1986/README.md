@@ -131,5 +131,5 @@ Nature 1986 노트의 「남는 질문」 네 줄이 전부 **한 번 돌려 보
 |---|---|
 | `figures/A_B_symmetry.png` | 왼쪽은 은닉 유닛 수별 못 푼 비율, 오른쪽은 푸는 데 걸린 훑기 수(가로선이 논문의 1,425) |
 | `figures/C_alpha.png` | α 세 값에서의 훑기 수 |
-| `figures/E_depth.png` | 층별 $\|\partial E/\partial w\|$ 평균. 아래층으로 갈수록 낮아진다 |
+| `figures/E_depth.png` | 층별 $\lvert \partial E/\partial w \rvert$ 평균. 아래층으로 갈수록 낮아진다 |
 | `figures/D3_person_units.png` | 논문 그림 4처럼, 사람 24명에 대한 2층 6유닛의 가중치. 세로선 왼쪽이 영국 사람이다 |
