@@ -1,0 +1,4 @@
+﻿kind,free_energy_mean,free_energy_std,run_id,notebook,python,numpy,platform
+test_digits,-278.608520167491,30.03879673128438,20260920_142811,dbn_2006.ipynb,3.13.15,2.1.3,Linux-6.6.122+-x86_64-with-glibc2.39
+pixel_shuffled,7.836391307299102,19.848527698763117,20260920_142811,dbn_2006.ipynb,3.13.15,2.1.3,Linux-6.6.122+-x86_64-with-glibc2.39
+uniform_noise,79.67181981725787,1.8647528636507305,20260920_142811,dbn_2006.ipynb,3.13.15,2.1.3,Linux-6.6.122+-x86_64-with-glibc2.39
