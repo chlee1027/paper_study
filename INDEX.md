@@ -13,6 +13,7 @@
 | **DDPM** — Denoising Diffusion Probabilistic Models | NeurIPS 2020 | 데이터에 잡음을 더하는 고정된 과정을 거꾸로 되돌리는 신경망을 학습한다. 평균이 아니라 **더해진 잡음을 예측**하게 하고 변분 하한의 가중치를 버리자 CIFAR10 FID가 13.51에서 3.17로 내려갔다 | 확산 모델의 출발점이라 생성 모델 계열을 읽으려면 먼저 봐야 한다. 이상 탐지 쪽에서도 재구성 기반 방법(AnoDDPM 등)이 이 논문의 두 식을 그대로 쓴다 | [NeurIPS20_DDPM](notes/NeurIPS20_DDPM_Denoising_Diffusion_Probabilistic_Models.md) |
 | **DBN** — A Fast Learning Algorithm for Deep Belief Nets | Neural Computation 2006 | 깊은 망을 한 번에 배우지 않고 **한 층씩 배워 얼리고 그 위에 또 얹는다.** 위층 가중치를 묶어 **상보 사전분포**를 만들면 사후분포가 정확히 곱꼴이 되고, 그 자리에서 한 층을 배우는 일이 **RBM 하나를 배우는 일**로 줄어든다. MNIST 순열 불변 조건에서 1.25% | 역전파 노트가 남긴 한계 하나(로지스틱 기울기 최댓값 0.25 가 층마다 곱해진다)를 그대로 받는 편. **탐욕 학습 2.49% 와 미세조정 1.25% 의 몫이 갈려 있지 않다는 것을 짚어 두었다** | [NC06_DBN](notes/NC06_DBN_A_Fast_Learning_Algorithm_for_Deep_Belief_Nets.md) |
 | **LeNet** — Gradient-Based Learning Applied to Document Recognition | Proceedings of the IEEE 1998 | 가중치에 **국소 수용장 · 가중치 공유 · 부분 표본 뽑기** 셋을 걸어 2차원 모양의 이동과 일그러짐을 견디게 만든다. LeNet-5 는 연결이 340,908 개인데 **학습되는 값은 60,000 개**이고 MNIST 시험 10,000 장에서 0.95%. 뒤쪽 절반은 자르기·인식·언어 지식을 **문서 수준 벌점 하나**로 함께 배우는 그래프 변환망이다 | DBN 노트가 남긴 한계 셋(지각 불변성)과 넷(분할이 끝났다고 가정한다)을 함께 받는 편. **다만 이 논문이 여덟 해 앞이라, 한계에 답한 것이 아니라 그 자리에 이미 놓여 있던 것이다.** 논문이 문장으로만 적고 재지 않은 자리 둘(픽셀을 섞으면 · 얼마나 옮겨도 견디는가)을 실험으로 옮겼다 | [ProcIEEE98_LeNet](notes/ProcIEEE98_LeNet_Gradient_Based_Learning_Applied_to_Document_Recognition.md) |
+| **오토인코더** — Reducing the Dimensionality of Data with Neural Networks | Science 2006 | RBM 을 한 층씩 쌓아 **깊은 오토인코더의 출발점을 먼저 찾고**, 펼쳐서 역전파로 재구성 오차를 줄인다. 이미지당 제곱 오차가 곡선 6 차원 1.44(주성분 18 차원 5.90) · MNIST 30 차원 3.00(13.87) · 얼굴 30 차원 126(135). 같은 사전학습으로 MNIST 분류 1.2% | 로드맵의 AE 칸. 같은 해 DBN 논문이 낸 **쌓기를 무엇에 쓰는가**를 보이는 편이다. **주성분 분석과의 비교가 파라미터 105~389 배 차이 위에 서 있고, 사전학습의 몫을 가르는 행이 본문에 없다는 것을 짚어 두었다** | [Science06_AE](notes/Science06_AE_Reducing_the_Dimensionality_of_Data_with_Neural_Networks.md) |
 
 ---
 
@@ -20,6 +21,7 @@
 
 | 논문 | 게재처·연도 | 왜 읽으려 하는가 | 원문을 구했는가 |
 |---|---|---|---|
+| **VAE** — Auto-Encoding Variational Bayes | ICLR 2014 | 오토인코더 노트 20절 — 코드에 분포가 없어 코드 공간에서 점을 골라 새 이미지를 만들 길이 없다. 부호기가 점 대신 분포를 내면 무엇이 바뀌는지 본다. 로드맵의 다음 칸이다 | 아직 |
 | **DDIM** — Denoising Diffusion Implicit Models | ICLR 2021 | DDPM의 1000스텝을 10~50스텝으로 줄인다. 같은 학습 모델을 그대로 쓰므로 DDPM 다음에 바로 읽힌다 | 아직 |
 | **AnoDDPM** | CVPR Workshops 2022 | 확산 모델을 이상 탐지에 쓴 편. 순방향으로 어디까지 보낼지(t₀)를 고르는 문제가 DDPM §3의 표와 바로 이어진다 | 아직 |
 | **층별 사전학습이 정말 필요한가를 잰 편** | - | DBN 이 답하지 않은 자리다. **직접 재 보니 이 규모(10,000 장·은닉 256)에서는 도움이 됐고 깊을수록 커졌다**([dbn_2006](experiments/dbn_2006/)). 남은 것은 **규모를 올려도 그 차이가 남는가** — 라벨이 많을수록 차이가 줄었으므로 60,000 장에서는 사라질 수 있다. 그 모양을 잰 편을 찾는다 | 편을 아직 못 골랐다 |
