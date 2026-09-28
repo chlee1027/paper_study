@@ -15,6 +15,7 @@
 | **LeNet** — Gradient-Based Learning Applied to Document Recognition | Proceedings of the IEEE 1998 | 가중치에 **국소 수용장 · 가중치 공유 · 부분 표본 뽑기** 셋을 걸어 2차원 모양의 이동과 일그러짐을 견디게 만든다. LeNet-5 는 연결이 340,908 개인데 **학습되는 값은 60,000 개**이고 MNIST 시험 10,000 장에서 0.95%. 뒤쪽 절반은 자르기·인식·언어 지식을 **문서 수준 벌점 하나**로 함께 배우는 그래프 변환망이다 | DBN 노트가 남긴 한계 셋(지각 불변성)과 넷(분할이 끝났다고 가정한다)을 함께 받는 편. **다만 이 논문이 여덟 해 앞이라, 한계에 답한 것이 아니라 그 자리에 이미 놓여 있던 것이다.** 논문이 문장으로만 적고 재지 않은 자리 둘(픽셀을 섞으면 · 얼마나 옮겨도 견디는가)을 실험으로 옮겼다 | [ProcIEEE98_LeNet](notes/ProcIEEE98_LeNet_Gradient_Based_Learning_Applied_to_Document_Recognition.md) |
 | **AlexNet** — ImageNet Classification with Deep Convolutional Neural Networks | NIPS 2012 | 합성곱 망을 **학습되는 층 여덟 · 파라미터 6천만**으로 키우고, 커지면서 생기는 두 문제를 각각 막는다 — 느린 학습은 **ReLU 와 GPU 둘로 쪼개기**로, 과적합은 **데이터 늘리기와 드롭아웃**으로. ILSVRC-2010 에서 top-1 37.5% · top-5 17.0%(그전 최고 47.1 · 28.2), 2012 대회는 top-5 15.3% 로 우승(2등 26.2%) | LeNet 노트 17절이 다음으로 꼽은 둘(**크게 키운 편** · **최댓값 풀링으로 바꾼 편**)이 한 편에 들어 있다. **1998년의 6만 파라미터가 2012년에 6천만이 되는 자리** | [NIPS12_AlexNet](notes/NIPS12_AlexNet_ImageNet_Classification_with_Deep_Convolutional_Neural_Networks.md) |
 | **오토인코더** — Reducing the Dimensionality of Data with Neural Networks | Science 2006 | RBM 을 한 층씩 쌓아 **깊은 오토인코더의 출발점을 먼저 찾고**, 펼쳐서 역전파로 재구성 오차를 줄인다. 이미지당 제곱 오차가 곡선 6 차원 1.44(주성분 18 차원 5.90) · MNIST 30 차원 3.00(13.87) · 얼굴 30 차원 126(135). 같은 사전학습으로 MNIST 분류 1.2% | 로드맵의 AE 칸. 같은 해 DBN 논문이 낸 **쌓기를 무엇에 쓰는가**를 보이는 편이다. **주성분 분석과의 비교가 파라미터 105~389 배 차이 위에 서 있고, 사전학습의 몫을 가르는 행이 본문에 없다는 것을 짚어 두었다** | [Science06_AE](notes/Science06_AE_Reducing_the_Dimensionality_of_Data_with_Neural_Networks.md) |
+| **VAE** — Auto-Encoding Variational Bayes | ICLR 2014 | 표본을 뽑는 자리를 $z = \mu + \sigma \odot \varepsilon$ 으로 바꿔(**재매개변수화**) 변분 하한의 기울기를 낮은 분산으로 추정한다. 부호기를 신경망으로 두면 오토인코더 모양이 되는데 **부호기가 점이 아니라 분포를 내고, 그 분포가 $\mathcal{N}(0, I)$ 에서 멀어질수록 KL 벌점**을 받는다. MNIST · Frey Face 에서 깨어남-잠보다 하한을 빨리, 높이 올렸다 | 로드맵의 VAE 칸. 오토인코더 노트가 남긴 한계(코드에 분포가 없어 새 이미지를 만들 길이 없다)를 받는 편. **「잠재 변수를 늘려도 과적합이 늘지 않는다」가 Frey Face 에서는 눈금과 어긋나고(학습-시험 간격 60 → 180), 하한과 $\log p(x)$ 의 틈을 재지 않는다는 것을 짚어 두었다** | [ICLR14_VAE](notes/ICLR14_VAE_Auto_Encoding_Variational_Bayes.md) |
 
 ---
 
@@ -22,7 +23,9 @@
 
 | 논문 | 게재처·연도 | 왜 읽으려 하는가 | 원문을 구했는가 |
 |---|---|---|---|
-| **VAE** — Auto-Encoding Variational Bayes | ICLR 2014 | 오토인코더 노트 20절 — 코드에 분포가 없어 코드 공간에서 점을 골라 새 이미지를 만들 길이 없다. 부호기가 점 대신 분포를 내면 무엇이 바뀌는지 본다. 로드맵의 다음 칸이다 | 아직 |
+| **GAN** — Generative Adversarial Nets | NeurIPS 2014 | VAE 노트 22절 둘 — VAE 는 복호기의 픽셀별 가능도(베르누이·가우스)를 정해야 하고, 논문이 표본 품질을 재지 않는다. 가능도 없이 배우면 무엇을 얻고 잃는지 본다. 로드맵의 다음 칸이다 | 아직 |
+| **하한을 조이는 편** (중요도 가중 하한) | - | VAE 노트 19절 셋 — 하한과 $\log p(x)$ 의 틈을 같은 모델에서 잰 자리가 없다. 표본 여럿으로 하한을 조이면 틈이 얼마나 주는지 본다 | 편을 아직 못 골랐다 |
+| **대각 가우스 근사 사후분포를 넓힌 편** (흐름 기반) | - | VAE 노트 10절 · 18절 — 각주가 「대각 가우스는 한계가 아니다」라고 적지만 실험은 대각 가우스뿐이다 | 편을 아직 못 골랐다 |
 | **DDIM** — Denoising Diffusion Implicit Models | ICLR 2021 | DDPM의 1000스텝을 10~50스텝으로 줄인다. 같은 학습 모델을 그대로 쓰므로 DDPM 다음에 바로 읽힌다 | 아직 |
 | **AnoDDPM** | CVPR Workshops 2022 | 확산 모델을 이상 탐지에 쓴 편. 순방향으로 어디까지 보낼지(t₀)를 고르는 문제가 DDPM §3의 표와 바로 이어진다 | 아직 |
 | **층별 사전학습이 정말 필요한가를 잰 편** | - | DBN 이 답하지 않은 자리다. **직접 재 보니 이 규모(10,000 장·은닉 256)에서는 도움이 됐고 깊을수록 커졌다**([dbn_2006](experiments/dbn_2006/)). 남은 것은 **규모를 올려도 그 차이가 남는가** — 라벨이 많을수록 차이가 줄었으므로 60,000 장에서는 사라질 수 있다. 그 모양을 잰 편을 찾는다 | 편을 아직 못 골랐다 |
