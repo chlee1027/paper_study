@@ -458,7 +458,7 @@ DBN 실험(numpy, MNIST 10,000 장)의 RBM 코드를 A 의 사전학습에 그�
 - Welling, M., Rosen-Zvi, M., and Hinton, G. (2005). NIPS 17, pp. 1481–1488. — 선형 가우스 보이는 유닛의 출처(참고 문헌 10).
 - Deerwester, S. C. et al. (1990). **J. Am. Soc. Inf. Sci.**, 41:391. — 잠재 의미 분석(참고 문헌 14).
 - Roweis, S. T. and Saul, L. K. (2000). **Science**, 290:2323. — 국소 선형 임베딩(참고 문헌 15).
-- Kingma, D. P. and Welling, M. (2014). Auto-Encoding Variational Bayes. ICLR. — 21절의 다음 읽을 것. **아직 읽지 않았다.**
+- Kingma, D. P. and Welling, M. (2014). Auto-Encoding Variational Bayes. ICLR. — 21절의 다음 읽을 것. **2026-09-28 에 읽었다.**
 
 ---
 
