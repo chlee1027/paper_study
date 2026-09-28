@@ -16,6 +16,7 @@
 | **AlexNet** — ImageNet Classification with Deep Convolutional Neural Networks | NIPS 2012 | 합성곱 망을 **학습되는 층 여덟 · 파라미터 6천만**으로 키우고, 커지면서 생기는 두 문제를 각각 막는다 — 느린 학습은 **ReLU 와 GPU 둘로 쪼개기**로, 과적합은 **데이터 늘리기와 드롭아웃**으로. ILSVRC-2010 에서 top-1 37.5% · top-5 17.0%(그전 최고 47.1 · 28.2), 2012 대회는 top-5 15.3% 로 우승(2등 26.2%) | LeNet 노트 17절이 다음으로 꼽은 둘(**크게 키운 편** · **최댓값 풀링으로 바꾼 편**)이 한 편에 들어 있다. **1998년의 6만 파라미터가 2012년에 6천만이 되는 자리** | [NIPS12_AlexNet](notes/NIPS12_AlexNet_ImageNet_Classification_with_Deep_Convolutional_Neural_Networks.md) |
 | **오토인코더** — Reducing the Dimensionality of Data with Neural Networks | Science 2006 | RBM 을 한 층씩 쌓아 **깊은 오토인코더의 출발점을 먼저 찾고**, 펼쳐서 역전파로 재구성 오차를 줄인다. 이미지당 제곱 오차가 곡선 6 차원 1.44(주성분 18 차원 5.90) · MNIST 30 차원 3.00(13.87) · 얼굴 30 차원 126(135). 같은 사전학습으로 MNIST 분류 1.2% | 로드맵의 AE 칸. 같은 해 DBN 논문이 낸 **쌓기를 무엇에 쓰는가**를 보이는 편이다. **주성분 분석과의 비교가 파라미터 105~389 배 차이 위에 서 있고, 사전학습의 몫을 가르는 행이 본문에 없다는 것을 짚어 두었다** | [Science06_AE](notes/Science06_AE_Reducing_the_Dimensionality_of_Data_with_Neural_Networks.md) |
 | **VAE** — Auto-Encoding Variational Bayes | ICLR 2014 | 표본을 뽑는 자리를 $z = \mu + \sigma \odot \varepsilon$ 으로 바꿔(**재매개변수화**) 변분 하한의 기울기를 낮은 분산으로 추정한다. 부호기를 신경망으로 두면 오토인코더 모양이 되는데 **부호기가 점이 아니라 분포를 내고, 그 분포가 $\mathcal{N}(0, I)$ 에서 멀어질수록 KL 벌점**을 받는다. MNIST · Frey Face 에서 깨어남-잠보다 하한을 빨리, 높이 올렸다 | 로드맵의 VAE 칸. 오토인코더 노트가 남긴 한계(코드에 분포가 없어 새 이미지를 만들 길이 없다)를 받는 편. **「잠재 변수를 늘려도 과적합이 늘지 않는다」가 Frey Face 에서는 눈금과 어긋나고(학습-시험 간격 60 → 180), 하한과 $\log p(x)$ 의 틈을 재지 않는다는 것을 짚어 두었다** | [ICLR14_VAE](notes/ICLR14_VAE_Auto_Encoding_Variational_Bayes.md) |
+| **GAN** — Generative Adversarial Networks (**CACM 2020 개관판**, 원판은 NIPS 2014) | Communications of the ACM 2020 | 밀도를 적지 않고 **잡음을 표본으로 바꾸는 생성기**와 **진짜·가짜를 가르는 판별기**를 겨루게 한다. 학습은 최적화가 아니라 두 사람 게임의 평형 찾기라서 가능도가 필요 없는 대신 **수렴 보장이 없다**. 원 논문의 두 이론 결과(밀도 함수 공간에서 평형은 p_model = p_data 하나, 안쪽 고리로 수렴)를 옮기고 「실제로 자주 수렴에 실패한다」고 적는다 | 로드맵의 GAN 칸. VAE 노트가 남긴 한계(복호기의 픽셀별 가능도를 사람이 정한다)를 판별기에 맡기는 편. **받은 파일이 6 쪽 개관판이라 식이 하나뿐이어서 최적 판별기 · JSD · 포화를 내가 유도해 넣었고, 이론이 서는 비용(M-GAN)과 권하는 비용(NS-GAN)이 다르다는 것을 짚어 두었다** | [CACM20_GAN](notes/CACM20_GAN_Generative_Adversarial_Networks.md) |
 
 ---
 
@@ -23,7 +24,8 @@
 
 | 논문 | 게재처·연도 | 왜 읽으려 하는가 | 원문을 구했는가 |
 |---|---|---|---|
-| **GAN** — Generative Adversarial Nets | NeurIPS 2014 | VAE 노트 22절 둘 — VAE 는 복호기의 픽셀별 가능도(베르누이·가우스)를 정해야 하고, 논문이 표본 품질을 재지 않는다. 가능도 없이 배우면 무엇을 얻고 잃는지 본다. 로드맵의 다음 칸이다 | 아직 |
+| **원 GAN** — Generative Adversarial Nets | NIPS 2014 | GAN 노트 3절 — 읽은 파일(CACM 2020)에 가치 함수 · 증명 · 알고리즘 · 실험이 없어 노트의 식 절반이 내 유도다. 원문과 맞춰 본다 | 아직 |
+| **Wasserstein GAN** | arXiv 2017 | GAN 노트 9절 — 모델이 데이터에서 멀면 JSD 가 위 끝(log 2)에 붙어 평평하다(m=5 에서 97.5%). 다른 거리를 쓰면 무엇이 바뀌는지 본다 | 아직 |
 | **하한을 조이는 편** (중요도 가중 하한) | - | VAE 노트 19절 셋 — 하한과 $\log p(x)$ 의 틈을 같은 모델에서 잰 자리가 없다. 표본 여럿으로 하한을 조이면 틈이 얼마나 주는지 본다 | 편을 아직 못 골랐다 |
 | **대각 가우스 근사 사후분포를 넓힌 편** (흐름 기반) | - | VAE 노트 10절 · 18절 — 각주가 「대각 가우스는 한계가 아니다」라고 적지만 실험은 대각 가우스뿐이다 | 편을 아직 못 골랐다 |
 | **DDIM** — Denoising Diffusion Implicit Models | ICLR 2021 | DDPM의 1000스텝을 10~50스텝으로 줄인다. 같은 학습 모델을 그대로 쓰므로 DDPM 다음에 바로 읽힌다 | 아직 |
