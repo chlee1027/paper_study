@@ -17,6 +17,9 @@
 | **오토인코더** — Reducing the Dimensionality of Data with Neural Networks | Science 2006 | RBM 을 한 층씩 쌓아 **깊은 오토인코더의 출발점을 먼저 찾고**, 펼쳐서 역전파로 재구성 오차를 줄인다. 이미지당 제곱 오차가 곡선 6 차원 1.44(주성분 18 차원 5.90) · MNIST 30 차원 3.00(13.87) · 얼굴 30 차원 126(135). 같은 사전학습으로 MNIST 분류 1.2% | 로드맵의 AE 칸. 같은 해 DBN 논문이 낸 **쌓기를 무엇에 쓰는가**를 보이는 편이다. **주성분 분석과의 비교가 파라미터 105~389 배 차이 위에 서 있고, 사전학습의 몫을 가르는 행이 본문에 없다는 것을 짚어 두었다** | [Science06_AE](notes/Science06_AE_Reducing_the_Dimensionality_of_Data_with_Neural_Networks.md) |
 | **VAE** — Auto-Encoding Variational Bayes | ICLR 2014 | 표본을 뽑는 자리를 $z = \mu + \sigma \odot \varepsilon$ 으로 바꿔(**재매개변수화**) 변분 하한의 기울기를 낮은 분산으로 추정한다. 부호기를 신경망으로 두면 오토인코더 모양이 되는데 **부호기가 점이 아니라 분포를 내고, 그 분포가 $\mathcal{N}(0, I)$ 에서 멀어질수록 KL 벌점**을 받는다. MNIST · Frey Face 에서 깨어남-잠보다 하한을 빨리, 높이 올렸다 | 로드맵의 VAE 칸. 오토인코더 노트가 남긴 한계(코드에 분포가 없어 새 이미지를 만들 길이 없다)를 받는 편. **「잠재 변수를 늘려도 과적합이 늘지 않는다」가 Frey Face 에서는 눈금과 어긋나고(학습-시험 간격 60 → 180), 하한과 $\log p(x)$ 의 틈을 재지 않는다는 것을 짚어 두었다** | [ICLR14_VAE](notes/ICLR14_VAE_Auto_Encoding_Variational_Bayes.md) |
 | **GAN** — Generative Adversarial Networks (**CACM 2020 개관판**, 원판은 NIPS 2014) | Communications of the ACM 2020 | 밀도를 적지 않고 **잡음을 표본으로 바꾸는 생성기**와 **진짜·가짜를 가르는 판별기**를 겨루게 한다. 학습은 최적화가 아니라 두 사람 게임의 평형 찾기라서 가능도가 필요 없는 대신 **수렴 보장이 없다**. 원 논문의 두 이론 결과(밀도 함수 공간에서 평형은 p_model = p_data 하나, 안쪽 고리로 수렴)를 옮기고 「실제로 자주 수렴에 실패한다」고 적는다 | 로드맵의 GAN 칸. VAE 노트가 남긴 한계(복호기의 픽셀별 가능도를 사람이 정한다)를 판별기에 맡기는 편. **받은 파일이 6 쪽 개관판이라 식이 하나뿐이어서 최적 판별기 · JSD · 포화를 내가 유도해 넣었고, 이론이 서는 비용(M-GAN)과 권하는 비용(NS-GAN)이 다르다는 것을 짚어 두었다** | [CACM20_GAN](notes/CACM20_GAN_Generative_Adversarial_Networks.md) |
+| **VGG** — Very Deep Convolutional Networks for Large-Scale Image Recognition | ICLR 2015 | 모든 합성곱을 **3x3 · 보폭 1** 로 고정하고 깊이만 11 → 19 층으로 바꿔 잰다. 3x3 세 층은 7x7 과 수용장이 같고 파라미터가 27C² 대 49C². 설정 A → E 에서 파라미터는 1.08 배인데 계산은 2.58 배(7.61 → 19.63 G). 망 둘 앙상블 top-5 6.8%, 위치 찾기 1 등 | AlexNet 노트가 남긴 「더 깊게 · 커널을 작게 간 편」. **19 층에서 포화한다는 결론이 한 행에 서 있고, 깊이를 바꿀 때 초기화 · 계산량도 함께 바뀐다는 것과 검증 집합을 시험 집합으로도 썼다는 것을 짚어 두었다** | [ICLR15_VGG](notes/ICLR15_VGG_Very_Deep_Convolutional_Networks_for_Large_Scale_Image_Recognition.md) |
+| **BN** — Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift | ICML 2015 | 층 입력을 **미니배치 평균 · 분산으로 정규화**하고 γ · β 로 표현력을 되찾는다. 핵심은 정규화를 역전파 안에 넣은 것이고, 추론 때는 모집단 통계로 고정한 선형 변환이 된다. Inception 72.2% 까지 BN 만으로 걸음 수 2.33 배 감소, BN + 변경 일곱으로 14.8 배. 앙상블 top-5 4.82% | AlexNet 노트가 남긴 「LRN 을 버리고 다른 정규화로 간 편」이자 깊은 망 학습 문제의 정규화 쪽 답. **「내부 공변량 이동」을 잰 곳은 MNIST 활성 하나뿐이고, 「14 배」가 BN 하나의 몫이 아니라는 것을 짚어 두었다** | [ICML15_BN](notes/ICML15_BN_Batch_Normalization_Accelerating_Deep_Network_Training_by_Reducing_Internal_Covariate_Shift.md) |
+| **ResNet** — Deep Residual Learning for Image Recognition | CVPR 2016 | 층이 H(x) 대신 **잔차 F(x) = H(x) − x** 를 배우고 항등 지름길로 x 를 더한다. 평범한 34 층 28.54% → 잔차 34 층 25.03%(top-1 10-crop), 152 층(11.3 G)이 VGG-19(19.6 G)보다 싸고 앙상블 top-5 3.57%. 파라미터 수를 직접 세어 torchvision 과 같음을 확인했다 | 「깊으면 안 배워진다」 흐름(역전파 기울기 감소 → DBN · AE 사전학습 → ReLU → VGG → BN)의 결론이고, **PatchCore 특징 추출기(WideResNet-50)의 원형**이다. 「기울기가 건강하다」에 수치가 없고 변동 폭이 110 층 한 곳뿐이라는 것을 짚어 두었다 | [CVPR16_ResNet](notes/CVPR16_ResNet_Deep_Residual_Learning_for_Image_Recognition.md) |
 
 ---
 
@@ -26,6 +29,11 @@
 |---|---|---|---|
 | **원 GAN** — Generative Adversarial Nets | NIPS 2014 | GAN 노트 3절 — 읽은 파일(CACM 2020)에 가치 함수 · 증명 · 알고리즘 · 실험이 없어 노트의 식 절반이 내 유도다. 원문과 맞춰 본다 | 아직 |
 | **Wasserstein GAN** | arXiv 2017 | GAN 노트 9절 — 모델이 데이터에서 멀면 JSD 가 위 끝(log 2)에 붙어 평평하다(m=5 에서 97.5%). 다른 거리를 쓰면 무엇이 바뀌는지 본다 | 아직 |
+| **Wide Residual Networks** | BMVC 2016 | ResNet 노트 — PatchCore 가 쓰는 WideResNet-50-2 의 원 논문. 깊이 대신 폭을 늘리면 무엇이 바뀌는지, layer2 · layer3 특징이 왜 쓸 만한지 본다 | 아직 |
+| **Identity Mappings in Deep Residual Networks** | ECCV 2016 | ResNet 노트 — 더한 뒤의 ReLU 가 지름길을 순수 항등이 아니게 만들고, 1202 층이 110 층보다 나빴다. 순서를 바꾸면 무엇이 풀리는지 본다 | 아직 |
+| **How Does Batch Normalization Help Optimization?** | NeurIPS 2018 | BN 노트 — 원 논문이 「내부 공변량 이동을 줄여서」라고 적지만 잰 곳이 활성 하나뿐이다. 그 설명이 맞는지 따로 잰 편 | 아직 |
+| **GoogLeNet** — Going Deeper with Convolutions | CVPR 2015 | VGG 노트 — 같은 해 대회 우승 편. 1x1 · 3x3 · 5x5 를 나란히 두어 계산을 어떻게 줄였는지 본다 | 아직 |
+| **Glorot · Bengio 초기화** — Understanding the difficulty of training deep feedforward neural networks | AISTATS 2010 | VGG 노트 — 논문이 「제출 뒤에 이 초기화면 사전학습이 필요 없음을 알았다」고 적는다. 분산을 맞추는 초기화가 사전학습을 어떻게 대신하는지 본다 | 아직 |
 | **하한을 조이는 편** (중요도 가중 하한) | - | VAE 노트 19절 셋 — 하한과 $\log p(x)$ 의 틈을 같은 모델에서 잰 자리가 없다. 표본 여럿으로 하한을 조이면 틈이 얼마나 주는지 본다 | 편을 아직 못 골랐다 |
 | **대각 가우스 근사 사후분포를 넓힌 편** (흐름 기반) | - | VAE 노트 10절 · 18절 — 각주가 「대각 가우스는 한계가 아니다」라고 적지만 실험은 대각 가우스뿐이다 | 편을 아직 못 골랐다 |
 | **DDIM** — Denoising Diffusion Implicit Models | ICLR 2021 | DDPM의 1000스텝을 10~50스텝으로 줄인다. 같은 학습 모델을 그대로 쓰므로 DDPM 다음에 바로 읽힌다 | 아직 |
@@ -34,8 +42,6 @@
 | **RBM 을 실수값 입력으로 넓힌 편** | - | DBN 의 한계 1 — 이진값이 아닌 값을 확률로 다룰 수 있는 이미지를 전제한다. 자연 이미지로 가려면 이 자리가 먼저다 | 아직 |
 | **부분 표본 뽑기를 최댓값 풀링으로 바꾼 편** | - | LeNet 노트 15절 둘 — 이 논문의 부분 표본에는 **학습되는 계수와 바이어스**가 있어 오늘날의 최댓값 풀링과 같은 것이 아니다. **AlexNet(2012)을 읽었는데도 이 자리는 안 닫혔다** — 겹치게 할지만 재고(−0.4/−0.3) 평균 대 최댓값이나 학습되는 계수를 둘지는 재지 않는다 | 편을 아직 못 골랐다 |
 | **분할 없이 글자열을 읽는 편** | - | LeNet 노트 11절 — 휴리스틱 과분할과 SDNN 중 어느 쪽도 **라벨 열만으로 배우는 문제**를 끝내지 못했다. 이 논문의 제약된 해석 그래프와 앞방향 벌점이 그쪽에서 어떤 모양으로 남는지 본다 | 아직 |
-| **더 깊게 · 커널을 작게 간 편** | - | AlexNet 노트 11절 — **「층을 빼면 top-1 이 약 2% 나빠진다」가 숫자 한 개에 얹혀 있다**(표도 조건도 없다). 깊이를 체계적으로 늘린 표가 있는지, 11x11 보폭 4 가 3x3 으로 바뀌는 이유가 무엇인지 본다 | 아직 |
-| **LRN 을 버리고 다른 정규화로 간 편** | - | AlexNet 노트 13절 다섯 — LRN 의 상수 넷을 검증으로 골랐다고만 적고 탐색 범위가 없는데 이득이 −1.4% 다. **오늘날 LRN 을 안 쓰는 이유가 이 자리에서 갈린다** | 아직 |
 
 ---
 
