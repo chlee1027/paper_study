@@ -29,19 +29,26 @@
 |---|---|---|---|
 | **원 GAN** — Generative Adversarial Nets | NIPS 2014 | GAN 노트 3절 — 읽은 파일(CACM 2020)에 가치 함수 · 증명 · 알고리즘 · 실험이 없어 노트의 식 절반이 내 유도다. 원문과 맞춰 본다 | 아직 |
 | **Wasserstein GAN** | arXiv 2017 | GAN 노트 9절 — 모델이 데이터에서 멀면 JSD 가 위 끝(log 2)에 붙어 평평하다(m=5 에서 97.5%). 다른 거리를 쓰면 무엇이 바뀌는지 본다 | 아직 |
+| **DCGAN** — Unsupervised Representation Learning with Deep Convolutional GANs | ICLR 2016 | GAN 노트 22절 · 15절 — 그림 6 의 2015 칸과 「지도 없이 성별 같은 개념을 찾는 임베딩」. 합성곱 구조로 무엇을 바꿔 학습이 되게 했는지 본다 | 아직 |
+| **GAN 수렴을 다룬 편** — The Numerics of GANs / Gradient descent GAN optimization is locally stable | NeurIPS 2017 (둘 다) | GAN 노트 22절 · 12 · 13절 — 동시 갱신이 평형에 가지 않는 모양. 12절의 $x \cdot y$ 예가 그 편들의 분석과 같은 자리인지 본다 | 아직 |
 | **Wide Residual Networks** | BMVC 2016 | ResNet 노트 — PatchCore 가 쓰는 WideResNet-50-2 의 원 논문. 깊이 대신 폭을 늘리면 무엇이 바뀌는지, layer2 · layer3 특징이 왜 쓸 만한지 본다 | 아직 |
 | **Identity Mappings in Deep Residual Networks** | ECCV 2016 | ResNet 노트 — 더한 뒤의 ReLU 가 지름길을 순수 항등이 아니게 만들고, 1202 층이 110 층보다 나빴다. 순서를 바꾸면 무엇이 풀리는지 본다 | 아직 |
+| **Highway Networks** | arXiv 2015 | ResNet 노트 22절 · 16절 — 게이트가 있는 지름길. 닫힐 수 있는 지름길과 늘 열린 항등의 차이가 실험에서 어디서 갈리는지 본다 | 아직 |
 | **How Does Batch Normalization Help Optimization?** | NeurIPS 2018 | BN 노트 — 원 논문이 「내부 공변량 이동을 줄여서」라고 적지만 잰 곳이 활성 하나뿐이다. 그 설명이 맞는지 따로 잰 편 | 아직 |
+| **미니배치에 기대지 않는 정규화** — Layer Normalization / Group Normalization | arXiv 2016 / ECCV 2018 | BN 노트 23절 · 18절 둘 — 미니배치가 작거나 RNN 일 때 BN 이 안 선다. 통계를 예시 하나 안에서 내면서 절대 척도를 버리는 문제를 어떻게 피하는지 본다. 로드맵의 RNN 칸과도 닿는다 | 아직 |
 | **GoogLeNet** — Going Deeper with Convolutions | CVPR 2015 | VGG 노트 — 같은 해 대회 우승 편. 1x1 · 3x3 · 5x5 를 나란히 두어 계산을 어떻게 줄였는지 본다 | 아직 |
 | **Glorot · Bengio 초기화** — Understanding the difficulty of training deep feedforward neural networks | AISTATS 2010 | VGG 노트 — 논문이 「제출 뒤에 이 초기화면 사전학습이 필요 없음을 알았다」고 적는다. 분산을 맞추는 초기화가 사전학습을 어떻게 대신하는지 본다 | 아직 |
-| **하한을 조이는 편** (중요도 가중 하한) | - | VAE 노트 19절 셋 — 하한과 $\log p(x)$ 의 틈을 같은 모델에서 잰 자리가 없다. 표본 여럿으로 하한을 조이면 틈이 얼마나 주는지 본다 | 편을 아직 못 골랐다 |
-| **대각 가우스 근사 사후분포를 넓힌 편** (흐름 기반) | - | VAE 노트 10절 · 18절 — 각주가 「대각 가우스는 한계가 아니다」라고 적지만 실험은 대각 가우스뿐이다 | 편을 아직 못 골랐다 |
+| **하한을 조이는 편** — 후보: Importance Weighted Autoencoders | ICLR 2016 | VAE 노트 19절 셋 — 하한과 $\log p(x)$ 의 틈을 같은 모델에서 잰 자리가 없다. 표본 여럿으로 하한을 조이면 틈이 얼마나 주는지 본다 | 아직 — 2026-09-30 에 후보로 골랐다. 읽고 이 자리에 맞는 편인지 가린다 |
+| **대각 가우스 근사 사후분포를 넓힌 편** — 후보: Variational Inference with Normalizing Flows (다음으로 IAF, NeurIPS 2016) | ICML 2015 | VAE 노트 10절 · 18절 — 각주가 「대각 가우스는 한계가 아니다」라고 적지만 실험은 대각 가우스뿐이다 | 아직 — 2026-09-30 에 후보로 골랐다. 읽고 이 자리에 맞는 편인지 가린다 |
+| **이산 잠재 변수로 가는 편** — 후보: VQ-VAE / Gumbel-Softmax | NeurIPS 2017 / ICLR 2017 | VAE 노트 23절 · 18절 하나 — 재매개변수화가 연속 분포에만 된다. 이산 코드를 쓰면서 기울기를 어떻게 흘리는지 본다 | 아직 — 2026-09-30 에 후보로 골랐다. 읽고 이 자리에 맞는 편인지 가린다 |
 | **DDIM** — Denoising Diffusion Implicit Models | ICLR 2021 | DDPM의 1000스텝을 10~50스텝으로 줄인다. 같은 학습 모델을 그대로 쓰므로 DDPM 다음에 바로 읽힌다 | 아직 |
 | **AnoDDPM** | CVPR Workshops 2022 | 확산 모델을 이상 탐지에 쓴 편. 순방향으로 어디까지 보낼지(t₀)를 고르는 문제가 DDPM §3의 표와 바로 이어진다 | 아직 |
-| **층별 사전학습이 정말 필요한가를 잰 편** | - | DBN 이 답하지 않은 자리다. **직접 재 보니 이 규모(10,000 장·은닉 256)에서는 도움이 됐고 깊을수록 커졌다**([dbn_2006](experiments/dbn_2006/)). 남은 것은 **규모를 올려도 그 차이가 남는가** — 라벨이 많을수록 차이가 줄었으므로 60,000 장에서는 사라질 수 있다. 그 모양을 잰 편을 찾는다 | 편을 아직 못 골랐다 |
-| **RBM 을 실수값 입력으로 넓힌 편** | - | DBN 의 한계 1 — 이진값이 아닌 값을 확률로 다룰 수 있는 이미지를 전제한다. 자연 이미지로 가려면 이 자리가 먼저다 | 아직 |
-| **부분 표본 뽑기를 최댓값 풀링으로 바꾼 편** | - | LeNet 노트 15절 둘 — 이 논문의 부분 표본에는 **학습되는 계수와 바이어스**가 있어 오늘날의 최댓값 풀링과 같은 것이 아니다. **AlexNet(2012)을 읽었는데도 이 자리는 안 닫혔다** — 겹치게 할지만 재고(−0.4/−0.3) 평균 대 최댓값이나 학습되는 계수를 둘지는 재지 않는다 | 편을 아직 못 골랐다 |
-| **분할 없이 글자열을 읽는 편** | - | LeNet 노트 11절 — 휴리스틱 과분할과 SDNN 중 어느 쪽도 **라벨 열만으로 배우는 문제**를 끝내지 못했다. 이 논문의 제약된 해석 그래프와 앞방향 벌점이 그쪽에서 어떤 모양으로 남는지 본다 | 아직 |
+| **층별 사전학습이 정말 필요한가를 잰 편** — 후보: Why Does Unsupervised Pre-training Help Deep Learning? | JMLR 2010 | DBN 이 답하지 않은 자리다. **직접 재 보니 이 규모(10,000 장·은닉 256)에서는 도움이 됐고 깊을수록 커졌다**([dbn_2006](experiments/dbn_2006/)). 남은 것은 **규모를 올려도 그 차이가 남는가** — 라벨이 많을수록 차이가 줄었으므로 60,000 장에서는 사라질 수 있다. 그 모양을 잰 편을 찾는다 | 아직 — 2026-09-30 에 후보로 골랐다. 읽고 이 자리에 맞는 편인지 가린다 |
+| **사전학습 없이 같은 깊은 오토인코더를 배운 편** — 후보: Deep learning via Hessian-free optimization | ICML 2010 | AE 노트 21절 · 5 · 17절 둘 — 「늘 평균을 재구성한다」가 수치 없이 있다. 같은 곡선 · MNIST · 얼굴 과제를 최적화 방법만 바꿔 사전학습 없이 풀면 AE 논문의 몫이 어디까지인지 본다 | 아직 — 2026-09-30 에 후보로 골랐다. 읽고 이 자리에 맞는 편인지 가린다 |
+| **RBM 대신 잡음 제거 오토인코더를 쌓은 편** — 후보: Extracting and Composing Robust Features with Denoising Autoencoders (확장판 Stacked DAE, JMLR 2010) | ICML 2008 | AE 노트 21절 · 18절 둘 — 사전학습 단계가 생성 모델 규칙이다. 층마다 재구성으로 배워 쌓아도 같은 출발점이 나오는지 본다 | 아직 — 2026-09-30 에 후보로 골랐다. 읽고 이 자리에 맞는 편인지 가린다 |
+| **RBM 을 실수값 입력으로 넓힌 편** — 후보: Learning Multiple Layers of Features from Tiny Images (가우스-베르누이 RBM, 다음으로 Nair & Hinton ICML 2010) | 기술 보고서 2009 | DBN 의 한계 1 — 이진값이 아닌 값을 확률로 다룰 수 있는 이미지를 전제한다. 자연 이미지로 가려면 이 자리가 먼저다 | 아직 — 2026-09-30 에 후보로 골랐다. 읽고 이 자리에 맞는 편인지 가린다 |
+| **부분 표본 뽑기를 최댓값 풀링으로 바꾼 편** — 후보: Evaluation of Pooling Operations in Convolutional Architectures for Object Recognition (이론 쪽은 Boureau 외, ICML 2010) | ICANN 2010 | LeNet 노트 15절 둘 — 이 논문의 부분 표본에는 **학습되는 계수와 바이어스**가 있어 오늘날의 최댓값 풀링과 같은 것이 아니다. **AlexNet(2012)을 읽었는데도 이 자리는 안 닫혔다** — 겹치게 할지만 재고(−0.4/−0.3) 평균 대 최댓값이나 학습되는 계수를 둘지는 재지 않는다 | 아직 — 2026-09-30 에 후보로 골랐다. 읽고 이 자리에 맞는 편인지 가린다 |
+| **분할 없이 글자열을 읽는 편** — 후보: Connectionist Temporal Classification | ICML 2006 | LeNet 노트 11절 — 휴리스틱 과분할과 SDNN 중 어느 쪽도 **라벨 열만으로 배우는 문제**를 끝내지 못했다. 이 논문의 제약된 해석 그래프와 앞방향 벌점이 그쪽에서 어떤 모양으로 남는지 본다 | 아직 — 2026-09-30 에 후보로 골랐다. 읽고 이 자리에 맞는 편인지 가린다 |
 
 ---
 
