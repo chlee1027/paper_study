@@ -544,7 +544,7 @@ PatchCore 는 ImageNet 으로 배운 **WideResNet-50-2** 를 얼려 특징 추�
 | 다음 | 이 노트의 어느 자리에서 나오는가 | 무엇을 확인하고 싶은가 |
 |---|---|---|
 | **Identity Mappings in Deep Residual Networks** (He 외, ECCV 2016, arXiv:1603.05027) | 19절 — 둘째 ReLU 가 덧셈 뒤에 있어 지름길이 엄밀한 항등이 아니다. 17절 넷 — 1202 층이 110 층보다 나쁘다 | BN · ReLU 를 잔차 가지 앞으로 옮기면(사전 활성) 지름길이 순수 항등이 되는가. 1000 층의 시험 오차가 나아지는가 |
-| **Wide Residual Networks** (Zagoruyko & Komodakis, BMVC 2016, arXiv:1605.07146) | 21절 셋 — PatchCore 의 특징 추출기. 13절 — 깊고 가는 1202 층이 과적합 | 깊이 대신 폭을 늘리면 무엇이 달라지는가. WideResNet-50-2 가 어떻게 정해졌는가 |
+| **Wide Residual Networks** (Zagoruyko & Komodakis, BMVC 2016, arXiv:1605.07146) | 21절 셋 — PatchCore 의 특징 추출기. 13절 — 깊고 가는 1202 층이 과적합 | 깊이 대신 폭을 늘리면 무엇이 달라지는가. WideResNet-50-2 가 어떻게 정해졌는가. **2026-10-04 에 읽었다** — 병목 안쪽만 두 배로 넓힌 표 8 의 WRN-50-2 와 모양이 같고, 파라미터 68,883,240 이 이 노트의 셈과 같다 |
 | **Highway Networks** (Srivastava 외, 2015, arXiv:1505.00387) | 16절 — 게이트가 있는 지름길 | 게이트가 닫힐 수 있는 지름길과 늘 열린 항등의 차이가 실험에서 어디서 갈리는가 |
 
 읽는 순서로는 **첫째가 먼저**다. 같은 저자들이 이 논문의 블록을 스스로 고친 편이다. 둘째는 연구와 바로 닿는다.
@@ -587,7 +587,7 @@ PatchCore 는 ImageNet 으로 배운 **WideResNet-50-2** 를 얼려 특징 추�
 - Glorot, X. and Bengio, Y. (2010). Understanding the difficulty of training deep feedforward neural networks. AISTATS. — 정규화된 초기화(참고 문헌 8).
 - Krizhevsky, A., Sutskever, I., and Hinton, G. (2012). ImageNet classification with deep convolutional neural networks. NIPS. — 10-crop 시험과 색 늘리기(참고 문헌 21).
 - Ren, S., He, K., Girshick, R., and Sun, J. (2015). Faster R-CNN. NIPS. — 15절의 검출기(참고 문헌 32).
-- Zagoruyko, S. and Komodakis, N. (2016). Wide residual networks. BMVC. — 21절의 WideResNet-50-2. **이 논문의 참고 문헌에는 없다(뒤에 나온 편이다). 아직 읽지 않았다.**
+- Zagoruyko, S. and Komodakis, N. (2016). Wide residual networks. BMVC. — 21절의 WideResNet-50-2. **이 논문의 참고 문헌에는 없다(뒤에 나온 편이다). 2026-10-04 에 읽고 노트를 따로 썼다.**
 - Roth, K. 외 (2022). Towards total recall in industrial anomaly detection (PatchCore). CVPR. — 21절 셋의 연결. **이 논문의 참고 문헌에는 없다.**
 
 ---
