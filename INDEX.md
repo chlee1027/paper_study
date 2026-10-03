@@ -20,6 +20,8 @@
 | **VGG** — Very Deep Convolutional Networks for Large-Scale Image Recognition | ICLR 2015 | 모든 합성곱을 **3x3 · 보폭 1** 로 고정하고 깊이만 11 → 19 층으로 바꿔 잰다. 3x3 세 층은 7x7 과 수용장이 같고 파라미터가 27C² 대 49C². 설정 A → E 에서 파라미터는 1.08 배인데 계산은 2.58 배(7.61 → 19.63 G). 망 둘 앙상블 top-5 6.8%, 위치 찾기 1 등 | AlexNet 노트가 남긴 「더 깊게 · 커널을 작게 간 편」. **19 층에서 포화한다는 결론이 한 행에 서 있고, 깊이를 바꿀 때 초기화 · 계산량도 함께 바뀐다는 것과 검증 집합을 시험 집합으로도 썼다는 것을 짚어 두었다** | [ICLR15_VGG](notes/ICLR15_VGG_Very_Deep_Convolutional_Networks_for_Large_Scale_Image_Recognition.md) |
 | **BN** — Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift | ICML 2015 | 층 입력을 **미니배치 평균 · 분산으로 정규화**하고 γ · β 로 표현력을 되찾는다. 핵심은 정규화를 역전파 안에 넣은 것이고, 추론 때는 모집단 통계로 고정한 선형 변환이 된다. Inception 72.2% 까지 BN 만으로 걸음 수 2.33 배 감소, BN + 변경 일곱으로 14.8 배. 앙상블 top-5 4.82% | AlexNet 노트가 남긴 「LRN 을 버리고 다른 정규화로 간 편」이자 깊은 망 학습 문제의 정규화 쪽 답. **「내부 공변량 이동」을 잰 곳은 MNIST 활성 하나뿐이고, 「14 배」가 BN 하나의 몫이 아니라는 것을 짚어 두었다** | [ICML15_BN](notes/ICML15_BN_Batch_Normalization_Accelerating_Deep_Network_Training_by_Reducing_Internal_Covariate_Shift.md) |
 | **ResNet** — Deep Residual Learning for Image Recognition | CVPR 2016 | 층이 H(x) 대신 **잔차 F(x) = H(x) − x** 를 배우고 항등 지름길로 x 를 더한다. 평범한 34 층 28.54% → 잔차 34 층 25.03%(top-1 10-crop), 152 층(11.3 G)이 VGG-19(19.6 G)보다 싸고 앙상블 top-5 3.57%. 파라미터 수를 직접 세어 torchvision 과 같음을 확인했다 | 「깊으면 안 배워진다」 흐름(역전파 기울기 감소 → DBN · AE 사전학습 → ReLU → VGG → BN)의 결론이고, **PatchCore 특징 추출기(WideResNet-50)의 원형**이다. 「기울기가 건강하다」에 수치가 없고 변동 폭이 110 층 한 곳뿐이라는 것을 짚어 두었다 | [CVPR16_ResNet](notes/CVPR16_ResNet_Deep_Residual_Learning_for_Image_Recognition.md) |
+| **원 GAN** — Generative Adversarial Nets | NIPS 2014 | 생성기와 판별기를 가치 함수 하나 $V(D, G)$ 를 두고 **한쪽은 올리고 한쪽은 내리는 최소최대 게임**으로 배운다. 밀도 함수 공간에서는 최적 판별기가 $p_\text{data} / (p_\text{data} + p_g)$ 이고 전역 최적이 $p_g = p_\text{data}$ 하나이며 그 값이 $-\log 4$ 임을 증명한다. 다만 $\theta_g$ 를 최적화하는 실제 학습에는 증명이 적용되지 않는다고 스스로 적는다. Parzen 창 로그 가능도 MNIST 225 ± 2(넷 중 1 위) · TFD 2057 ± 26(2 위, 1 위와 차이 53 이 두 표준오차의 제곱합 56.4 보다 작다) | CACM 개관판 노트의 식 절반이 내 유도여서 원문과 맞춰 봤다. **식 셋(가치 함수 · 최적 판별기 · JSD)은 같았고, 개관판 노트에서 고칠 자리가 나왔다**(NS 꼴의 「같은 고정점」 한 문장 · 그림 (a) 캡션 · 번갈아 갱신). 알고리즘 1 에 인쇄된 생성기 갱신이 3절이 권한 꼴과 다르고 실험이 어느 쪽인지 적혀 있지 않다는 것, Parzen 수치가 σ 와 차원에 크게 움직인다는 것(생성기가 완벽해도 50 차원에서 참값보다 7.55 nat 낮다)을 짚어 두었다 | [NIPS14_GAN](notes/NIPS14_GAN_Generative_Adversarial_Nets.md) |
+| **Wide ResNet** — Wide Residual Networks | BMVC 2016 | 잔차 망을 깊게 하는 대신 **블록 안 채널을 k 배로 넓히고 층을 줄인다.** WRN-28-10(36.5M)이 CIFAR-10 4.00% 로 1001 층 망(4.92%)보다 낮고, 블록 안 드롭아웃으로 3.89%. 비슷한 정확도의 WRN-40-4 는 갱신 시간이 7.5 배 짧다. ImageNet 에서는 병목 안쪽만 두 배로 넓힌 **WRN-50-2** 가 ResNet-152 보다 top-1 이 0.26 낮고 시간은 0.81 배 | **PatchCore 특징 추출기(WRN-50-2)의 원 논문.** 파라미터를 직접 세어 표 4 · 8 과 torchvision(68,883,240)과 맞췄고, **넓혀도 layer2(512x28x28) · layer3(1024x14x14) 출력 차원은 ResNet-50 과 같다**는 것을 확인했다. 흩어짐이 한 군데도 없고, 깊이 대 폭을 파라미터를 맞춰 비교한 것이 한 쌍뿐이며(ImageNet 에서는 세 짝 모두 깊은 쪽이 낮다), 「빠르다」가 계산량이 아니라 GPU 병렬성 차이라는 것을 짚어 두었다 | [BMVC16_WRN](notes/BMVC16_WRN_Wide_Residual_Networks.md) |
 
 ---
 
@@ -27,12 +29,14 @@
 
 | 논문 | 게재처·연도 | 왜 읽으려 하는가 | 원문을 구했는가 |
 |---|---|---|---|
-| **원 GAN** — Generative Adversarial Nets | NIPS 2014 | GAN 노트 3절 — 읽은 파일(CACM 2020)에 가치 함수 · 증명 · 알고리즘 · 실험이 없어 노트의 식 절반이 내 유도다. 원문과 맞춰 본다 | 아직 |
 | **Wasserstein GAN** | arXiv 2017 | GAN 노트 9절 — 모델이 데이터에서 멀면 JSD 가 위 끝(log 2)에 붙어 평평하다(m=5 에서 97.5%). 다른 거리를 쓰면 무엇이 바뀌는지 본다 | 아직 |
+| **생성 모델 평가를 다룬 편** — A note on the evaluation of generative models (Theis 외) | ICLR 2016 | 원 GAN 노트 24절 — 원판의 성적표가 Parzen 창 로그 가능도뿐인데, 직접 재 보니 1 차원에서 σ 하나로 −10.04 에서 −1.43 까지 움직이고 차원이 크면 완벽한 생성기도 참값보다 낮게 나온다. 그 추정이 왜 믿을 만하지 않은지를 정면으로 다룬 편 | 아직 |
 | **DCGAN** — Unsupervised Representation Learning with Deep Convolutional GANs | ICLR 2016 | GAN 노트 22절 · 15절 — 그림 6 의 2015 칸과 「지도 없이 성별 같은 개념을 찾는 임베딩」. 합성곱 구조로 무엇을 바꿔 학습이 되게 했는지 본다 | 아직 |
 | **GAN 수렴을 다룬 편** — The Numerics of GANs / Gradient descent GAN optimization is locally stable | NeurIPS 2017 (둘 다) | GAN 노트 22절 · 12 · 13절 — 동시 갱신이 평형에 가지 않는 모양. 12절의 $x \cdot y$ 예가 그 편들의 분석과 같은 자리인지 본다 | 아직 |
-| **Wide Residual Networks** | BMVC 2016 | ResNet 노트 — PatchCore 가 쓰는 WideResNet-50-2 의 원 논문. 깊이 대신 폭을 늘리면 무엇이 바뀌는지, layer2 · layer3 특징이 왜 쓸 만한지 본다 | 아직 |
-| **Identity Mappings in Deep Residual Networks** | ECCV 2016 | ResNet 노트 — 더한 뒤의 ReLU 가 지름길을 순수 항등이 아니게 만들고, 1202 층이 110 층보다 나빴다. 순서를 바꾸면 무엇이 풀리는지 본다 | 아직 |
+| **Identity Mappings in Deep Residual Networks** | ECCV 2016 | ResNet 노트 — 더한 뒤의 ReLU 가 지름길을 순수 항등이 아니게 만들고, 1202 층이 110 층보다 나빴다. 순서를 바꾸면 무엇이 풀리는지 본다. **Wide ResNet 노트도 첫째로 꼽는다** — 그 논문의 블록이 이 편의 사전 활성 순서를 그대로 쓰고, 비교 상대 ResNet-1001 이 이 편의 망이다 | 아직 |
+| **Deep Networks with Stochastic Depth** | ECCV 2016 | Wide ResNet 노트 25절 — 깊고 가는 망의 「블록 대부분이 하는 일이 적다」는 주장을 블록을 무작위로 건너뛰며 배워 재는 편. 폭 쪽 답(WRN)과 깊이 쪽 답을 나란히 본다 | 아직 |
+| **ResNeXt** — Aggregated Residual Transformations for Deep Neural Networks | CVPR 2017 | Wide ResNet 노트 25절 — 넓히는 방법을 채널 수 말고 **갈래 수(cardinality)** 로 바꾼 편. 같은 계산에서 폭 대 갈래 | 아직 — 2026-10-04 에 후보로 골랐다. 읽고 이 자리에 맞는 편인지 가린다 |
+| **PatchCore** — Towards Total Recall in Industrial Anomaly Detection | CVPR 2022 | Wide ResNet 노트 · ResNet 노트 21절 — 연구에서 쓰는 방법. WRN-50-2 의 layer2 · layer3 을 왜 골랐는지, 원 논문이 백본을 바꿔 잰 표가 있는지 본다 | 아직 |
 | **Highway Networks** | arXiv 2015 | ResNet 노트 22절 · 16절 — 게이트가 있는 지름길. 닫힐 수 있는 지름길과 늘 열린 항등의 차이가 실험에서 어디서 갈리는지 본다 | 아직 |
 | **How Does Batch Normalization Help Optimization?** | NeurIPS 2018 | BN 노트 — 원 논문이 「내부 공변량 이동을 줄여서」라고 적지만 잰 곳이 활성 하나뿐이다. 그 설명이 맞는지 따로 잰 편 | 아직 |
 | **미니배치에 기대지 않는 정규화** — Layer Normalization / Group Normalization | arXiv 2016 / ECCV 2018 | BN 노트 23절 · 18절 둘 — 미니배치가 작거나 RNN 일 때 BN 이 안 선다. 통계를 예시 하나 안에서 내면서 절대 척도를 버리는 문제를 어떻게 피하는지 본다. 로드맵의 RNN 칸과도 닿는다 | 아직 |
@@ -67,3 +71,8 @@
 ## 주제 묶음
 
 읽은 것이 쌓이면 여기에 주제별로 다시 묶는다. **묶음 이름은 미리 정하지 않는다** — 세 편이 같은 자리에 모이면 그때 이름을 붙인다.
+
+| 묶음 | 편 | 묶은 까닭 |
+|---|---|---|
+| **깊은 망을 배워지게 만드는 장치** | 역전파 → DBN · 오토인코더(사전학습) → AlexNet(ReLU) → VGG → BN → ResNet → Wide ResNet | 앞 편이 남긴 「깊어지면 안 배워진다」를 다음 편이 받는다. 2026-10-04 에 Wide ResNet 이 들어오며 일곱 편이 됐고, 끝자리가 PatchCore 의 백본이다 |
+| **생성 모델** | 오토인코더 → VAE → GAN(원판 NIPS 2014 · 개관판 CACM 2020) → DDPM | 밀도를 어떻게 다루는가(적지 않는다 · 하한으로 · 게임으로 · 잡음을 되돌려)로 갈린다. 원판과 개관판을 둘 다 읽은 것은 GAN 하나다 |
