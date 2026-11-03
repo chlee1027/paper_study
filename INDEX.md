@@ -31,12 +31,13 @@
 | **GRU · RNN 인코더-디코더** — Learning Phrase Representations using RNN Encoder-Decoder for Statistical Machine Translation | EMNLP 2014 | RNN 둘로 인코더-디코더(입력 전체를 벡터 c 하나로)를 잇고, 재설정 · 갱신 게이트 둘만 가진 은닉 유닛(뒤의 GRU, **원문에는 이름이 없다**)을 낸다. 실험은 번역을 만들지 않고 Moses 구문표에 RNN 점수 한 칸을 더해 시험 BLEU 33.30 → 33.87. **유닛을 견준 수는 없다** | 갈래 B 셋째 칸(GRU). LSTM 을 게이트 둘로 줄인 편이고 다음 칸 seq2seq 의 틀을 같은 편이 낸다. **표 1 에 Baseline + CSLM 줄이 없어 「직교한다」를 셈할 수 없고, 그림 3 점 5,000 개의 순위 상관이 −0.355 다** | [EMNLP14_GRU](notes/EMNLP14_GRU_Learning_Phrase_Representations_using_RNN_Encoder_Decoder_for_Statistical_Machine_Translation.md) |
 | **seq2seq** — Sequence to Sequence Learning with Neural Networks | NIPS 2014 (읽은 파일은 arXiv v3, 2014-12) | LSTM 4층 인코더가 뒤집은 원문을 읽어 8,000 개 수의 벡터 하나로 줄이고, 다른 LSTM 4층이 그 벡터에서 번역을 낸다. **기준 SMT(33.30)를 넘은 것은 앙상블 5(34.81)이고 단일 모델은 30.59.** 파라미터 384M 의 83.3% 가 낱말 표와 소프트맥스 | GRU 칸이 남긴 RNN 인코더-디코더를 직접 번역으로 끝까지 민 편. **입력 뒤집기는 Abstract 에서 원인, 3.3절에서 가설이다. 그림 3 을 벡터 좌표로 읽으면 가장 긴 칸에서 기준과 +0.14 차다** | [NIPS14_Seq2Seq](notes/NIPS14_Seq2Seq_Sequence_to_Sequence_Learning_with_Neural_Networks.md) |
 | **Attention** — Neural Machine Translation by Jointly Learning to Align and Translate | ICLR 2015 (읽은 파일은 arXiv v6, 2015-04, 부록 포함) | 원문을 벡터 하나로 줄이지 않고 양방향 RNN 으로 원문 자리마다 주석(2,000 개 수)을 남긴 뒤, 번역 낱말마다 디코더 직전 상태로 점수를 매겨 **소프트맥스 무게로 주석을 더한 맥락 벡터**를 새로 만든다. 같은 데이터 · 어휘 30,000 · 같은 학습 시간에서 전체 시험 BLEU 17.82 → 26.75(RNNencdec-50 대 RNNsearch-50). **「Moses 와 견줄 만하다」 는 UNK 없는 열의 50* 한 줄(36.15 대 35.63)이고 전체 열로는 4.85 아래** | 갈래 B 다섯째 칸(Attention). seq2seq 가 남긴 고정 길이 벡터 하나를 원문 자리마다의 무게 합으로 바꾼 편이고, 이 무게 합이 다음 칸 Transformer 로 간다. **그림 2 를 벡터 좌표로, 그림 3 을 화소로 읽었다 — -50 쌍은 가로 0 · 1 에서 뒤지고, 파라미터는 RNNsearch 가 17.3% 크다** | [ICLR15_Attention](notes/ICLR15_Attention_Neural_Machine_Translation_by_Jointly_Learning_to_Align_and_Translate.md) |
+| **Transformer** — Attention Is All You Need | NIPS 2017 (읽은 파일은 학회판 11 쪽, 부록 없음) | 인코더-디코더에서 되먹임과 합성곱을 빼고 **주의만** 남긴다. 머리 8 개 × 64 의 자기 주의 · 자리별 앞먹임 · 사인 자리 부호화, 6 층 × 폭 512. newstest2014 에서 big 이 EN-DE 28.4(앞 최고 26.36), EN-FR 41.0(단일 최고, 앙상블 41.29 아래). **「학습이 빠르다」 의 근거는 표 1 차수와 FLOPs 추정(시간 × GPU × 최대 능력)뿐, 표 2 · 3 은 줄마다 실행 하나** | 로드맵 갈래 B 의 마지막 칸. Bahdanau 외의 주의를 RNN 위 장치에서 모델 전체로 바꾼 편. **표 1 의 O(n²·d) 는 투영 4nd² 를 뺀 값이고(n = 50 에서 주의 부분층 5,500 만), 표 3 params 는 base 쪽 열 줄과 big 줄이 하나의 어휘로 맞지 않는다**는 것을 셌다 | [NIPS17_Transformer](notes/NIPS17_Transformer_Attention_Is_All_You_Need.md) |
 
 ---
 
 ## 아직 안 읽음 — 큰 틀 (먼저, 이 순서대로)
 
-**다음에 읽을 것은 이 표에서 원문 칸이 「아직」인 첫 줄(6번 Transformer)이다.** 로드맵 갈래 A(퍼셉트론 → 역전파 → DBN → CNN → AE → VAE → GAN → Diffusion)는 2026-11-03 까지 다 읽었고, 갈래 B(순차 데이터) 여섯 칸 중 앞 다섯(RNN · LSTM · GRU · seq2seq · Attention)은 2026-11-04 에 읽어 「읽었다」 표에 올렸다. 남은 것은 Transformer 하나다. 앞 편의 한계를 다음 편이 받는다 — RNN 의 기울기 소실을 LSTM 이 받고, GRU 가 LSTM 을 줄이고, seq2seq 가 입력 전체를 벡터 하나에 담는 병목을 Attention 이 풀고, Transformer 가 Attention 만 남긴다.
+**이 표의 여섯 칸은 2026-11-04 에 다 읽었다. 그다음 큰 틀은 아직 정하지 않았다** — Transformer 노트가 꼽은 후보는 ViT(ICLR 2021) · BERT(NAACL 2019) 둘이고 아래 「나중에 볼 세부」 표에 올렸다. 로드맵 갈래 A(퍼셉트론 → 역전파 → DBN → CNN → AE → VAE → GAN → Diffusion)는 2026-11-03 까지 다 읽었고, 갈래 B(순차 데이터) 여섯 칸 중 여섯 칸(RNN · LSTM · GRU · seq2seq · Attention · Transformer)도 2026-11-04 에 다 읽어 「읽었다」 표에 올렸다. 앞 편의 한계를 다음 편이 받는다 — RNN 의 기울기 소실을 LSTM 이 받고, GRU 가 LSTM 을 줄이고, seq2seq 가 입력 전체를 벡터 하나에 담는 병목을 Attention 이 풀고, Transformer 가 Attention 만 남긴다.
 
 | 순서 | 논문 | 게재처·연도 | 로드맵 칸 | 원문을 구했는가 |
 |---:|---|---|---|---|
@@ -45,7 +46,7 @@
 | 3 | **Learning Phrase Representations using RNN Encoder-Decoder for Statistical Machine Translation** (Cho 외) | EMNLP 2014 | GRU | 구함 — 2026-11-04 에 노트를 썼다 |
 | 4 | **Sequence to Sequence Learning with Neural Networks** (Sutskever 외) | NIPS 2014 | seq2seq | 구함 — 2026-11-04 에 노트를 썼다 |
 | 5 | **Neural Machine Translation by Jointly Learning to Align and Translate** (Bahdanau 외) | ICLR 2015 | Attention | 구함 — 2026-11-04 에 노트를 썼다 |
-| 6 | **Attention Is All You Need** (Vaswani 외) | NIPS 2017 | Transformer | 아직 |
+| 6 | **Attention Is All You Need** (Vaswani 외) | NIPS 2017 | Transformer | 구함 — 2026-11-04 에 노트를 썼다 |
 
 ## 나중에 볼 세부 (노트마다 꼽은 후속 편)
 
@@ -101,6 +102,14 @@
 | **On Using Very Large Target Vocabulary for Neural Machine Translation** (Jean · Cho · Memisevic · Bengio) | ACL 2015 | Attention 노트 20 · 21절 — 원문이 꼽은 남은 과제(모르는 낱말). 어휘를 늘리면 전체 열의 Moses 와 차 4.85 가 얼마나 주는가 | 아직 — 2026-11-04 에 후보로 골랐다 |
 | **On the Properties of Neural Machine Translation: Encoder–Decoder Approaches** (Cho · van Merriënboer · Bahdanau · Bengio) | SSST-8 2014 | Attention 노트 3절 — 「길이가 늘면 빠르게 떨어진다」 의 근거로 원문이 든 편. 길이 칸을 어떻게 나눴는가 | 아직 |
 | **Generating Sequences With Recurrent Neural Networks** (Graves) | arXiv 2013 | Attention 노트 17절 — 원문이 가장 가까운 앞 편으로 꼽은 단조 가우스 창 | 아직 |
+| **An Image is Worth 16x16 Words** (ViT, Dosovitskiy 외) — 후보 | ICLR 2021 | Transformer 노트 22 · 28절 — 원문 7절 「텍스트 밖의 형식(이미지)」. 이미지의 자리 수 n 과 n² 비용, 합성곱과 같은 조건 비교 | 아직 — 2026-11-04 에 후보로 골랐다 |
+| **BERT** (Devlin 외) — 후보 | NAACL 2019 | Transformer 노트 23 · 28절 — 번역 둘에서 처음부터 학습만 했다. 인코더를 다른 과제로 옮긴 결과 | 아직 — 2026-11-04 에 후보로 골랐다 |
+| **Massive Exploration of Neural Machine Translation Architectures** (Britz 외) | EMNLP 2017 | Transformer 노트 5절 — 큰 d_k 에서 더하기 주의가 앞선다는 √d_k 나누기의 출처 | 아직 |
+| **On Layer Normalization in the Transformer Architecture** (Xiong 외) — 후보 | ICML 2020 | Transformer 노트 14 · 23절 — 덧셈 뒤 정규화와 데우기 4,000 의 까닭이 원문에 없다 | 아직 — 2026-11-04 에 후보로 골랐다 |
+| **Self-Attention with Relative Position Representations** (Shaw · Uszkoreit · Vaswani) — 후보 | NAACL 2018 | Transformer 노트 10 · 23절 — 사인 부호화의 상대 자리 · 긴 열 넘겨 쓰기는 가설로만 적혔다 | 아직 — 2026-11-04 에 후보로 골랐다 |
+| **A Call for Clarity in Reporting BLEU Scores** (Post) — 후보 | WMT 2018 | Transformer 노트 17 · 23절 — BLEU 셈법을 적지 않은 채 다른 논문 값과 견준다 | 아직 — 2026-11-04 에 후보로 골랐다 |
+| **Using the Output Embedding to Improve Language Models** (Press · Wolf) | EACL 2017 | Transformer 노트 9절 — 낱말 표 셋 공유의 몫이 표 3 에 없다 | 아직 |
+| **Convolutional Sequence to Sequence Learning** (ConvS2S, Gehring 외) | ICML 2017 | Transformer 노트 17절 — 표 2 의 가장 센 상대, 학습하는 자리 표현의 출처 | 아직 |
 
 ---
 
