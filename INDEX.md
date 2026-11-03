@@ -29,19 +29,20 @@
 | **단순 순환망** — Finding Structure in Time | Cognitive Science 1990 | 은닉 활성을 문맥 유닛에 복사해 다음 걸음 입력에 덧붙이는 것(무게 1.0 고정)만으로 망에 기억을 준다. 다음 입력 맞히기 과제 다섯에서 오차가 구조를 따라 오르내리고, 은닉 활성의 계통수가 품사 · 생물 · 사람 갈래로 갈린다. **실행 횟수 · 비교 상대 · 학습률이 없고, 원문의 「RMS」는 그림 3 · 6 의 값으로 보아 제곱 오차의 합이다** | 로드맵 갈래 B 의 첫 칸(RNN). 역전파 노트 9절이 결과 없이 남긴 「되먹임 망」을 펼치지 않는 길로 채운 편이고, 원문 204쪽의 「기억이 지수로 준다 · 오차를 늦게 넣으면 나쁘다」가 다음 칸 LSTM 으로 넘어간다 | [CogSci90_Elman](notes/CogSci90_Elman_Finding_Structure_in_Time.md) |
 | **LSTM** — Long Short-Term Memory | Neural Computation 1997 (읽은 파일은 저자 배포본 32쪽) | 오차 배율을 1.0 으로 묶은 유닛(항등 활성 · 자기 연결 1.0, **CEC**)을 셀 가운데 두고, 쓰기와 읽기를 **입력 · 출력 곱셈 게이트**가 정한다. 셀 밖으로 새는 오차를 잘라 무게당 걸음 셈이 $O(1)$. 최소 지연 1,001 걸음 과제를 20번 모두 풀었다(서열 49,000개). **망각 게이트가 없고**(Gers 2000) 실험은 모두 인공 과제, 저자가 같은 조건에서 돌린 비교는 2a(와 2b 의 CH)뿐 | 로드맵 갈래 B 둘째 칸. 단순 순환망의 「긴 지연을 못 배운다」를 받는다. 무게 수 열두 칸을 짜임에서 다시 세어 맞췄고, 「아주 천천히 는다」(표 3)는 지연 20배에 서열 수로 1.63배, 걸음×무게로 438배라는 것을 셌다 | [NC97_LSTM](notes/NC97_LSTM_Long_Short_Term_Memory.md) |
 | **GRU · RNN 인코더-디코더** — Learning Phrase Representations using RNN Encoder-Decoder for Statistical Machine Translation | EMNLP 2014 | RNN 둘로 인코더-디코더(입력 전체를 벡터 c 하나로)를 잇고, 재설정 · 갱신 게이트 둘만 가진 은닉 유닛(뒤의 GRU, **원문에는 이름이 없다**)을 낸다. 실험은 번역을 만들지 않고 Moses 구문표에 RNN 점수 한 칸을 더해 시험 BLEU 33.30 → 33.87. **유닛을 견준 수는 없다** | 갈래 B 셋째 칸(GRU). LSTM 을 게이트 둘로 줄인 편이고 다음 칸 seq2seq 의 틀을 같은 편이 낸다. **표 1 에 Baseline + CSLM 줄이 없어 「직교한다」를 셈할 수 없고, 그림 3 점 5,000 개의 순위 상관이 −0.355 다** | [EMNLP14_GRU](notes/EMNLP14_GRU_Learning_Phrase_Representations_using_RNN_Encoder_Decoder_for_Statistical_Machine_Translation.md) |
+| **seq2seq** — Sequence to Sequence Learning with Neural Networks | NIPS 2014 (읽은 파일은 arXiv v3, 2014-12) | LSTM 4층 인코더가 뒤집은 원문을 읽어 8,000 개 수의 벡터 하나로 줄이고, 다른 LSTM 4층이 그 벡터에서 번역을 낸다. **기준 SMT(33.30)를 넘은 것은 앙상블 5(34.81)이고 단일 모델은 30.59.** 파라미터 384M 의 83.3% 가 낱말 표와 소프트맥스 | GRU 칸이 남긴 RNN 인코더-디코더를 직접 번역으로 끝까지 민 편. **입력 뒤집기는 Abstract 에서 원인, 3.3절에서 가설이다. 그림 3 을 벡터 좌표로 읽으면 가장 긴 칸에서 기준과 +0.14 차다** | [NIPS14_Seq2Seq](notes/NIPS14_Seq2Seq_Sequence_to_Sequence_Learning_with_Neural_Networks.md) |
 
 ---
 
 ## 아직 안 읽음 — 큰 틀 (먼저, 이 순서대로)
 
-**다음에 읽을 것은 이 표의 맨 윗줄이다.** 로드맵 갈래 A(퍼셉트론 → 역전파 → DBN → CNN → AE → VAE → GAN → Diffusion)는 2026-11-03 까지 다 읽었고, 남은 것은 갈래 B(순차 데이터) 여섯 칸이다. 앞 편의 한계를 다음 편이 받는다 — RNN 의 기울기 소실을 LSTM 이 받고, GRU 가 LSTM 을 줄이고, seq2seq 가 입력 전체를 벡터 하나에 담는 병목을 Attention 이 풀고, Transformer 가 Attention 만 남긴다.
+**다음에 읽을 것은 이 표에서 원문 칸이 「아직」인 첫 줄(5번 Attention)이다.** 로드맵 갈래 A(퍼셉트론 → 역전파 → DBN → CNN → AE → VAE → GAN → Diffusion)는 2026-11-03 까지 다 읽었고, 갈래 B(순차 데이터) 여섯 칸 중 앞 넷(RNN · LSTM · GRU · seq2seq)은 2026-11-04 에 읽어 「읽었다」 표에 올렸다. 남은 것은 Attention · Transformer 둘이다. 앞 편의 한계를 다음 편이 받는다 — RNN 의 기울기 소실을 LSTM 이 받고, GRU 가 LSTM 을 줄이고, seq2seq 가 입력 전체를 벡터 하나에 담는 병목을 Attention 이 풀고, Transformer 가 Attention 만 남긴다.
 
 | 순서 | 논문 | 게재처·연도 | 로드맵 칸 | 원문을 구했는가 |
 |---:|---|---|---|---|
 | 1 | **Finding Structure in Time** (Elman) | Cognitive Science 1990 | RNN | 구함 — 2026-11-04 에 노트를 썼다 |
 | 2 | **Long Short-Term Memory** (Hochreiter · Schmidhuber) | Neural Computation 1997 | LSTM | 구함 — 2026-11-04 에 노트를 썼다 |
 | 3 | **Learning Phrase Representations using RNN Encoder-Decoder for Statistical Machine Translation** (Cho 외) | EMNLP 2014 | GRU | 구함 — 2026-11-04 에 노트를 썼다 |
-| 4 | **Sequence to Sequence Learning with Neural Networks** (Sutskever 외) | NIPS 2014 | seq2seq | 아직 |
+| 4 | **Sequence to Sequence Learning with Neural Networks** (Sutskever 외) | NIPS 2014 | seq2seq | 구함 — 2026-11-04 에 노트를 썼다 |
 | 5 | **Neural Machine Translation by Jointly Learning to Align and Translate** (Bahdanau 외) | ICLR 2015 | Attention | 아직 |
 | 6 | **Attention Is All You Need** (Vaswani 외) | NIPS 2017 | Transformer | 아직 |
 
@@ -92,6 +93,9 @@
 | **Framewise Phoneme Classification with Bidirectional LSTM** (Graves · Schmidhuber) | Neural Networks 2005 | LSTM 노트 9 · 22절 — 잘린 기울기와 자르지 않은 BPTT 의 차이 | 아직 |
 | **LSTM: A Search Space Odyssey** (Greff 외) — 후보 | IEEE TNNLS 2017 | LSTM 노트 22절 — 게이트 하나씩을 뺀 비교가 원문에 없다 | 아직 — 2026-11-04 에 후보로 골랐다 |
 | **GRU 대 LSTM 견주기** — Empirical Evaluation of Gated Recurrent Neural Networks on Sequence Modeling (Chung 외) | arXiv 2014 | GRU 노트 — 게이트 둘 유닛을 LSTM · tanh 와 같은 조건에서 견준 수가 원 편에 없다. 재설정 게이트를 어느 자리에서 곱했는지도 본다 | 아직 — 2026-11-04 에 후보로 골랐다 |
+| **Addressing the Rare Word Problem in NMT** (Luong · Sutskever · Le · Vinyals · Zaremba) | ACL 2015 | seq2seq 노트 13 · 21절 — 그림 3 오른쪽 끝 칸 −1.28, 표 3 의 UNK. 출력 어휘 밖 낱말을 다루면 역전이 사라지는가 | 아직 — 2026-11-04 에 후보로 골랐다 |
+| **On the Difficulty of Training Recurrent Neural Networks** (Pascanu · Mikolov · Bengio) | ICML 2013 | seq2seq 노트 8절 — 기울기 노름 5 자르기의 근거 | 아직 |
+| **BLEU** (Papineni 외) | ACL 2002 | seq2seq 노트 10절 — 같은 출력이 셈 방식만으로 1.2 BLEU 갈린다 | 아직 |
 
 ---
 
