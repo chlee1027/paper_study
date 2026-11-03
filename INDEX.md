@@ -29,7 +29,22 @@
 
 ---
 
-## 아직 안 읽음 (읽으려는 순서대로)
+## 아직 안 읽음 — 큰 틀 (먼저, 이 순서대로)
+
+**다음에 읽을 것은 이 표의 맨 윗줄이다.** 로드맵 갈래 A(퍼셉트론 → 역전파 → DBN → CNN → AE → VAE → GAN → Diffusion)는 2026-11-03 까지 다 읽었고, 남은 것은 갈래 B(순차 데이터) 여섯 칸이다. 앞 편의 한계를 다음 편이 받는다 — RNN 의 기울기 소실을 LSTM 이 받고, GRU 가 LSTM 을 줄이고, seq2seq 가 입력 전체를 벡터 하나에 담는 병목을 Attention 이 풀고, Transformer 가 Attention 만 남긴다.
+
+| 순서 | 논문 | 게재처·연도 | 로드맵 칸 | 원문을 구했는가 |
+|---:|---|---|---|---|
+| 1 | **Finding Structure in Time** (Elman) | Cognitive Science 1990 | RNN | 아직 |
+| 2 | **Long Short-Term Memory** (Hochreiter · Schmidhuber) | Neural Computation 1997 | LSTM | 아직 |
+| 3 | **Learning Phrase Representations using RNN Encoder-Decoder for Statistical Machine Translation** (Cho 외) | EMNLP 2014 | GRU | 아직 |
+| 4 | **Sequence to Sequence Learning with Neural Networks** (Sutskever 외) | NIPS 2014 | seq2seq | 아직 |
+| 5 | **Neural Machine Translation by Jointly Learning to Align and Translate** (Bahdanau 외) | ICLR 2015 | Attention | 아직 |
+| 6 | **Attention Is All You Need** (Vaswani 외) | NIPS 2017 | Transformer | 아직 |
+
+## 나중에 볼 세부 (노트마다 꼽은 후속 편)
+
+큰 틀을 다 읽은 뒤에 고른다. 노트를 쓰며 나온 후속 편을 지우지 않고 모아 둔 표이고, 줄 순서는 2026-11-03 전에 정한 그대로다.
 
 | 논문 | 게재처·연도 | 왜 읽으려 하는가 | 원문을 구했는가 |
 |---|---|---|---|
