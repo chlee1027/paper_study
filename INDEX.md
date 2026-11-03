@@ -26,6 +26,7 @@
 | **사전 활성 ResNet** — Identity Mappings in Deep Residual Networks | ECCV 2016 | 지름길 $h$ 와 덧셈 뒤 연산 $f$ 가 둘 다 항등이면 앞으로는 깊은 블록의 특징이 얕은 블록 특징에 잔차를 더한 합이 되고(식 4), 뒤로는 기울기에 가중치를 거치지 않는 「1 +」 항이 생긴다(식 5). 지름길에 상수 배 · 게이트 · 1x1 · 드롭아웃을 넣은 변형은 ResNet-110 에서 모두 원래(6.61)보다 나빴고, BN · ReLU 를 가중치 앞으로 옮긴 **완전 사전 활성**이 표 3 의 여섯 행 모두에서 낮았다. 1001 층 CIFAR-10 7.61 → 4.92(배치 64 로 4.62), ImageNet ResNet-200 top-1 21.8 → 20.7 | ResNet 노트(덧셈 뒤 ReLU · 1202 층)와 Wide ResNet 노트(WRN 의 블록 순서 · ResNet-1001)가 함께 첫째로 꼽은 편. **곡선 그림 셋을 PDF 안의 선 좌표에서 직접 꺼내 1001 층의 1 만 반복 학습 손실이 0.670 대 0.239 임을 옮겼다. 식 (5) 를 직접 잰 자리가 없고 흩어짐은 1001 층 세 칸뿐이라는 것, 기준값 6.61 이 원 ResNet 논문의 평균과 같은 수라는 것, 10.2M 은 BN 을 빼야 맞고 같은 표의 19.4M 은 넣어야 맞는다는 것을 짚어 두었다.** Wide ResNet 노트의 「4.64」를 이 편의 4.62 로 바로잡았다 | [ECCV16_PreAct](notes/ECCV16_PreAct_Identity_Mappings_in_Deep_Residual_Networks.md) |
 | **PatchCore** — Towards Total Recall in Industrial Anomaly Detection | CVPR 2022 (읽은 파일은 arXiv v2, 부록 포함) | ImageNet 망(WRN-50-2)을 얼린 채 layer2 · layer3 특징을 3x3 이웃 평균으로 묶은 **조각 특징**을 정상 이미지에서 전부 모아 **뱅크 하나**에 넣고, **탐욕 코어셋**으로 1~25% 만 남긴다. 이미지 점수는 조각별 최근접 거리의 최댓값에 이웃 재가중을 곱한 값이고 학습되는 파라미터가 없다. MVTec AD 이미지 AUROC 99.1 · 픽셀 98.1 · PRO 93.5, 1% 로 줄여도 99.0 이고 시간은 0.6 → 0.17 초 | 연구에서 쓰는 방법이고, Wide ResNet · ResNet 노트의 물음(백본 비교 · 단계 근거)을 받는 편. **부록 표 S6 의 ResNet-50 대 WRN-50 차이가 −0.3 ~ +0.3 이고 흩어짐이 없다는 것, 「오차 57% 감소」의 비교 상대(PaDiM 97.9)가 논문 스스로 재현하지 못한 값이라는 것, 재가중 값이 늘 $[1 - 1/b, 1)$ 안이라는 것(내 유도), 표 5 의 세 점에 직선을 맞추면 1% 의 추론 시간 중 98% 가 뱅크 크기와 상관없는 고정 몫이라는 것을 짚어 두었다** | [CVPR22_PatchCore](notes/CVPR22_PatchCore_Towards_Total_Recall_in_Industrial_Anomaly_Detection.md) |
 | **Wasserstein GAN** | ICML 2017 (읽은 파일은 arXiv v3, 2017-12) | 생성 분포와 데이터 분포를 JSD 대신 **EM 거리 $W$** 로 잰다. 받침이 따로인 분포에서 JSD · KL · TV 는 $\theta$ 에 대해 불연속인데 $W$ 는 연속이다(예 1 · 정리 1). 쌍대 식으로 1-립시츠 critic 을 배우고 립시츠 조건은 무게 자르기($c = 0.01$)로 흉내 낸다. LSUN 침실에서 EM 추정이 표본과 함께 내려가는 곡선 셋(그림 3)과 BN 없는 생성기 · MLP 생성기 표본(그림 6 · 7)이 근거이고, 표본 질을 수로 잰 값과 실행 수는 없다 | GAN 노트 둘이 넘긴 자리(모델이 멀면 JSD 가 $\log 2$ 에 붙어 평평하다)를 받는 편. **이론으로는 닫히고 실제 학습에서는 일부만 닫혔다는 것(곧은 critic 을 보인 것이 1 차원 그림 하나), 부록 D 정리 4 의 상수가 $m/2$ 로 적혔는데 원문 자신의 정의로 계산하면 $m$ 이라는 것(내 계산), 그림 2 의 대비 상대가 실험의 비교 상대(−log D 꼴)와 다른 꼴이라는 것, 모드 붕괴를 두고 한 문장 넷의 세기가 서로 다르다는 것을 짚어 두었다** | [ICML17_WGAN](notes/ICML17_WGAN_Wasserstein_GAN.md) |
+| **단순 순환망** — Finding Structure in Time | Cognitive Science 1990 | 은닉 활성을 문맥 유닛에 복사해 다음 걸음 입력에 덧붙이는 것(무게 1.0 고정)만으로 망에 기억을 준다. 다음 입력 맞히기 과제 다섯에서 오차가 구조를 따라 오르내리고, 은닉 활성의 계통수가 품사 · 생물 · 사람 갈래로 갈린다. **실행 횟수 · 비교 상대 · 학습률이 없고, 원문의 「RMS」는 그림 3 · 6 의 값으로 보아 제곱 오차의 합이다** | 로드맵 갈래 B 의 첫 칸(RNN). 역전파 노트 9절이 결과 없이 남긴 「되먹임 망」을 펼치지 않는 길로 채운 편이고, 원문 204쪽의 「기억이 지수로 준다 · 오차를 늦게 넣으면 나쁘다」가 다음 칸 LSTM 으로 넘어간다 | [CogSci90_Elman](notes/CogSci90_Elman_Finding_Structure_in_Time.md) |
 
 ---
 
@@ -35,7 +36,7 @@
 
 | 순서 | 논문 | 게재처·연도 | 로드맵 칸 | 원문을 구했는가 |
 |---:|---|---|---|---|
-| 1 | **Finding Structure in Time** (Elman) | Cognitive Science 1990 | RNN | 아직 |
+| 1 | **Finding Structure in Time** (Elman) | Cognitive Science 1990 | RNN | 구함 — 2026-11-04 에 노트를 썼다 |
 | 2 | **Long Short-Term Memory** (Hochreiter · Schmidhuber) | Neural Computation 1997 | LSTM | 아직 |
 | 3 | **Learning Phrase Representations using RNN Encoder-Decoder for Statistical Machine Translation** (Cho 외) | EMNLP 2014 | GRU | 아직 |
 | 4 | **Sequence to Sequence Learning with Neural Networks** (Sutskever 외) | NIPS 2014 | seq2seq | 아직 |
@@ -82,6 +83,9 @@
 | **RBM 을 실수값 입력으로 넓힌 편** — 후보: Learning Multiple Layers of Features from Tiny Images (가우스-베르누이 RBM, 다음으로 Nair & Hinton ICML 2010) | 기술 보고서 2009 | DBN 의 한계 1 — 이진값이 아닌 값을 확률로 다룰 수 있는 이미지를 전제한다. 자연 이미지로 가려면 이 자리가 먼저다 | 아직 — 2026-09-30 에 후보로 골랐다. 읽고 이 자리에 맞는 편인지 가린다 |
 | **부분 표본 뽑기를 최댓값 풀링으로 바꾼 편** — 후보: Evaluation of Pooling Operations in Convolutional Architectures for Object Recognition (이론 쪽은 Boureau 외, ICML 2010) | ICANN 2010 | LeNet 노트 15절 둘 — 이 논문의 부분 표본에는 **학습되는 계수와 바이어스**가 있어 오늘날의 최댓값 풀링과 같은 것이 아니다. **AlexNet(2012)을 읽었는데도 이 자리는 안 닫혔다** — 겹치게 할지만 재고(−0.4/−0.3) 평균 대 최댓값이나 학습되는 계수를 둘지는 재지 않는다 | 아직 — 2026-09-30 에 후보로 골랐다. 읽고 이 자리에 맞는 편인지 가린다 |
 | **분할 없이 글자열을 읽는 편** — 후보: Connectionist Temporal Classification | ICML 2006 | LeNet 노트 11절 — 휴리스틱 과분할과 SDNN 중 어느 쪽도 **라벨 열만으로 배우는 문제**를 끝내지 못했다. 이 논문의 제약된 해석 그래프와 앞방향 벌점이 그쪽에서 어떤 모양으로 남는지 본다 | 아직 — 2026-09-30 에 후보로 골랐다. 읽고 이 자리에 맞는 편인지 가린다 |
+| **Learning long-term dependencies with gradient descent is difficult** (Bengio · Simard · Frasconi) | IEEE TNN 1994 | Elman 노트 21 · 23절 — 원문은 순방향 기억의 감쇠만 말하고 기울기 감쇠는 말하지 않는다 | 아직 — 2026-11-04 에 후보로 골랐다 |
+| **Encoding sequential structure in simple recurrent networks** (Servan-Schreiber · Cleeremans · McClelland) | CMU 기술 보고서 1988 | Elman 노트 17절 3 · 9 — 원문이 열린 물음으로 남긴 표현 용량을 유한 상태 자동기 열로 쟀는가 | 아직 — 2026-11-04 에 후보로 골랐다 |
+| **Distributed representations, simple recurrent networks, and grammatical structure** (Elman) | Machine Learning 1991 | Elman 노트 17절 8 — 계통수가 잃는 시간 관계를 은닉 궤적의 주성분으로 보였는가 | 아직 — 2026-11-04 에 후보로 골랐다 |
 
 ---
 
