@@ -271,6 +271,8 @@ $Z(\mathbf{e})$ 는 무게와 상관없는 정규화 상수이고, 무게는 개
 |---|---|---|
 | 양국어 다섯의 합 | 61 + 5.5 + 421 + 90 + 780 = **1,357.5M** | 원문의 「850M」 과 다르다. 원문은 무엇을 뺐는지 적지 않는다 |
 | UN 과 크롤 1 을 뺀 합 | **846.5M** | 850M 에 맞는 조합 하나. **내가 맞춰 본 것일 뿐 원문의 말이 아니다** |
+
+> 2026-11-04 — 같은 저자군의 Bahdanau 외(ICLR 2015) 4.1절은 같은 말뭉치 다섯을 61 · 5.5 · 421 · 90 · 272.5M 으로 적어 합이 정확히 850M 이다. 이 편과 다른 것은 둘째 크롤 한 칸(780M 대 272.5M)이다. 위 「UN 과 크롤 1 을 뺀 846.5M」 조합은 맞춰 본 것일 뿐이고, Bahdanau 외의 수로는 다섯을 다 더한 것이 850M 이다. 어느 쪽이 맞는지, 272.5M 이 780M 에서 무엇을 거른 값인지는 두 편 모두 적지 않는다.
 | 언어 모형 풀 | 712 + 1,357.5 = **2,069.5M** | 「2G 넘는다」 와 맞는다 |
 | 418 / 2,069.5 | **20.2%** | 언어 모형용으로 고른 몫 |
 | 348 / 850 | **40.9%** | RNN 학습용으로 고른 몫 |
@@ -688,8 +690,8 @@ $$p\left(x_t = [\text{UNK}] \mid x_{<t}\right) = p\left(x_t \notin SL \mid x_{<t
 - Bergstra, J. 외 (2010). Theano: a CPU and GPU math expression compiler. In *SciPy*. Bastien, F. 외 (2012). Theano: new features and speed improvements. NIPS 2012 Workshop. — CSLM 구현.
 - Paszke, A. 외 (2019). PyTorch: An imperative style, high-performance deep learning library. In *NeurIPS*. — 9절에서 견준 `nn.GRU` 식의 라이브러리. **원문 참고 문헌에는 없다.**
 - Chung, J., Gulcehre, C., Cho, K., and Bengio, Y. (2014). Empirical evaluation of gated recurrent neural networks on sequence modeling. arXiv:1412.3555. — 다음에 읽을 것 후보. **원문 참고 문헌에는 없다(뒤에 나온 편). 읽지 않았다.**
-- Sutskever, I., Vinyals, O., and Le, Q. V. (2014). Sequence to sequence learning with neural networks. In *NIPS*. — 다음에 읽을 것. **원문 참고 문헌에는 없다. 읽지 않았다.**
-- Bahdanau, D., Cho, K., and Bengio, Y. (2015). Neural machine translation by jointly learning to align and translate. In *ICLR*. — 다음에 읽을 것. **원문 참고 문헌에는 없다. 읽지 않았다.**
+- Sutskever, I., Vinyals, O., and Le, Q. V. (2014). Sequence to sequence learning with neural networks. In *NIPS*. — 다음에 읽을 것. **원문 참고 문헌에는 없다. 읽지 않았다.** **2026-11-04 에 읽었다 — 노트를 따로 썼다.**
+- Bahdanau, D., Cho, K., and Bengio, Y. (2015). Neural machine translation by jointly learning to align and translate. In *ICLR*. — 다음에 읽을 것. **원문 참고 문헌에는 없다. 읽지 않았다.** **2026-11-04 에 읽었다 — 노트를 따로 썼다.**
 
 ---
 
