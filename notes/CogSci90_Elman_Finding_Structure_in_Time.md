@@ -518,7 +518,7 @@ $\boldsymbol{\varepsilon}_t$ 는 출력 쪽 오차 신호다. $\mathbf{c}_t = \m
 - Hinton, G. E., McClelland, J. L., and Rumelhart, D. E. (1986). Distributed representations. In PDP vol. 1, 77–109. — 분산 표현의 장점(각주 8). **읽지 않았다.**
 - Chomsky, N. (1957). Syntactic Structures. Mouton. / (1965). Aspects of the Theory of Syntax. MIT Press. — 9절의 추상 구조 논의.
 - MacWhinney, B. (1978). The acquisition of morphophonology. Monographs of the SRCD, 43. — 8절의 관용구 덩이.
-- Hochreiter, S. and Schmidhuber, J. (1997). Long short-term memory. Neural Computation, 9(8):1735–1780. — 다음에 읽을 것. **원문 참고 문헌에는 없다(뒤에 나온 편).**
+- Hochreiter, S. and Schmidhuber, J. (1997). Long short-term memory. Neural Computation, 9(8):1735–1780. — 다음에 읽을 것. **원문 참고 문헌에는 없다(뒤에 나온 편).** **2026-11-04 에 읽었다 — 노트를 따로 썼다.**
 - Bengio, Y., Simard, P., and Frasconi, P. (1994). Learning long-term dependencies with gradient descent is difficult. IEEE Transactions on Neural Networks, 5(2):157–166. — 다음에 읽을 것 후보. **원문 참고 문헌에는 없다. 읽지 않았다.**
 
 ---

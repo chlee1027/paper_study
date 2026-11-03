@@ -244,6 +244,8 @@ $$\hat{T} = \arg\max_T \, p(T \mid S) \qquad (2)$$
 - **원문 Abstract 는 34.8 을 「LSTM 이 낸 번역」 이라 적고, 1절은 「80k 어휘의 LSTM 하나(an LSTM)가 34.81 을 냈다」 고 적는다.** 1절의 다른 문장은 「깊은 LSTM 다섯의 앙상블」 이라 바로 적으므로 원문 안에서 같은 값이 두 이름으로 불린다(22 · 23절).
 - **「빔 1 에서도 잘한다」(3.2절)는 앙상블 5 의 33.00 이다.** 단일 모델의 빔 1 값은 표에 없다.
 - **Bahdanau 외 28.45 는 다른 논문에서 옮긴 값이다.** 그 시스템의 어휘 · 학습 문장 · 모델 크기는 이 편에 적혀 있지 않다. 같은 조건의 비교가 아니다.
+
+> 2026-11-04 — 28.45 는 Bahdanau 외 표 1 의 RNNsearch-50*(전체 시험셋 열)이다. 조건: 어휘 30,000(두 언어), 단일 모델, 50 낱말 이하 문장으로 학습, Quadro K-6000 한 장에서 252 시간, 개발셋 성능이 멈출 때 끝냄. 빔 크기와 BLEU 스크립트는 그 편에 적혀 있지 않다. 시험셋(3,003 문장) · 기준 수(33.30) · 학습 데이터 크기(348M)는 이 편과 같다.
 - **모든 줄이 실행 하나다.** 앙상블 구성원 다섯을 학습했으니 단일 모델의 값도 다섯이 있었을 텐데, 표에는 하나만 있고 어느 구성원인지도 없다(21절 둘).
 
 ---
@@ -567,7 +569,7 @@ $$\hat{T} = \arg\max_T \, p(T \mid S) \qquad (2)$$
 - Graves, A. (2013). Generating sequences with recurrent neural networks. arXiv:1308.0850. — 이 편이 쓴 LSTM 꼴과 기울기 자르기(원문 [10]). **읽지 않았다.**
 - Cho, K. 외 (2014). Learning phrase representations using RNN encoder-decoder for statistical machine translation. EMNLP. — RNN 인코더-디코더, 표 2 의 34.54 (원문 [5], 원문은 arXiv 판을 인용).
 - Kalchbrenner, N. and Blunsom, P. (2013). Recurrent continuous translation models. EMNLP. — 문장 -> 벡터 -> 문장 첫 시도(원문 [18]). **읽지 않았다.**
-- Bahdanau, D., Cho, K., and Bengio, Y. (2014). Neural machine translation by jointly learning to align and translate. arXiv:1409.0473 (ICLR 2015). — 표 1 의 28.45, 다음에 읽을 것(원문 [2]). **읽지 않았다.**
+- Bahdanau, D., Cho, K., and Bengio, Y. (2014). Neural machine translation by jointly learning to align and translate. arXiv:1409.0473 (ICLR 2015). — 표 1 의 28.45, 다음에 읽을 것(원문 [2]). **읽지 않았다.** **2026-11-04 에 읽었다 — 노트를 따로 썼다.**
 - Pouget-Abadie, J. 외 (2014). Overcoming the curse of sentence length for neural machine translation using automatic segmentation. arXiv:1409.1257. — 원문 [26]. **읽지 않았다.**
 - Schwenk, H. (2014). University le Mans (기준 SMT · 데이터 · 1000-best 목록 공개 자리). — 원문 [29].
 - Durrani, N., Haddow, B., Koehn, P., and Heafield, K. (2014). Edinburgh's phrase-based machine translation systems for WMT-14. WMT. — WMT'14 최고 결과 37.0 (원문 [9]).

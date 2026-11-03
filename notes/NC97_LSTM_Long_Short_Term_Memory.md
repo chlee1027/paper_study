@@ -643,7 +643,7 @@ $$4 + \sum_{k=0}^{\infty} \frac{1}{10}\left(\frac{9}{10}\right)^k (q + k) = q + 
 - Gers, F. A., Schmidhuber, J., and Cummins, F. (2000). Learning to forget: Continual prediction with LSTM. Neural Computation, 12(10):2451–2471. — 망각 게이트. **원문 참고 문헌에는 없다(뒤에 나온 편). 읽지 않았다.**
 - Gers, F. A., Schraudolph, N. N., and Schmidhuber, J. (2002). Learning precise timing with LSTM recurrent networks. JMLR, 3:115–143. — 엿보기 연결. **읽지 않았다.**
 - Graves, A. and Schmidhuber, J. (2005). Framewise phoneme classification with bidirectional LSTM and other neural network architectures. Neural Networks, 18(5–6):602–610. — 자르지 않은 BPTT. **읽지 않았다.**
-- Cho, K. 외 (2014). Learning phrase representations using RNN encoder–decoder for statistical machine translation. EMNLP. — 다음에 읽을 것.
+- Cho, K. 외 (2014). Learning phrase representations using RNN encoder–decoder for statistical machine translation. EMNLP. — 다음에 읽을 것. **2026-11-04 에 읽었다 — 노트를 따로 썼다.**
 - Greff, K. 외 (2017). LSTM: A search space odyssey. IEEE TNNLS, 28(10):2222–2232. — 후보. **읽지 않았다.**
 
 ---
