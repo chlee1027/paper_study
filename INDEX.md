@@ -28,6 +28,7 @@
 | **Wasserstein GAN** | ICML 2017 (읽은 파일은 arXiv v3, 2017-12) | 생성 분포와 데이터 분포를 JSD 대신 **EM 거리 $W$** 로 잰다. 받침이 따로인 분포에서 JSD · KL · TV 는 $\theta$ 에 대해 불연속인데 $W$ 는 연속이다(예 1 · 정리 1). 쌍대 식으로 1-립시츠 critic 을 배우고 립시츠 조건은 무게 자르기($c = 0.01$)로 흉내 낸다. LSUN 침실에서 EM 추정이 표본과 함께 내려가는 곡선 셋(그림 3)과 BN 없는 생성기 · MLP 생성기 표본(그림 6 · 7)이 근거이고, 표본 질을 수로 잰 값과 실행 수는 없다 | GAN 노트 둘이 넘긴 자리(모델이 멀면 JSD 가 $\log 2$ 에 붙어 평평하다)를 받는 편. **이론으로는 닫히고 실제 학습에서는 일부만 닫혔다는 것(곧은 critic 을 보인 것이 1 차원 그림 하나), 부록 D 정리 4 의 상수가 $m/2$ 로 적혔는데 원문 자신의 정의로 계산하면 $m$ 이라는 것(내 계산), 그림 2 의 대비 상대가 실험의 비교 상대(−log D 꼴)와 다른 꼴이라는 것, 모드 붕괴를 두고 한 문장 넷의 세기가 서로 다르다는 것을 짚어 두었다** | [ICML17_WGAN](notes/ICML17_WGAN_Wasserstein_GAN.md) |
 | **단순 순환망** — Finding Structure in Time | Cognitive Science 1990 | 은닉 활성을 문맥 유닛에 복사해 다음 걸음 입력에 덧붙이는 것(무게 1.0 고정)만으로 망에 기억을 준다. 다음 입력 맞히기 과제 다섯에서 오차가 구조를 따라 오르내리고, 은닉 활성의 계통수가 품사 · 생물 · 사람 갈래로 갈린다. **실행 횟수 · 비교 상대 · 학습률이 없고, 원문의 「RMS」는 그림 3 · 6 의 값으로 보아 제곱 오차의 합이다** | 로드맵 갈래 B 의 첫 칸(RNN). 역전파 노트 9절이 결과 없이 남긴 「되먹임 망」을 펼치지 않는 길로 채운 편이고, 원문 204쪽의 「기억이 지수로 준다 · 오차를 늦게 넣으면 나쁘다」가 다음 칸 LSTM 으로 넘어간다 | [CogSci90_Elman](notes/CogSci90_Elman_Finding_Structure_in_Time.md) |
 | **LSTM** — Long Short-Term Memory | Neural Computation 1997 (읽은 파일은 저자 배포본 32쪽) | 오차 배율을 1.0 으로 묶은 유닛(항등 활성 · 자기 연결 1.0, **CEC**)을 셀 가운데 두고, 쓰기와 읽기를 **입력 · 출력 곱셈 게이트**가 정한다. 셀 밖으로 새는 오차를 잘라 무게당 걸음 셈이 $O(1)$. 최소 지연 1,001 걸음 과제를 20번 모두 풀었다(서열 49,000개). **망각 게이트가 없고**(Gers 2000) 실험은 모두 인공 과제, 저자가 같은 조건에서 돌린 비교는 2a(와 2b 의 CH)뿐 | 로드맵 갈래 B 둘째 칸. 단순 순환망의 「긴 지연을 못 배운다」를 받는다. 무게 수 열두 칸을 짜임에서 다시 세어 맞췄고, 「아주 천천히 는다」(표 3)는 지연 20배에 서열 수로 1.63배, 걸음×무게로 438배라는 것을 셌다 | [NC97_LSTM](notes/NC97_LSTM_Long_Short_Term_Memory.md) |
+| **GRU · RNN 인코더-디코더** — Learning Phrase Representations using RNN Encoder-Decoder for Statistical Machine Translation | EMNLP 2014 | RNN 둘로 인코더-디코더(입력 전체를 벡터 c 하나로)를 잇고, 재설정 · 갱신 게이트 둘만 가진 은닉 유닛(뒤의 GRU, **원문에는 이름이 없다**)을 낸다. 실험은 번역을 만들지 않고 Moses 구문표에 RNN 점수 한 칸을 더해 시험 BLEU 33.30 → 33.87. **유닛을 견준 수는 없다** | 갈래 B 셋째 칸(GRU). LSTM 을 게이트 둘로 줄인 편이고 다음 칸 seq2seq 의 틀을 같은 편이 낸다. **표 1 에 Baseline + CSLM 줄이 없어 「직교한다」를 셈할 수 없고, 그림 3 점 5,000 개의 순위 상관이 −0.355 다** | [EMNLP14_GRU](notes/EMNLP14_GRU_Learning_Phrase_Representations_using_RNN_Encoder_Decoder_for_Statistical_Machine_Translation.md) |
 
 ---
 
@@ -39,7 +40,7 @@
 |---:|---|---|---|---|
 | 1 | **Finding Structure in Time** (Elman) | Cognitive Science 1990 | RNN | 구함 — 2026-11-04 에 노트를 썼다 |
 | 2 | **Long Short-Term Memory** (Hochreiter · Schmidhuber) | Neural Computation 1997 | LSTM | 구함 — 2026-11-04 에 노트를 썼다 |
-| 3 | **Learning Phrase Representations using RNN Encoder-Decoder for Statistical Machine Translation** (Cho 외) | EMNLP 2014 | GRU | 아직 |
+| 3 | **Learning Phrase Representations using RNN Encoder-Decoder for Statistical Machine Translation** (Cho 외) | EMNLP 2014 | GRU | 구함 — 2026-11-04 에 노트를 썼다 |
 | 4 | **Sequence to Sequence Learning with Neural Networks** (Sutskever 외) | NIPS 2014 | seq2seq | 아직 |
 | 5 | **Neural Machine Translation by Jointly Learning to Align and Translate** (Bahdanau 외) | ICLR 2015 | Attention | 아직 |
 | 6 | **Attention Is All You Need** (Vaswani 외) | NIPS 2017 | Transformer | 아직 |
@@ -90,6 +91,7 @@
 | **Learning to Forget: Continual Prediction with LSTM** (Gers 외) | Neural Computation 2000 | LSTM 노트 10 · 22절 — 원판에는 상태를 줄이는 장치가 없어 서열마다 바깥에서 비운다. 끝없는 입력에서 원판이 어떻게 되는가 | 아직 |
 | **Framewise Phoneme Classification with Bidirectional LSTM** (Graves · Schmidhuber) | Neural Networks 2005 | LSTM 노트 9 · 22절 — 잘린 기울기와 자르지 않은 BPTT 의 차이 | 아직 |
 | **LSTM: A Search Space Odyssey** (Greff 외) — 후보 | IEEE TNNLS 2017 | LSTM 노트 22절 — 게이트 하나씩을 뺀 비교가 원문에 없다 | 아직 — 2026-11-04 에 후보로 골랐다 |
+| **GRU 대 LSTM 견주기** — Empirical Evaluation of Gated Recurrent Neural Networks on Sequence Modeling (Chung 외) | arXiv 2014 | GRU 노트 — 게이트 둘 유닛을 LSTM · tanh 와 같은 조건에서 견준 수가 원 편에 없다. 재설정 게이트를 어느 자리에서 곱했는지도 본다 | 아직 — 2026-11-04 에 후보로 골랐다 |
 
 ---
 
