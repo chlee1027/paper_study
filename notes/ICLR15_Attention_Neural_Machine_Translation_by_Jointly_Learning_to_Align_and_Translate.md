@@ -682,7 +682,7 @@ $$\text{문장 하나} = 42.2\text{M} \times T + 3{,}000 \times T^2$$
 - Graves, A. (2013). Generating sequences with recurrent neural networks. arXiv:1308.0850. — 6.1절의 가장 가까운 편. **읽지 않았다.**
 - Koehn, P., Och, F. J., and Marcu, D. (2003). Statistical phrase-based translation. NAACL. — 구문 기반 번역. **읽지 않았다.**
 - Bergstra, J. 외 (2010) · Bastien, F. 외 (2012). Theano. — 구현에 쓴 라이브러리(감사의 글). **읽지 않았다.**
-- Vaswani, A. 외 (2017). Attention is all you need. NIPS. — 다음에 읽을 것. **원문 참고 문헌에는 없다(뒤에 나온 편).**
+- Vaswani, A. 외 (2017). Attention is all you need. NIPS. — 다음에 읽을 것. **원문 참고 문헌에는 없다(뒤에 나온 편).** **2026-11-04 에 읽었다 — 노트를 따로 썼다.**
 - Luong, M.-T., Pham, H., and Manning, C. D. (2015). Effective approaches to attention-based neural machine translation. EMNLP. — 다음에 읽을 것 후보. **원문 참고 문헌에는 없다.**
 - Jean, S., Cho, K., Memisevic, R., and Bengio, Y. (2015). On using very large target vocabulary for neural machine translation. ACL. — 다음에 읽을 것 후보. **원문 참고 문헌에는 없다.**
 
