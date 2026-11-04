@@ -585,6 +585,8 @@ $$lrate = d_{\text{model}}^{-0.5} \cdot \min\left(step\_num^{-0.5},\; step\_num 
 | **An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale** (Dosovitskiy 외, ICLR 2021) — 후보 | 22절 일곱 · 원문 7절 「텍스트 밖의 형식(이미지)으로 넓히려 한다」. 22절 둘 — 이미지는 자리 수가 많아 $n^2$ 가 문제다 | 이미지를 자리 열로 어떻게 자르는가(그래서 n 이 얼마인가). 합성곱의 국소성 없이 같은 조건의 합성곱 망과 견줬는가. 자리 부호화를 무엇으로 썼는가 |
 | **BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding** (Devlin 외, NAACL 2019) — 후보 | 23절 아홉 — 이 편은 번역 둘에서 과제마다 처음부터 학습했다. 인코더만 떼어 다른 과제로 옮겨 쓸 수 있는지는 시험하지 않았다 | 인코더만 쓴 짜임이 번역 밖 과제에서 무엇을 보였는가. 사전학습의 몫을 처음부터 학습한 같은 짜임과 견줘 갈랐는가 |
 
+> **2026-11-05 에 BERT 를 읽었다(NAACL 2019 발표집 판).** 첫 물음 「인코더만 쓴 짜임이 번역 밖 과제에서 무엇을 보였는가」 의 답은 GLUE 여덟 과제 · SQuAD 둘 · SWAG · NER 값이다. 둘째 물음 「사전학습의 몫을 처음부터 학습한 같은 짜임과 견줘 갈랐는가」 의 답은 **갈지 않았다** — 표 1 ~ 8 에 그 줄이 없고 그림 5 의 첫 점도 30,000 걸음이다. 잰 것은 어떤 과제로 사전학습하느냐의 차이다.
+
 **자잘한 후속 편.**
 
 | 다음 | 이 노트의 어느 자리에서 나오는가 | 무엇을 확인하고 싶은가 |
@@ -641,7 +643,7 @@ $$lrate = d_{\text{model}}^{-0.5} \cdot \min\left(step\_num^{-0.5},\; step\_num 
 - Szegedy, C. 외 (2015). Rethinking the inception architecture for computer vision. arXiv:1512.00567. — 라벨 다듬기(원문 [30]). **읽지 않았다.**
 - Kingma, D. and Ba, J. (2015). Adam: a method for stochastic optimization. ICLR. — 원문 [17]. **읽지 않았다.**
 - Dosovitskiy, A. 외 (2021). An image is worth 16x16 words: Transformers for image recognition at scale. ICLR. — 다음에 읽을 것 후보. **원문 참고 문헌에는 없다(뒤에 나온 편). 2026-11-05 에 읽었다.**
-- Devlin, J. 외 (2019). BERT: pre-training of deep bidirectional transformers for language understanding. NAACL. — 다음에 읽을 것 후보. **원문 참고 문헌에는 없다. 읽지 않았다.**
+- Devlin, J. 외 (2019). BERT: pre-training of deep bidirectional transformers for language understanding. NAACL. — 다음에 읽을 것 후보. **원문 참고 문헌에는 없다. 2026-11-05 에 읽었다.**
 - Xiong, R. 외 (2020). On layer normalization in the Transformer architecture. ICML. · Shaw, P., Uszkoreit, J., and Vaswani, A. (2018). Self-attention with relative position representations. NAACL. · Post, M. (2018). A call for clarity in reporting BLEU scores. WMT. — 다음에 읽을 것 후보. **원문 참고 문헌에는 없다. 읽지 않았다.**
 - 코드: tensor2tensor (`https://github.com/tensorflow/tensor2tensor`, 원문 7절). 이 노트는 코드를 보지 않았다.
 
