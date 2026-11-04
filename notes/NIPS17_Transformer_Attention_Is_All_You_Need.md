@@ -598,6 +598,8 @@ $$lrate = d_{\text{model}}^{-0.5} \cdot \min\left(step\_num^{-0.5},\; step\_num 
 
 읽는 순서로는 **ViT 가 먼저**다. 원문이 스스로 적은 다음 할 일(다른 형식)을 바로 받고, 이 저장소의 앞 갈래(이미지 · 합성곱 망)와 이어진다.
 
+> **2026-11-05 에 ViT 를 읽었다.** (1) 자르는 법과 n: 겹치지 않는 $P \times P$, 224 / 16 이면 $N = 196$, 분류 토큰까지 $n = 197$. 22절 둘의 $n^2$ 걱정은 이 범위에서 블록 곱셈-덧셈의 1.1 ~ 15.1% 이고 몫은 $n/(n+6D)$ 다(ViT 노트에서 내가 센 것). (2) 같은 조건의 합성곱 망과 견줬나: 표 2 는 문헌 값이고, 표 6 · 그림 4 는 같은 JFT · 같은 Adam 이다. 다만 학습률은 모델마다 다르고 ResNet 은 BiT 설정 실행까지 골라 쓰며 흩어짐이 없다. (3) 자리 부호화: 학습하는 1 차원. 2 차원 · 상대와의 폭 0.00328, 없음과의 차 0.02824. 이 편의 사인 · 코사인은 시험하지 않았다.
+
 ---
 
 ## 29. 남는 질문
@@ -638,7 +640,7 @@ $$lrate = d_{\text{model}}^{-0.5} \cdot \min\left(step\_num^{-0.5},\; step\_num 
 - Srivastava, N. 외 (2014). Dropout: a simple way to prevent neural networks from overfitting. JMLR 15:1929–1958. — 원문 [27].
 - Szegedy, C. 외 (2015). Rethinking the inception architecture for computer vision. arXiv:1512.00567. — 라벨 다듬기(원문 [30]). **읽지 않았다.**
 - Kingma, D. and Ba, J. (2015). Adam: a method for stochastic optimization. ICLR. — 원문 [17]. **읽지 않았다.**
-- Dosovitskiy, A. 외 (2021). An image is worth 16x16 words: Transformers for image recognition at scale. ICLR. — 다음에 읽을 것 후보. **원문 참고 문헌에는 없다(뒤에 나온 편). 읽지 않았다.**
+- Dosovitskiy, A. 외 (2021). An image is worth 16x16 words: Transformers for image recognition at scale. ICLR. — 다음에 읽을 것 후보. **원문 참고 문헌에는 없다(뒤에 나온 편). 2026-11-05 에 읽었다.**
 - Devlin, J. 외 (2019). BERT: pre-training of deep bidirectional transformers for language understanding. NAACL. — 다음에 읽을 것 후보. **원문 참고 문헌에는 없다. 읽지 않았다.**
 - Xiong, R. 외 (2020). On layer normalization in the Transformer architecture. ICML. · Shaw, P., Uszkoreit, J., and Vaswani, A. (2018). Self-attention with relative position representations. NAACL. · Post, M. (2018). A call for clarity in reporting BLEU scores. WMT. — 다음에 읽을 것 후보. **원문 참고 문헌에는 없다. 읽지 않았다.**
 - 코드: tensor2tensor (`https://github.com/tensorflow/tensor2tensor`, 원문 7절). 이 노트는 코드를 보지 않았다.
