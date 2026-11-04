@@ -33,12 +33,13 @@
 | **Attention** — Neural Machine Translation by Jointly Learning to Align and Translate | ICLR 2015 (읽은 파일은 arXiv v6, 2015-04, 부록 포함) | 원문을 벡터 하나로 줄이지 않고 양방향 RNN 으로 원문 자리마다 주석(2,000 개 수)을 남긴 뒤, 번역 낱말마다 디코더 직전 상태로 점수를 매겨 **소프트맥스 무게로 주석을 더한 맥락 벡터**를 새로 만든다. 같은 데이터 · 어휘 30,000 · 같은 학습 시간에서 전체 시험 BLEU 17.82 → 26.75(RNNencdec-50 대 RNNsearch-50). **「Moses 와 견줄 만하다」 는 UNK 없는 열의 50* 한 줄(36.15 대 35.63)이고 전체 열로는 4.85 아래** | 갈래 B 다섯째 칸(Attention). seq2seq 가 남긴 고정 길이 벡터 하나를 원문 자리마다의 무게 합으로 바꾼 편이고, 이 무게 합이 다음 칸 Transformer 로 간다. **그림 2 를 벡터 좌표로, 그림 3 을 화소로 읽었다 — -50 쌍은 가로 0 · 1 에서 뒤지고, 파라미터는 RNNsearch 가 17.3% 크다** | [ICLR15_Attention](notes/ICLR15_Attention_Neural_Machine_Translation_by_Jointly_Learning_to_Align_and_Translate.md) |
 | **Transformer** — Attention Is All You Need | NIPS 2017 (읽은 파일은 학회판 11 쪽, 부록 없음) | 인코더-디코더에서 되먹임과 합성곱을 빼고 **주의만** 남긴다. 머리 8 개 × 64 의 자기 주의 · 자리별 앞먹임 · 사인 자리 부호화, 6 층 × 폭 512. newstest2014 에서 big 이 EN-DE 28.4(앞 최고 26.36), EN-FR 41.0(단일 최고, 앙상블 41.29 아래). **「학습이 빠르다」 의 근거는 표 1 차수와 FLOPs 추정(시간 × GPU × 최대 능력)뿐, 표 2 · 3 은 줄마다 실행 하나** | 로드맵 갈래 B 의 마지막 칸. Bahdanau 외의 주의를 RNN 위 장치에서 모델 전체로 바꾼 편. **표 1 의 O(n²·d) 는 투영 4nd² 를 뺀 값이고(n = 50 에서 주의 부분층 5,500 만), 표 3 params 는 base 쪽 열 줄과 big 줄이 하나의 어휘로 맞지 않는다**는 것을 셌다 | [NIPS17_Transformer](notes/NIPS17_Transformer_Attention_Is_All_You_Need.md) |
 | **ViT** — An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale | ICLR 2021 (읽은 파일은 학회판 21 쪽, 부록 포함) | 이미지를 $P \times P$ 조각으로 잘라 낱말처럼 다루고, 선형 투영 · 분류 토큰 · 학습하는 1 차원 자리 임베딩만 붙여 **표준 Transformer 인코더**에 넣는다. 224 입력 · 패치 16 이면 조각 196. ImageNet 만으로 배우면 L/16 76.53 으로 BiT 띠(76.81 ~ 81.30) 아래이고, JFT-300M 사전학습 + 미세조정이면 H/14 가 ImageNet 88.55 ± 0.04(BiT-L 87.54 ± 0.02) · VTAB 77.63 ± 0.23(BiT-L 76.29 ± 1.70) | 로드맵 두 갈래 뒤 사용자가 고른 다음 큰 틀. Transformer 노트가 남긴 물음 셋(자르는 법 · 합성곱과 같은 조건 비교 · 자리 부호화)을 받는다. **파라미터를 torchvision 과 정수까지 맞췄고 표 1 의 307M 은 L/16 으로 안 나온다는 것(303.3 ~ 304.3M), $n^2$ 항의 몫이 $n/(n+6D)$ 로 B/16 · 224 에서 4.1% 라는 것, 「모든 과제에서 넘는다」 는 7 행 중 ± 밖이 4 행이고 ReaL 0.00 · VTAB −0.01 이라는 것, 「귀납 편향을 이긴다」 를 받치는 그림 3 · 4 에 편향을 변인으로 둔 행이 없고 하이브리드를 데이터 크기로 돌린 행이 없다는 것, 벡터 좌표로 읽으니 H/14 ImageNet 값이 네 벌(88.55 · 88.04 · 88.08 · 88.28)이고 뒤쪽 층 주의 거리가 균일 주의 116.49 의 94 ~ 99% 라는 것을 짚어 두었다** | [ICLR21_ViT](notes/ICLR21_ViT_An_Image_is_Worth_16x16_Words_Transformers_for_Image_Recognition_at_Scale.md) |
+| **BERT** — BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding | NAACL 2019 (읽은 파일은 발표집 판 16 쪽, 부록 포함) | Transformer 인코더만 남겨 라벨 없는 글 33 억 낱말에서 **입력의 15% 를 가리고 맞히는 과제**와 **다음 문장 과제(NSP)** 로 사전학습한 뒤, 과제마다 출력 층 하나를 붙여 전체를 미세조정한다. Base(12 층 · 폭 768) · Large(24 층 · 폭 1024). GLUE 표 평균 79.6 · 82.1(GPT 75.1), SQuAD 1.1 시험 F1 93.2(앙상블) · 91.8(단일), SQuAD 2.0 83.1, SWAG 86.3. **같은 짜임을 처음부터 학습한 줄이 표 1 ~ 8 어디에도 없다** | Transformer 노트가 꼽은 큰 틀 후보 둘 중 하나이고, ViT 와 중간중간 함께 읽기로 한 편. 그 노트의 물음 「인코더만 옮기면 무엇이 나오나 · 사전학습의 몫을 갈랐나」 를 받는다. **표 5 의 NSP 몫이 QNLI 85.4% 인데 MRPC 2.2% · SQuAD 5.6% 이고, 가림 과제만 뺀 줄이 없어 그 몫은 뽑히지 않는다는 것, 표 8 의 80/10/10 이 표 7 의 같은 설정과 1.0 · 1.2 F1 다르다는 것, 본문 「단일로 +1.3」 은 #2 와의 차이고 #1 과는 +0.1 이라는 것, 「약 40 에폭」 이 길이 128 일정을 넣으면 256 열 유지 때 12.9 라는 것, 파라미터를 세면 Base 는 110M 과 맞고 Large 는 340M 보다 1.1 ~ 1.9% 작다는 것을 짚어 두었다** | [NAACL19_BERT](notes/NAACL19_BERT_Pre_training_of_Deep_Bidirectional_Transformers_for_Language_Understanding.md) |
 
 ---
 
 ## 아직 안 읽음 — 큰 틀 (먼저, 이 순서대로)
 
-**앞 여섯 칸은 2026-11-04 에 다 읽었다. 그다음 큰 틀은 2026-11-05 에 ViT 로 정했고, BERT 를 중간중간 함께 읽는다.** ViT 는 같은 날 읽었다. 로드맵 갈래 A(퍼셉트론 → 역전파 → DBN → CNN → AE → VAE → GAN → Diffusion)는 2026-11-03 까지 다 읽었고, 갈래 B(순차 데이터) 여섯 칸 중 여섯 칸(RNN · LSTM · GRU · seq2seq · Attention · Transformer)도 2026-11-04 에 다 읽어 「읽었다」 표에 올렸다. 앞 편의 한계를 다음 편이 받는다 — RNN 의 기울기 소실을 LSTM 이 받고, GRU 가 LSTM 을 줄이고, seq2seq 가 입력 전체를 벡터 하나에 담는 병목을 Attention 이 풀고, Transformer 가 Attention 만 남긴다.
+**앞 여섯 칸은 2026-11-04 에, 이어 정한 ViT · BERT 두 칸은 2026-11-05 에 다 읽었다. 그다음 큰 틀은 아직 정하지 않았다.** 로드맵 갈래 A(퍼셉트론 → 역전파 → DBN → CNN → AE → VAE → GAN → Diffusion)는 2026-11-03 까지 다 읽었고, 갈래 B(순차 데이터) 여섯 칸 중 여섯 칸(RNN · LSTM · GRU · seq2seq · Attention · Transformer)도 2026-11-04 에 다 읽어 「읽었다」 표에 올렸다. 앞 편의 한계를 다음 편이 받는다 — RNN 의 기울기 소실을 LSTM 이 받고, GRU 가 LSTM 을 줄이고, seq2seq 가 입력 전체를 벡터 하나에 담는 병목을 Attention 이 풀고, Transformer 가 Attention 만 남긴다.
 
 | 순서 | 논문 | 게재처·연도 | 로드맵 칸 | 원문을 구했는가 |
 |---:|---|---|---|---|
@@ -49,6 +50,7 @@
 | 5 | **Neural Machine Translation by Jointly Learning to Align and Translate** (Bahdanau 외) | ICLR 2015 | Attention | 구함 — 2026-11-04 에 노트를 썼다 |
 | 6 | **Attention Is All You Need** (Vaswani 외) | NIPS 2017 | Transformer | 구함 — 2026-11-04 에 노트를 썼다 |
 | 7 | **An Image is Worth 16x16 Words** (Dosovitskiy 외) | ICLR 2021 | ViT | 구함 — 2026-11-05 에 노트를 썼다 |
+| 8 | **BERT: Pre-training of Deep Bidirectional Transformers** (Devlin 외) | NAACL 2019 | BERT (ViT 와 함께) | 구함 — 2026-11-05 에 노트를 썼다 |
 
 ## 나중에 볼 세부 (노트마다 꼽은 후속 편)
 
@@ -104,7 +106,6 @@
 | **On Using Very Large Target Vocabulary for Neural Machine Translation** (Jean · Cho · Memisevic · Bengio) | ACL 2015 | Attention 노트 20 · 21절 — 원문이 꼽은 남은 과제(모르는 낱말). 어휘를 늘리면 전체 열의 Moses 와 차 4.85 가 얼마나 주는가 | 아직 — 2026-11-04 에 후보로 골랐다 |
 | **On the Properties of Neural Machine Translation: Encoder–Decoder Approaches** (Cho · van Merriënboer · Bahdanau · Bengio) | SSST-8 2014 | Attention 노트 3절 — 「길이가 늘면 빠르게 떨어진다」 의 근거로 원문이 든 편. 길이 칸을 어떻게 나눴는가 | 아직 |
 | **Generating Sequences With Recurrent Neural Networks** (Graves) | arXiv 2013 | Attention 노트 17절 — 원문이 가장 가까운 앞 편으로 꼽은 단조 가우스 창 | 아직 |
-| **BERT** (Devlin 외) — 후보 | NAACL 2019 | Transformer 노트 23 · 28절 — 번역 둘에서 처음부터 학습만 했다. 인코더를 다른 과제로 옮긴 결과 | 아직 — 2026-11-04 에 후보로 골랐다 |
 | **Massive Exploration of Neural Machine Translation Architectures** (Britz 외) | EMNLP 2017 | Transformer 노트 5절 — 큰 d_k 에서 더하기 주의가 앞선다는 √d_k 나누기의 출처 | 아직 |
 | **On Layer Normalization in the Transformer Architecture** (Xiong 외) — 후보 | ICML 2020 | Transformer 노트 14 · 23절 — 덧셈 뒤 정규화와 데우기 4,000 의 까닭이 원문에 없다 | 아직 — 2026-11-04 에 후보로 골랐다 |
 | **Self-Attention with Relative Position Representations** (Shaw · Uszkoreit · Vaswani) — 후보 | NAACL 2018 | Transformer 노트 10 · 23절 — 사인 부호화의 상대 자리 · 긴 열 넘겨 쓰기는 가설로만 적혔다 | 아직 — 2026-11-04 에 후보로 골랐다 |
@@ -117,6 +118,13 @@
 | **Swin Transformer** (Liu 외) — 후보 | ICCV 2021 | ViT 노트 24절 · 10절 — 검출 · 분할이 남았다. 국소 창으로 $n^2$ 을 줄이고 편향을 얼마나 들여오나 | 아직 — 2026-11-05 에 후보로 골랐다. 읽고 이 자리에 맞는 편인지 가린다 |
 | **Quantifying attention flow in transformers** (Abnar · Zuidema) | ACL 2020 | ViT 노트 19절 — Attention Rollout 이 무엇을 재는가. 정답과 겹침을 잰 값이 있는가 | 아직 |
 | **On the relationship between self-attention and convolutional layers** (Cordonnier 외) | ICLR 2020 | ViT 노트 3 · 6절 — 가장 가까운 앞 편. 자기 주의가 합성곱을 표현한다는 증명과 「편향이 없다」 의 관계 | 아직 |
+| **Deep contextualized word representations** (ELMo, Peters 외) | NAACL 2018 | BERT 노트 15 · 17 · 28절 — 표 1 · 7 의 비교 상대. 두 방향 모델을 잇는 꼴을 BERT 가 말로만 견줬다 | 아직 |
+| **Improving Language Understanding by Generative Pre-Training** (GPT, Radford 외) | 기술 보고서 2018 | BERT 노트 15 · 28절 — A.4 절의 네 차이. 파라미터와 표 값의 출처 | 아직 |
+| **GLUE** (Wang 외) | BlackboxNLP 2018 | BERT 노트 11절 — 공식 점수 식(80.5 를 칸에서 맞출 수 있나), CoLA 지표, WNLI | 아직 |
+| **Dissecting Contextual Word Embeddings** (Peters 외) | EMNLP 2018 | BERT 노트 16절 — 크기 효과가 엇갈렸다는 쪽의 값 | 아직 |
+| **How transferable are features in deep neural networks?** (Yosinski 외) | NIPS 2014 | BERT 노트 21절 — 층을 옮기는 것과 처음부터 학습을 견줘 잰 편인지 | 아직 |
+| **Rethinking ImageNet Pre-training** (He 외) — 후보 | ICCV 2019 | BERT 노트 21절 — 처음부터 학습 대조의 이미지 쪽. 원문 참고 문헌에 없다 | 아직 — 2026-11-05 에 후보로 골랐다. 읽고 이 자리에 맞는 편인지 가린다 |
+| **RoBERTa** (Liu 외) — 후보 | arXiv 2019 | BERT 노트 15절 — NSP 의 몫. 원문 참고 문헌에 없다 | 아직 — 2026-11-05 에 후보로 골랐다. 읽고 이 자리에 맞는 편인지 가린다 |
 
 ---
 
