@@ -4,9 +4,9 @@
 
 ## 지금 있는 것 (2026-11-06)
 
-- **노트 스물여섯.** 읽는 순서는 퍼셉트론에서 DDPM 까지의 로드맵을 따르고, **노트마다 한계를 적은 뒤 그 한계를 푼 편을 다음으로 읽는다.** 편마다 한 줄 요약과 읽은 까닭은 `INDEX.md` 에 있다. 이상 탐지 논문 다섯 편(MVTec AD · Uninformed Students · PaDiM · VisA · Real-IAD)은 노트가 비공개 저장소 `beyond-mvtec` 에 있어 `INDEX.md` 에 줄만 둔다.
-- **두 갈래가 길어졌다.** 깊은 망을 배워지게 만드는 장치(역전파 → DBN · 오토인코더 → 사전학습은 왜 돕는가 → AlexNet → VGG → BN → ResNet → 사전 활성 ResNet → Wide ResNet)와 생성 모델(오토인코더 → VAE → GAN → Wasserstein GAN → DDPM)이다. Wide ResNet 은 연구에서 쓰는 PatchCore 의 특징 추출기(WRN-50-2)의 원 논문이다.
-- **로드맵 두 갈래가 다 끝났다.** 갈래 A(이미지와 생성)는 2026-11-03 에, 갈래 B(RNN → LSTM → GRU → seq2seq → Attention → Transformer)는 2026-11-04 에 끝났다. 그다음 큰 틀로 정한 ViT 와 함께 읽은 BERT 도 2026-11-05 에 읽었다. 다음 큰 틀은 확산 심화(DDIM → Score SDE → Latent Diffusion)로 2026-11-06 에 정했다.
+- **노트 스물아홉.** 읽는 순서는 퍼셉트론에서 DDPM 까지의 로드맵을 따르고, **노트마다 한계를 적은 뒤 그 한계를 푼 편을 다음으로 읽는다.** 편마다 한 줄 요약과 읽은 까닭은 `INDEX.md` 에 있다. 이상 탐지 논문 다섯 편(MVTec AD · Uninformed Students · PaDiM · VisA · Real-IAD)은 노트가 비공개 저장소 `beyond-mvtec` 에 있어 `INDEX.md` 에 줄만 둔다.
+- **두 갈래가 길어졌다.** 깊은 망을 배워지게 만드는 장치(역전파 → DBN · 오토인코더 → 사전학습은 왜 돕는가 → AlexNet → VGG → BN → ResNet → 사전 활성 ResNet → Wide ResNet)와 생성 모델(오토인코더 → VAE → GAN → Wasserstein GAN → DDPM → DDIM → Score SDE → Latent Diffusion)이다. Wide ResNet 은 연구에서 쓰는 PatchCore 의 특징 추출기(WRN-50-2)의 원 논문이다.
+- **로드맵 두 갈래가 다 끝났다.** 갈래 A(이미지와 생성)는 2026-11-03 에, 갈래 B(RNN → LSTM → GRU → seq2seq → Attention → Transformer)는 2026-11-04 에 끝났다. 그다음 큰 틀로 정한 ViT 와 함께 읽은 BERT 도 2026-11-05 에 읽었다. 이어서 고른 확산 심화(DDIM → Score SDE → Latent Diffusion)도 2026-11-06 에 읽었다. 그 뒤 칸은 아직 정하지 않았다.
 - **연구에서 쓰는 방법(PatchCore)을 원문으로 읽었다.** 깊은 망 갈래의 끝자리(Wide ResNet)를 얼려 쓰는 편이라, 백본과 단계를 고른 근거를 앞 노트들의 물음과 맞춰 봤다.
 - **GAN 은 두 판을 다 읽었다.** 2020 년 개관판을 먼저 읽고 식 절반을 직접 유도해 적었고, 원판(NIPS 2014)을 읽어 그 유도를 하나씩 맞춰 봤다. 식 셋이 같았고, 개관판 노트에서 고친 자리는 그 노트 안에 날짜를 단 인용 블록으로 남겼다.
 - **실험 다섯.** 넷(퍼셉트론 · 역전파 · DBN · LeNet)은 결과까지 들어 있고, AlexNet 은 질문과 가설만 적었다. **2026-11-03 부터 새 실험은 돌리지 않고 논문의 실험을 분석하는 것으로 바꿨다**(아래 「실험 하나를 넣는 절차 셋」).
