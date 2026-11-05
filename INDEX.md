@@ -52,9 +52,16 @@
 
 ---
 
-## 아직 안 읽음 — 큰 틀
+## 아직 안 읽음 — 큰 틀 (먼저, 이 순서대로)
 
-**정해 둔 큰 틀은 모두 읽었고, 그다음 큰 틀은 아직 정하지 않았다.** 로드맵 갈래 A(퍼셉트론 → 역전파 → DBN → CNN → AE → VAE → GAN → Diffusion)는 2026-11-03 까지, 갈래 B(RNN → LSTM → GRU → seq2seq → Attention → Transformer)는 2026-11-04 에, ViT · BERT 는 2026-11-05 에, 확산 심화(DDIM → Score SDE → Latent Diffusion)는 2026-11-06 에 읽었다.
+**지금 큰 틀은 산업 이상 탐지다(2026-11-06 에 정했다).** PatchCore 와 「다른 저장소에 노트가 있는 것」 표의 다섯 편에서 이어 간다 — 최근접 이웃으로 조각을 맞대는 원형, 뱅크를 줄이는 코어셋의 근거, 확산 모델을 이상 탐지에 쓰는 편, 모델 하나로 여러 부류를 다루는 편 순서다. 앞서 정한 칸은 모두 읽어 「읽었다」 표에 있다: 로드맵 갈래 A(퍼셉트론 → 역전파 → DBN → CNN → AE → VAE → GAN → Diffusion)는 2026-11-03 까지, 갈래 B(RNN → LSTM → GRU → seq2seq → Attention → Transformer)는 2026-11-04 에, ViT · BERT 는 2026-11-05 에, 확산 심화(DDIM → Score SDE → Latent Diffusion)는 2026-11-06 에 읽었다.
+
+| 순서 | 논문 | 게재처·연도 | 왜 읽으려 하는가 | 원문을 구했는가 |
+|---:|---|---|---|---|
+| 1 | **SPADE** — Sub-Image Anomaly Detection with Deep Pyramid Correspondences | arXiv 2020 | PatchCore 노트 — PatchCore 가 WRN-50 을 고른 까닭이 이 편 · PaDiM 과 같은 백본을 쓰려는 것이었다. 최근접 이웃으로 조각을 맞대는 원형 | 아직 |
+| 2 | **코어셋 뽑기** — Active Learning for Convolutional Neural Networks: A Core-Set Approach (Sener · Savarese) | ICLR 2018 | PatchCore 노트 — 탐욕 코어셋의 출처로 인용한 편. 가장 먼 점을 하나씩 더하는 방법의 보장(원리의 원 출처는 Gonzalez 1985)이 PatchCore 의 덮는 반지름 식과 같은 것인지 본다 | 아직 |
+| 3 | **AnoDDPM** | CVPR Workshops 2022 | 확산 모델을 이상 탐지에 쓴 편. 순방향으로 어디까지 보낼지(t₀)를 고르는 문제가 DDPM §3의 표와 바로 이어진다 | 아직 |
+| 4 | **UniAD** — A Unified Model for Multi-class Anomaly Detection (You 외) — 후보 | NeurIPS 2022 | PatchCore · PaDiM 은 부류마다 모델을 따로 둔다. 모델 하나로 여러 부류를 다룰 때 무엇이 달라지는지 본다 | 아직 — 2026-11-06 에 후보로 골랐다. 읽고 이 자리에 맞는 편인지 가린다 |
 
 ## 나중에 볼 세부 (노트마다 꼽은 후속 편)
 
@@ -62,7 +69,6 @@
 
 | 논문 | 게재처·연도 | 왜 읽으려 하는가 | 원문을 구했는가 |
 |---|---|---|---|
-| **SPADE** — Sub-Image Anomaly Detection with Deep Pyramid Correspondences | arXiv 2020 | PatchCore 노트 — PatchCore 가 WRN-50 을 고른 까닭이 이 편 · PaDiM 과 같은 백본을 쓰려는 것이었다. 최근접 이웃으로 조각을 맞대는 원형 | 아직 |
 | **WGAN-GP** — Improved Training of Wasserstein GANs | NeurIPS 2017 | Wasserstein GAN 노트 — 원문 스스로 무게 자르기를 「분명히 끔찍한」 방법이라 적는다. 립시츠 조건을 기울기 벌점으로 바꾸면 무엇이 달라지는지 본다 | 아직 — 2026-11-03 에 후보로 골랐다. 읽고 이 자리에 맞는 편인지 가린다 |
 | **Towards Principled Methods for Training GANs** (Arjovsky · Bottou) | ICLR 2017 | Wasserstein GAN 노트 — 원문 참고 문헌 1. 받침이 저차원 다양체에 있으면 완벽한 판별기가 있고 기울기가 사라진다는 앞 편 | 아직 |
 | **생성 모델 평가를 다룬 편** — A note on the evaluation of generative models (Theis 외) | ICLR 2016 | 원 GAN 노트 24절 — 원판의 성적표가 Parzen 창 로그 가능도뿐인데, 직접 재 보니 1 차원에서 σ 하나로 −10.04 에서 −1.43 까지 움직이고 차원이 크면 완벽한 생성기도 참값보다 낮게 나온다. 그 추정이 왜 믿을 만하지 않은지를 정면으로 다룬 편 | 아직 |
@@ -73,7 +79,6 @@
 | **Residual Networks Behave Like Ensembles of Relatively Shallow Networks** (Veit 외) | NIPS 2016 | 사전 활성 ResNet 노트 — 식 (4) 를 받아 블록별 기여를 재는 편. 원 논문이 식 (5) 의 「1 +」 항을 직접 재지 않았고, ResNet 노트 23절 D(단계 끝 대 가운데 블록)와도 닿는다 | 아직 — 2026-11-03 에 후보로 골랐다. 읽고 이 자리에 맞는 편인지 가린다 |
 | **Deep Networks with Stochastic Depth** | ECCV 2016 | Wide ResNet 노트 25절 — 깊고 가는 망의 「블록 대부분이 하는 일이 적다」는 주장을 블록을 무작위로 건너뛰며 배워 재는 편. 폭 쪽 답(WRN)과 깊이 쪽 답을 나란히 본다 | 아직 |
 | **ResNeXt** — Aggregated Residual Transformations for Deep Neural Networks | CVPR 2017 | Wide ResNet 노트 25절 — 넓히는 방법을 채널 수 말고 **갈래 수(cardinality)** 로 바꾼 편. 같은 계산에서 폭 대 갈래 | 아직 — 2026-10-04 에 후보로 골랐다. 읽고 이 자리에 맞는 편인지 가린다 |
-| **코어셋 뽑기** — Active Learning for Convolutional Neural Networks: A Core-Set Approach (Sener · Savarese) | ICLR 2018 | PatchCore 노트 — 탐욕 코어셋의 출처로 인용한 편. 가장 먼 점을 하나씩 더하는 방법의 보장(원리의 원 출처는 Gonzalez 1985)이 PatchCore 의 덮는 반지름 식과 같은 것인지 본다 | 아직 |
 | **곱 양자화** — Product Quantization for Nearest Neighbor Search (Jégou 외) | TPAMI 2011 | PatchCore 노트 — 근사 최근접 탐색(IVFPQ)의 원리. 뱅크를 줄이는 쪽(코어셋)과 탐색을 줄이는 쪽(양자화)을 나란히 놓는다 | 아직 — 2026-11-03 에 후보로 골랐다. 읽고 이 자리에 맞는 편인지 가린다 |
 | **Fixup Initialization** — Residual Learning Without Normalization | ICLR 2019 | 사전 활성 ResNet 노트 — 사전 활성의 두 효과(항등 $f$ 로 최적화가 쉬움 · BN 이 가중치 입력을 정규화)가 원 논문에서 갈려 있지 않다. BN 없이 잔차 망을 배우는 편으로 BN 의 몫을 따로 본다 | 아직 — 2026-11-03 에 후보로 골랐다. 읽고 이 자리에 맞는 편인지 가린다 |
 | **Highway Networks** | arXiv 2015 | ResNet 노트 22절 · 16절 — 게이트가 있는 지름길. 닫힐 수 있는 지름길과 늘 열린 항등의 차이가 실험에서 어디서 갈리는지 본다 | 아직 |
@@ -84,7 +89,6 @@
 | **하한을 조이는 편** — 후보: Importance Weighted Autoencoders | ICLR 2016 | VAE 노트 19절 셋 — 하한과 $\log p(x)$ 의 틈을 같은 모델에서 잰 자리가 없다. 표본 여럿으로 하한을 조이면 틈이 얼마나 주는지 본다 | 아직 — 2026-09-30 에 후보로 골랐다. 읽고 이 자리에 맞는 편인지 가린다 |
 | **대각 가우스 근사 사후분포를 넓힌 편** — 후보: Variational Inference with Normalizing Flows (다음으로 IAF, NeurIPS 2016) | ICML 2015 | VAE 노트 10절 · 18절 — 각주가 「대각 가우스는 한계가 아니다」라고 적지만 실험은 대각 가우스뿐이다 | 아직 — 2026-09-30 에 후보로 골랐다. 읽고 이 자리에 맞는 편인지 가린다 |
 | **이산 잠재 변수로 가는 편** — 후보: VQ-VAE / Gumbel-Softmax | NeurIPS 2017 / ICLR 2017 | VAE 노트 23절 · 18절 하나 — 재매개변수화가 연속 분포에만 된다. 이산 코드를 쓰면서 기울기를 어떻게 흘리는지 본다 | 아직 — 2026-09-30 에 후보로 골랐다. 읽고 이 자리에 맞는 편인지 가린다 |
-| **AnoDDPM** | CVPR Workshops 2022 | 확산 모델을 이상 탐지에 쓴 편. 순방향으로 어디까지 보낼지(t₀)를 고르는 문제가 DDPM §3의 표와 바로 이어진다 | 아직 |
 | **같은 제목의 저널판** — Why Does Unsupervised Pre-training Help Deep Learning? | JMLR 2010 | 사전학습 노트 21절 — 2026-10-11 에 학회판(AISTATS 2010, 8 쪽)을 읽었다. 학회판의 본문-그림 어긋남 다섯 자리가 고쳐졌는지, 온라인 실험에 반복(seed)이 붙었는지 본다 | 아직 |
 | **Erhan 외 (2009b)** — The difficulty of training deep architectures and the effect of unsupervised pre-training | AISTATS 2009 | 사전학습 노트 4절 · 21절 — 정규화 가설과 식 (2) 의 출처이고, 무작위 초기화 400 번 · 「두 함수 구역이 겹치지 않는다」 를 잰 편 | 아직 |
 | **Curriculum learning** (Bengio 외) | ICML 2009 | 사전학습 노트 17절 · 21절 — 앞쪽 예시가 결과를 정한다면 앞쪽에 무엇을 보이느냐가 사전학습의 대안이 되는지 | 아직 |
