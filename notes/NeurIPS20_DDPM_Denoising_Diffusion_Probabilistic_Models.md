@@ -112,6 +112,8 @@ $$p_\theta(\mathbf{x}_{0:T}) = p(\mathbf{x}_T)\prod_{t=1}^{T} p_\theta(\mathbf{x
 
 논문은 $\boldsymbol\Sigma_\theta(\mathbf{x}_t,t)=\sigma_t^2\mathbf{I}$로 고정한다. 후보는 둘이고, 실험에서 두 후보의 결과 차이는 판정 한계 안이었다.
 
+> 2026-11-06(DDIM 노트): 원문은 「had similar results」 라고만 적어 「판정 한계 안」 은 원문보다 세다. DDIM 표 1 에서 같은 체크포인트 · 1000 걸음의 분산만 바꾼 FID 가 $\tilde\beta_t$ 4.73 대 $\beta_t$ 3.17(CIFAR10), 5.98 대 3.26(CelebA)이다. 3.17 은 $\beta_t$ 판 값이고, DDIM 원문은 이 판을 CIFAR10 표본에만 썼다고 적는다.
+
 - $\sigma_t^2=\beta_t$: $\mathbf{x}_0$가 $\mathcal{N}(\mathbf{0},\mathbf{I})$를 따를 때 최적.
 - $\sigma_t^2=\tilde\beta_t=\frac{1-\bar\alpha_{t-1}}{1-\bar\alpha_t}\beta_t$: $\mathbf{x}_0$가 한 점에 고정되어 있을 때 최적. 아래 사후분포의 분산과 같다.
 
@@ -251,6 +253,8 @@ $$L_{\text{simple}}(\theta):=\mathbb{E}_{t,\mathbf{x}_0,\boldsymbol\epsilon}\Big
 *논문 식 (14)*
 
 이것은 변분 하한을 **다시 가중치 매긴** 것이지 다른 목적 함수가 아니다. 버린 계수는 $t$가 작을수록 크다. 즉 원래 하한은 "거의 깨끗한 이미지에서 아주 작은 잡음을 걷는" 쉬운 단계에 큰 무게를 두었고, L<sub>simple</sub>은 그 무게를 걷어 큰 $t$의 어려운 단계에 상대적으로 집중하게 만든다. 논문은 이 재가중치가 샘플 품질에 도움이 된다고 실험으로 확인했다(표 2, FID 13.51에서 3.17). 반대로 우도(NLL)는 원래 하한으로 학습할 때가 더 좋다(3.70 대 3.75).
+
+> 2026-11-06(DDIM 노트, 내가 계산한 것): 버린 계수는 $\sigma^2 = \tilde\beta_t$ 에서 $t = 2$ 0.5997, $t = 350$ 최저 0.00498, $t = 1000$ 0.0102 로 단조가 아니다. 작은 $t$ 쪽이 가장 큰 것은 맞다.
 
 > 한 줄로 줄이면, DDPM의 학습은 **"잡음 섞인 이미지와 시각 t를 주면, 어떤 잡음이 섞였는지 맞혀라"** 라는 회귀 문제다. 확률 모델의 유도는 이 회귀 문제가 어디서 왔는지를 설명하는 역할이다.
 
@@ -394,6 +398,8 @@ CIFAR10. 줄표는 논문이 "학습 불안정, 샘플 품질 나쁨"으로 적�
 | **DDPM (L_simple)** | **6.36** | **7.89** |
 | **DDPM (L_simple, 큰 모델)** | **4.90** | **–** |
 
+> 2026-11-06(Latent Diffusion 노트): Latent Diffusion 표 1 은 StyleGAN 침실을 2.35 로 적어 이 표의 2.65 와 다르다(교회 4.21 · StyleGAN2 3.86 · PGGAN 6.42 · DDPM 7.89 · 4.90 은 같다). 저장한 12 쪽 PDF 의 글자 층에서 `2.65` 와 12절 율-왜곡 표의 `67.60` 이 찾아지지 않는다. 부록의 값으로 읽히는데 원문으로 확인하지 못했다. 다만 Latent Diffusion 그림 2 의 곡선을 픽셀로 읽으니 율-왜곡 표의 끝 점과 (0.11994, 12.02) 가 1 픽셀 안에 든다.
+
 고해상도에서는 ProgressiveGAN과 같은 급이고 StyleGAN 계열에는 미치지 못한다. 논문 초록의 "ProgressiveGAN과 비슷한 샘플 품질"이라는 표현이 이 표를 가리킨다. CelebA-HQ 256×256은 샘플 그림만 제시하고 수치 비교는 하지 않았다.
 
 ---
@@ -427,8 +433,14 @@ CIFAR10 test. 역방향 진행 단계 수(T−t+1)에 따른 누적 율과 왜�
 
 - **샘플링 비용.** 한 장에 신경망 통과 1000번. CIFAR10 256장에 17초, 256×256 128장에 300초(TPU v3-8). GAN은 한 번 통과다. DDIM(2020)과 이후 증류 연구가 이 문제를 다룬다.
 - **우도.** 3.75 bits/dim으로 자기회귀 모델(2.80)에 미치지 못한다. §12가 이유를 설명하지만 해결하지는 않는다.
+
+  > 2026-11-06(Score SDE 노트): 같은 점수로 식 (13) 의 ODE 밀도를 재면 3.28 이다(Score SDE 표 2). 다만 3.75 는 역방향 사슬의 하한, 3.28 은 ODE 밀도를 균일 역양자화 데이터에서 잰 값이라 같은 모델의 틈이 아니다. 2.80 과도 평가 조건이 다르다.
+
 - **고해상도 품질.** LSUN에서 StyleGAN 계열보다 FID가 높다(Bedroom 4.90 대 2.65).
 - **조건부 생성 없음.** 클래스나 텍스트 조건이 없다. 조건부 확산은 Dhariwal과 Nichol(2021)의 분류기 안내에서 시작한다.
+
+  > 2026-11-06(Score SDE 노트): Score SDE(ICLR 2021) 5절 · 부록 I.1 을 읽었다. 시간 조건 분류기(WRN-28-10)로 CIFAR-10 부류 조건 표본을 이미 낸다. 수치는 분류기 정확도 곡선뿐이고 FID · IS 는 없다. 「Dhariwal 과 Nichol(2021)에서 시작한다」 는 이 편을 빠뜨린 문장이다. 그 편은 아직 읽지 않아 무엇을 더했는지는 확인하지 않았다.
+
 - **분산 학습 실패.** Σ를 학습하면 불안정했고, 왜 그런지는 설명하지 않았다. Nichol과 Dhariwal(2021)이 β_t와 β̃_t 사이의 보간으로 풀었다.
 - **스케줄 선택.** 선형 β 스케줄은 32×32에서는 괜찮았지만, 뒤에 저해상도에서 마지막 단계들이 정보를 너무 빨리 잃는다는 지적(코사인 스케줄)이 나왔다.
 
@@ -441,10 +453,13 @@ CIFAR10 test. 역방향 진행 단계 수(T−t+1)에 따른 누적 율과 왜�
 아래는 논문 내용이 아니라 이 논문을 어디에 이어 붙여 읽을지에 대한 안내다.
 
 - **DDIM** (Song, Meng, Ermon 2020): 같은 학습 모델을 비마르코프 과정으로 다시 해석해 결정적 샘플러를 만들고, 10~50스텝으로 줄인다. §7의 $\hat{\mathbf{x}}_0$ 식을 그대로 쓴다.
+
+  > 2026-11-06(DDIM 노트): 「10~50스텝」 은 잘못 옮긴 값이다. 원문은 10 배 ~ 50 배, 곧 20 ~ 100 걸음이다. 2026-11-06 에 읽었다.
+
 - **Improved DDPM** (Nichol, Dhariwal 2021): 코사인 스케줄, Σ 학습 복원, 하이브리드 손실로 NLL을 개선한다. §4의 "결정 1"을 뒤집는 논문.
-- **Score SDE** (Song 등 2021): DDPM과 NCSN을 연속 시간 확률 미분 방정식으로 통합한다. §8의 연결을 일반화한 것.
+- **Score SDE** (Song 등 2021): DDPM과 NCSN을 연속 시간 확률 미분 방정식으로 통합한다. §8의 연결을 일반화한 것. 2026-11-06 에 읽었다.
 - **Diffusion beats GANs** (Dhariwal, Nichol 2021): 구조 개선과 분류기 안내로 ImageNet에서 GAN을 넘는다.
-- **Latent Diffusion** (Rombach 등 2022): 픽셀이 아니라 오토인코더 잠재 공간에서 확산을 돌려 비용을 줄인다. Stable Diffusion의 바탕.
+- **Latent Diffusion** (Rombach 등 2022): 픽셀이 아니라 오토인코더 잠재 공간에서 확산을 돌려 비용을 줄인다. Stable Diffusion의 바탕. 2026-11-06 에 읽었다.
 
 ### 이상 탐지 관점에서 읽을 때
 
@@ -468,11 +483,11 @@ CIFAR10 test. 역방향 진행 단계 수(T−t+1)에 따른 누적 율과 왜�
 1. Ho, J., Jain, A., Abbeel, P. Denoising Diffusion Probabilistic Models. NeurIPS 2020. arXiv:2006.11239. 코드: github.com/hojonathanho/diffusion
 2. Sohl-Dickstein, J. 등. Deep Unsupervised Learning using Nonequilibrium Thermodynamics. ICML 2015. (확산 모델의 원 출처)
 3. Song, Y., Ermon, S. Generative Modeling by Estimating Gradients of the Data Distribution. NeurIPS 2019. (NCSN, 잡음 제거 스코어 매칭)
-4. Song, J., Meng, C., Ermon, S. Denoising Diffusion Implicit Models. ICLR 2021. (DDIM)
+4. Song, J., Meng, C., Ermon, S. Denoising Diffusion Implicit Models. ICLR 2021. (DDIM) 2026-11-06 에 읽었다.
 5. Nichol, A., Dhariwal, P. Improved Denoising Diffusion Probabilistic Models. ICML 2021.
-6. Song, Y. 등. Score-Based Generative Modeling through Stochastic Differential Equations. ICLR 2021.
+6. Song, Y. 등. Score-Based Generative Modeling through Stochastic Differential Equations. ICLR 2021. 2026-11-06 에 읽었다.
 7. Dhariwal, P., Nichol, A. Diffusion Models Beat GANs on Image Synthesis. NeurIPS 2021.
-8. Rombach, R. 등. High-Resolution Image Synthesis with Latent Diffusion Models. CVPR 2022.
+8. Rombach, R. 등. High-Resolution Image Synthesis with Latent Diffusion Models. CVPR 2022. 2026-11-06 에 읽었다.
 9. Wyatt, J. 등. AnoDDPM: Anomaly Detection with Denoising Diffusion Probabilistic Models using Simplex Noise. CVPR Workshops 2022.
 
 *표 1·2·3·4의 수치와 부록 B의 하이퍼파라미터는 arXiv 2006.11239 원문에서 옮겼다. §3의 ᾱ_t 표는 논문의 선형 스케줄을 직접 계산한 값이다. §14는 논문 밖의 해설이다.*

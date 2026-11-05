@@ -34,6 +34,9 @@
 | **Transformer** — Attention Is All You Need | NIPS 2017 (읽은 파일은 학회판 11 쪽, 부록 없음) | 인코더-디코더에서 되먹임과 합성곱을 빼고 **주의만** 남긴다. 머리 8 개 × 64 의 자기 주의 · 자리별 앞먹임 · 사인 자리 부호화, 6 층 × 폭 512. newstest2014 에서 big 이 EN-DE 28.4(앞 최고 26.36), EN-FR 41.0(단일 최고, 앙상블 41.29 아래). **「학습이 빠르다」 의 근거는 표 1 차수와 FLOPs 추정(시간 × GPU × 최대 능력)뿐, 표 2 · 3 은 줄마다 실행 하나** | 로드맵 갈래 B 의 마지막 칸. Bahdanau 외의 주의를 RNN 위 장치에서 모델 전체로 바꾼 편. **표 1 의 O(n²·d) 는 투영 4nd² 를 뺀 값이고(n = 50 에서 주의 부분층 5,500 만), 표 3 params 는 base 쪽 열 줄과 big 줄이 하나의 어휘로 맞지 않는다**는 것을 셌다 | [NIPS17_Transformer](notes/NIPS17_Transformer_Attention_Is_All_You_Need.md) |
 | **ViT** — An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale | ICLR 2021 (읽은 파일은 학회판 21 쪽, 부록 포함) | 이미지를 $P \times P$ 조각으로 잘라 낱말처럼 다루고, 선형 투영 · 분류 토큰 · 학습하는 1 차원 자리 임베딩만 붙여 **표준 Transformer 인코더**에 넣는다. 224 입력 · 패치 16 이면 조각 196. ImageNet 만으로 배우면 L/16 76.53 으로 BiT 띠(76.81 ~ 81.30) 아래이고, JFT-300M 사전학습 + 미세조정이면 H/14 가 ImageNet 88.55 ± 0.04(BiT-L 87.54 ± 0.02) · VTAB 77.63 ± 0.23(BiT-L 76.29 ± 1.70) | 로드맵 두 갈래 뒤 사용자가 고른 다음 큰 틀. Transformer 노트가 남긴 물음 셋(자르는 법 · 합성곱과 같은 조건 비교 · 자리 부호화)을 받는다. **파라미터를 torchvision 과 정수까지 맞췄고 표 1 의 307M 은 L/16 으로 안 나온다는 것(303.3 ~ 304.3M), $n^2$ 항의 몫이 $n/(n+6D)$ 로 B/16 · 224 에서 4.1% 라는 것, 「모든 과제에서 넘는다」 는 7 행 중 ± 밖이 4 행이고 ReaL 0.00 · VTAB −0.01 이라는 것, 「귀납 편향을 이긴다」 를 받치는 그림 3 · 4 에 편향을 변인으로 둔 행이 없고 하이브리드를 데이터 크기로 돌린 행이 없다는 것, 벡터 좌표로 읽으니 H/14 ImageNet 값이 네 벌(88.55 · 88.04 · 88.08 · 88.28)이고 뒤쪽 층 주의 거리가 균일 주의 116.49 의 94 ~ 99% 라는 것을 짚어 두었다** | [ICLR21_ViT](notes/ICLR21_ViT_An_Image_is_Worth_16x16_Words_Transformers_for_Image_Recognition_at_Scale.md) |
 | **BERT** — BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding | NAACL 2019 (읽은 파일은 발표집 판 16 쪽, 부록 포함) | Transformer 인코더만 남겨 라벨 없는 글 33 억 낱말에서 **입력의 15% 를 가리고 맞히는 과제**와 **다음 문장 과제(NSP)** 로 사전학습한 뒤, 과제마다 출력 층 하나를 붙여 전체를 미세조정한다. Base(12 층 · 폭 768) · Large(24 층 · 폭 1024). GLUE 표 평균 79.6 · 82.1(GPT 75.1), SQuAD 1.1 시험 F1 93.2(앙상블) · 91.8(단일), SQuAD 2.0 83.1, SWAG 86.3. **같은 짜임을 처음부터 학습한 줄이 표 1 ~ 8 어디에도 없다** | Transformer 노트가 꼽은 큰 틀 후보 둘 중 하나이고, ViT 와 중간중간 함께 읽기로 한 편. 그 노트의 물음 「인코더만 옮기면 무엇이 나오나 · 사전학습의 몫을 갈랐나」 를 받는다. **표 5 의 NSP 몫이 QNLI 85.4% 인데 MRPC 2.2% · SQuAD 5.6% 이고, 가림 과제만 뺀 줄이 없어 그 몫은 뽑히지 않는다는 것, 표 8 의 80/10/10 이 표 7 의 같은 설정과 1.0 · 1.2 F1 다르다는 것, 본문 「단일로 +1.3」 은 #2 와의 차이고 #1 과는 +0.1 이라는 것, 「약 40 에폭」 이 길이 128 일정을 넣으면 256 열 유지 때 12.9 라는 것, 파라미터를 세면 Base 는 110M 과 맞고 Large 는 340M 보다 1.1 ~ 1.9% 작다는 것을 짚어 두었다** | [NAACL19_BERT](notes/NAACL19_BERT_Pre_training_of_Deep_Bidirectional_Transformers_for_Language_Understanding.md) |
+| **DDIM** — Denoising Diffusion Implicit Models | ICLR 2021 (읽은 파일은 arXiv v4, 부록 포함) | DDPM 목적이 주변 분포 $q(x_t \mid x_0)$ 에만 기댄다는 데서 출발해, 같은 주변 분포의 **비마르코프 앞방향 가족**을 놓고 **학습한 망을 그대로 쓴 채** 뽑기만 바꾼다. $\sigma = 0$ 이면 결정적이고 걸음은 $T = 1000$ 의 부분열로 줄인다. CIFAR10 FID 가 DDIM $S$ = 10 · 20 · 100 에서 13.36 · 6.84 · 4.16, 같은 체크포인트 DDPM($\eta = 1$) 41.07 · 18.36 · 5.78, 1000 걸음 최저는 $\hat\sigma$ 3.17 | 로드맵 뒤 사용자가 고른 큰 틀(확산 심화)의 첫 편. DDPM 노트의 한계(한 장에 망 통과 1000 번)를 받는다. **「10 ~ 50 배」 는 20 ~ 100 걸음이고 시간 비는 9.5 ~ 48.8 배(Bedroom 은 10.0 ~ 39.3 배)라는 것, 「1000 걸음과 견줄 만」 이 20 걸음에서 1.40 ~ 3.91 배라는 것, 표 3 Church $S = 100$ 은 DDPM 이 2.31 낮은데 본문에 언급이 없다는 것, 정리 1 의 끝 계수가 같은 편 식 (66) 과 맞지 않고($\gamma_2/\gamma_{1000}$ 이 58.8 대 0.0148) 대리 목적의 근거가 공유하지 않는 망의 말이라는 것, 이차 $\tau$ 규칙이 $S \ge 50$ 에서 글자 그대로 돌지 않는다는 것을 짚어 두었다** | [ICLR21_DDIM](notes/ICLR21_DDIM_Denoising_Diffusion_Implicit_Models.md) |
+| **Score SDE** — Score-Based Generative Modeling through Stochastic Differential Equations | ICLR 2021 (읽은 파일은 arXiv v2, 부록 포함 36 쪽) | 유한 개이던 잡음 크기를 연속 시간 SDE 로 늘린다. SMLD 는 VE, DDPM 은 VP SDE 의 이산화이고 새 꼴 sub-VP 를 더한다. 거꾸로 가는 SDE(식 6)와 같은 주변 분포의 확률 흐름 ODE(식 13)는 점수 하나만 요구하므로 예측기-수정기 표본기 · 우도 계산 · 조건부 생성이 한 틀에서 나온다. CIFAR-10 FID 2.20 · IS 9.89(NCSN++ cont. deep, VE), 2.99 bits/dim(DDPM++ cont. deep, sub-VP) | 큰 틀 확산 심화의 둘째 칸. DDPM 노트의 대응(잡음 예측 = 점수 맞추기)과 비용 · 우도 · 조건부 한계를 받는다. **「90% 넘게 줄여도 영향 없음」 에 분모가 없고 그림 3 의 짝으로는 84.3% · 97.4%(얼룩)라는 것, 「PC 가 같거나 낫다」 가 표 4 VP 칸에서 3.11 · 3.10 대 3.21 · 3.18 로 뒤집힌다는 것, 2.20 은 학습 반복 하나의 가장 낮은 체크포인트이고 그림 10 의 체크포인트 평균 최저가 2.60 이라는 것, 3.75 와 3.28 이 다른 밀도의 값이라는 것(내 판단), H.2 의 우도 3.21 · 3.05 가 표 2 의 다른 줄 값이고 식 (19) 에 기울기가 빠졌다는 것을 짚어 두었다.** 식 (26) · (28) · (29) · (33) 을 다시 풀어 맞췄고 sub-VP 분산이 VP 분산의 제곱임을 적었다 | [ICLR21_ScoreSDE](notes/ICLR21_ScoreSDE_Score_Based_Generative_Modeling_through_Stochastic_Differential_Equations.md) |
+| **Latent Diffusion** — High-Resolution Image Synthesis with Latent Diffusion Models | CVPR 2022 (읽은 파일은 arXiv v2, 부록 포함 45 쪽) | 확산을 픽셀이 아니라 먼저 배워 얼린 오토인코더의 잠재 공간에서 돌린다. 256 x 256 x 3 이 $f = 4$ 면 64 x 64 x 3 으로 16 분의 1 이 되고, 손실은 DDPM 의 잡음 맞히기 그대로다. 조건은 UNet 층마다 교차 주의로 넣는다. CelebA-HQ FID 5.11, ImageNet 부류 조건 3.60(ADM-G 4.59), 메우기 9.39. ImageNet 학습 271 V100-일로 ADM 916 의 0.30 배 | 큰 틀 확산 심화의 셋째 칸. DDPM 의 비용 문제와 오토인코더 · VAE 칸이 만나는 자리. **그림 6 · 17 을 포개니 2M 걸음의 비용이 LDM-1 35.0 · LDM-8 54.0 V100-일이라 캡션의 「같은 계산 예산」 이 틀렸고 「차이 38」 은 같은 비용에서 31.5 라는 것, 식 (16) 의 부호와 $W_Q$ · $W_V$ 차원이 틀렸다는 것, UNet 을 표의 설정으로 세면 18 행 중 14 행이 1.2% 안이고 표 12 의 294M · 표 13 의 391M 이 어긋난다는 것, 표 8 복원은 $f$ 보다 잠재 수의 개수를 따른다는 것(같은 4,096 개에서 $f$ 8 · 16 차이 0.11 dB), 「4 배」 에 첫 단계 비용이 빠져 더하면 2.61 배라는 것을 짚어 두었다** | [CVPR22_LDM](notes/CVPR22_LDM_High_Resolution_Image_Synthesis_with_Latent_Diffusion_Models.md) |
 
 ### 다른 저장소에 노트가 있는 것
 
@@ -49,15 +52,9 @@
 
 ---
 
-## 아직 안 읽음 — 큰 틀 (먼저, 이 순서대로)
+## 아직 안 읽음 — 큰 틀
 
-**지금 큰 틀은 확산 심화다(2026-11-06 에 정했다).** DDPM 노트에서 이어 간다 — 표본 뽑기 걸음 수를 줄이는 편, 확산과 점수 맞추기를 한 틀에 놓는 편, 잠재 공간으로 옮겨 계산을 줄이는 편 순서다. 앞서 정한 칸은 모두 읽어 「읽었다」 표에 있다: 로드맵 갈래 A(퍼셉트론 → 역전파 → DBN → CNN → AE → VAE → GAN → Diffusion)는 2026-11-03 까지, 갈래 B(RNN → LSTM → GRU → seq2seq → Attention → Transformer)는 2026-11-04 에, ViT · BERT 는 2026-11-05 에 읽었다.
-
-| 순서 | 논문 | 게재처·연도 | 왜 읽으려 하는가 | 원문을 구했는가 |
-|---:|---|---|---|---|
-| 1 | **DDIM** — Denoising Diffusion Implicit Models (Song · Meng · Ermon) | ICLR 2021 | DDPM의 1000스텝을 10~50스텝으로 줄인다. 같은 학습 모델을 그대로 쓰므로 DDPM 다음에 바로 읽힌다 | 아직 |
-| 2 | **Score SDE** — Score-Based Generative Modeling through Stochastic Differential Equations (Song 외) | ICLR 2021 | DDPM 노트에 적은 점수 맞추기와의 관계를 받는 편. 확산을 연속 시간 확률 미분 방정식으로 적어 두 계열을 한 틀에 놓는다 | 아직 — 2026-11-06 에 후보로 골랐다. 읽고 이 자리에 맞는 편인지 가린다 |
-| 3 | **Latent Diffusion** — High-Resolution Image Synthesis with Latent Diffusion Models (Rombach 외) | CVPR 2022 | 픽셀이 아니라 오토인코더의 잠재 공간에서 확산을 돌린다. 오토인코더 · VAE 칸과 확산 칸이 만나는 자리 | 아직 — 2026-11-06 에 후보로 골랐다. 읽고 이 자리에 맞는 편인지 가린다 |
+**정해 둔 큰 틀은 모두 읽었고, 그다음 큰 틀은 아직 정하지 않았다.** 로드맵 갈래 A(퍼셉트론 → 역전파 → DBN → CNN → AE → VAE → GAN → Diffusion)는 2026-11-03 까지, 갈래 B(RNN → LSTM → GRU → seq2seq → Attention → Transformer)는 2026-11-04 에, ViT · BERT 는 2026-11-05 에, 확산 심화(DDIM → Score SDE → Latent Diffusion)는 2026-11-06 에 읽었다.
 
 ## 나중에 볼 세부 (노트마다 꼽은 후속 편)
 
@@ -129,6 +126,26 @@
 | **How transferable are features in deep neural networks?** (Yosinski 외) | NIPS 2014 | BERT 노트 21절 — 층을 옮기는 것과 처음부터 학습을 견줘 잰 편인지 | 아직 |
 | **Rethinking ImageNet Pre-training** (He 외) — 후보 | ICCV 2019 | BERT 노트 21절 — 처음부터 학습 대조의 이미지 쪽. 원문 참고 문헌에 없다 | 아직 — 2026-11-05 에 후보로 골랐다. 읽고 이 자리에 맞는 편인지 가린다 |
 | **RoBERTa** (Liu 외) — 후보 | arXiv 2019 | BERT 노트 15절 — NSP 의 몫. 원문 참고 문헌에 없다 | 아직 — 2026-11-05 에 후보로 골랐다. 읽고 이 자리에 맞는 편인지 가린다 |
+| **NCSN** — Generative Modeling by Estimating Gradients of the Data Distribution (Song · Ermon) | NeurIPS 2019 | Score SDE 노트 — 식 1 · 2 의 출처. DDIM 노트도 인용한다 | 아직 |
+| **Improved Techniques for Training Score-Based Generative Models** (Song · Ermon) | NeurIPS 2020 | Score SDE 노트 — $\sigma_\text{max}$ 를 정하는 Technique 1 의 출처 | 아직 |
+| **Adversarial score matching and improved sampling for image generation** (Jolicoeur-Martineau 외) | ICLR 2021 | DDIM · Score SDE 노트 — FID 가 남은 잡음에 민감하다는 근거와 끝의 잡음 제거 | 아직 |
+| **Learning in implicit generative models** (Mohamed · Lakshminarayanan) | arXiv 2016 | DDIM 노트 — 암묵적 모델이라는 이름의 출처 | 아직 |
+| **Improved DDPM** (Nichol · Dhariwal) — 후보 | ICML 2021 | DDIM 노트 — 분산을 어떻게 고르는가. 원문 참고 문헌에 없다 | 아직 — 2026-11-06 에 후보로 골랐다. 읽고 이 자리에 맞는 편인지 가린다 |
+| **DPM-Solver** (Lu 외) — 후보 | NeurIPS 2022 | DDIM 노트 — 걸음 수를 더 줄이는 쪽. 원문 참고 문헌에 없다 | 아직 — 2026-11-06 에 후보로 골랐다. 읽고 이 자리에 맞는 편인지 가린다 |
+| **ADM** — Diffusion Models Beat GANs on Image Synthesis (Dhariwal · Nichol) | NeurIPS 2021 | Latent Diffusion 노트 — 식 (16) 의 부호와 UNet 의 출처, 비용 비교 상대. Score SDE 노트 — 수치가 있는 조건부 생성 | 아직 |
+| **Classifier-Free Diffusion Guidance** (Ho · Salimans) | NeurIPS Workshop 2021 | Latent Diffusion 노트 — 식이 원문 파일에 없다 | 아직 |
+| **VQGAN** — Taming Transformers for High-Resolution Image Synthesis (Esser 외) | CVPR 2021 | Latent Diffusion 노트 — 첫 단계 적대 항의 무게 | 아직 |
+| **VQ-VAE-2** — Generating Diverse High-Fidelity Images with VQ-VAE-2 (Razavi 외) | NeurIPS 2019 | Latent Diffusion 노트 — VQ 정칙화. VQ-VAE 는 위 「이산 잠재 변수로 가는 편」 줄에 있다 | 아직 |
+| **LSGM** — Score-based Generative Modeling in Latent Space (Vahdat 외) | NeurIPS 2021 | Latent Diffusion 노트 — 오토인코더와 확산을 함께 배우는 길 | 아직 |
+| **On Buggy Resizing Libraries and Surprising Subtleties in FID Calculation** (Parmar 외) | arXiv 2021 | Latent Diffusion 노트 — 전처리에 따라 FID 가 얼마나 달라지는가 | 아직 |
+| **Variational Diffusion Models** (Kingma 외) | NeurIPS 2021 | Latent Diffusion 노트 — 부록 B 의 표기와 $t = 1$ 처리 | 아직 |
+| **U-Net** (Ronneberger 외) | MICCAI 2015 | Latent Diffusion 노트 — 골격의 원형 | 아직 |
+| **Reverse-time diffusion equation models** (Anderson) | Stochastic Processes and their Applications 1982 | Score SDE 노트 — 식 6 의 출처 | 아직 |
+| **A Connection Between Score Matching and Denoising Autoencoders** (Vincent) | Neural Computation 2011 | Score SDE 노트 — 식 7 과 잡음 제거 오토인코더의 연결 | 아직 |
+| **Neural ODE** — Neural Ordinary Differential Equations (Chen 외) | NeurIPS 2018 | Score SDE 노트 — 식 39 · 40 의 우도 계산 | 아직 |
+| **Interacting particle solutions of Fokker-Planck equations through gradient-log-density estimation** (Maoutsa 외) | Entropy 2020 | Score SDE 노트 — 확률 흐름의 착상 | 아직 |
+| **Maximum Likelihood Training of Score-Based Diffusion Models** (Song 외) — 후보 | NeurIPS 2021 | Score SDE 노트 — $\lambda(t)$ 와 우도. 원문 참고 문헌에 없다 | 아직 — 2026-11-06 에 후보로 골랐다. 읽고 이 자리에 맞는 편인지 가린다 |
+| **EDM** — Elucidating the Design Space of Diffusion-Based Generative Models (Karras 외) — 후보 | NeurIPS 2022 | Score SDE 노트 — 표본기 설정을 갈라 잰 편인지. 원문 참고 문헌에 없다 | 아직 — 2026-11-06 에 후보로 골랐다. 읽고 이 자리에 맞는 편인지 가린다 |
 
 ---
 
@@ -151,4 +168,4 @@
 | 묶음 | 편 | 묶은 까닭 |
 |---|---|---|
 | **깊은 망을 배워지게 만드는 장치** | 역전파 → DBN · 오토인코더(사전학습) → 사전학습은 왜 돕는가(2010) → AlexNet(ReLU) → VGG → BN → ResNet → 사전 활성 ResNet → Wide ResNet | 앞 편이 남긴 「깊어지면 안 배워진다」를 다음 편이 받는다. 2026-10-04 에 Wide ResNet 이 들어오며 일곱 편이 됐고, 2026-10-11 에 사전학습을 따지는 편이 들어와 여덟 편이 됐다. 2026-11-03 에 사전 활성 ResNet 이 ResNet 과 Wide ResNet 사이에 들어왔다(Wide ResNet 의 CIFAR 블록이 이 편의 순서다). 끝자리가 PatchCore 의 백본이다 — **다만 PatchCore 가 쓰는 ImageNet WRN-50-2 는 사전 활성이 아니라 원래 블록(덧셈 뒤 ReLU)이다** |
-| **생성 모델** | 오토인코더 → VAE → GAN(원판 NIPS 2014 · 개관판 CACM 2020) → Wasserstein GAN → DDPM | 밀도를 어떻게 다루는가(적지 않는다 · 하한으로 · 게임으로 · 잡음을 되돌려)로 갈린다. 원판과 개관판을 둘 다 읽은 것은 GAN 하나다. 2026-11-03 에 들어온 Wasserstein GAN 은 게임은 그대로 두고 **두 분포 사이 거리를 JSD 에서 EM 거리로 바꾼** 편이다 |
+| **생성 모델** | 오토인코더 → VAE → GAN(원판 NIPS 2014 · 개관판 CACM 2020) → Wasserstein GAN → DDPM → DDIM → Score SDE → Latent Diffusion | 밀도를 어떻게 다루는가(적지 않는다 · 하한으로 · 게임으로 · 잡음을 되돌려)로 갈린다. 원판과 개관판을 둘 다 읽은 것은 GAN 하나다. 2026-11-03 에 들어온 Wasserstein GAN 은 게임은 그대로 두고 **두 분포 사이 거리를 JSD 에서 EM 거리로 바꾼** 편이다 2026-11-06 에 DDPM 뒤로 세 편이 들어왔다: 뽑기 걸음을 줄이는 편, 연속 시간으로 한 틀에 놓는 편, 잠재 공간으로 옮기는 편이다 |
