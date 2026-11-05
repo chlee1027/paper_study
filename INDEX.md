@@ -35,22 +35,29 @@
 | **ViT** — An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale | ICLR 2021 (읽은 파일은 학회판 21 쪽, 부록 포함) | 이미지를 $P \times P$ 조각으로 잘라 낱말처럼 다루고, 선형 투영 · 분류 토큰 · 학습하는 1 차원 자리 임베딩만 붙여 **표준 Transformer 인코더**에 넣는다. 224 입력 · 패치 16 이면 조각 196. ImageNet 만으로 배우면 L/16 76.53 으로 BiT 띠(76.81 ~ 81.30) 아래이고, JFT-300M 사전학습 + 미세조정이면 H/14 가 ImageNet 88.55 ± 0.04(BiT-L 87.54 ± 0.02) · VTAB 77.63 ± 0.23(BiT-L 76.29 ± 1.70) | 로드맵 두 갈래 뒤 사용자가 고른 다음 큰 틀. Transformer 노트가 남긴 물음 셋(자르는 법 · 합성곱과 같은 조건 비교 · 자리 부호화)을 받는다. **파라미터를 torchvision 과 정수까지 맞췄고 표 1 의 307M 은 L/16 으로 안 나온다는 것(303.3 ~ 304.3M), $n^2$ 항의 몫이 $n/(n+6D)$ 로 B/16 · 224 에서 4.1% 라는 것, 「모든 과제에서 넘는다」 는 7 행 중 ± 밖이 4 행이고 ReaL 0.00 · VTAB −0.01 이라는 것, 「귀납 편향을 이긴다」 를 받치는 그림 3 · 4 에 편향을 변인으로 둔 행이 없고 하이브리드를 데이터 크기로 돌린 행이 없다는 것, 벡터 좌표로 읽으니 H/14 ImageNet 값이 네 벌(88.55 · 88.04 · 88.08 · 88.28)이고 뒤쪽 층 주의 거리가 균일 주의 116.49 의 94 ~ 99% 라는 것을 짚어 두었다** | [ICLR21_ViT](notes/ICLR21_ViT_An_Image_is_Worth_16x16_Words_Transformers_for_Image_Recognition_at_Scale.md) |
 | **BERT** — BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding | NAACL 2019 (읽은 파일은 발표집 판 16 쪽, 부록 포함) | Transformer 인코더만 남겨 라벨 없는 글 33 억 낱말에서 **입력의 15% 를 가리고 맞히는 과제**와 **다음 문장 과제(NSP)** 로 사전학습한 뒤, 과제마다 출력 층 하나를 붙여 전체를 미세조정한다. Base(12 층 · 폭 768) · Large(24 층 · 폭 1024). GLUE 표 평균 79.6 · 82.1(GPT 75.1), SQuAD 1.1 시험 F1 93.2(앙상블) · 91.8(단일), SQuAD 2.0 83.1, SWAG 86.3. **같은 짜임을 처음부터 학습한 줄이 표 1 ~ 8 어디에도 없다** | Transformer 노트가 꼽은 큰 틀 후보 둘 중 하나이고, ViT 와 중간중간 함께 읽기로 한 편. 그 노트의 물음 「인코더만 옮기면 무엇이 나오나 · 사전학습의 몫을 갈랐나」 를 받는다. **표 5 의 NSP 몫이 QNLI 85.4% 인데 MRPC 2.2% · SQuAD 5.6% 이고, 가림 과제만 뺀 줄이 없어 그 몫은 뽑히지 않는다는 것, 표 8 의 80/10/10 이 표 7 의 같은 설정과 1.0 · 1.2 F1 다르다는 것, 본문 「단일로 +1.3」 은 #2 와의 차이고 #1 과는 +0.1 이라는 것, 「약 40 에폭」 이 길이 128 일정을 넣으면 256 열 유지 때 12.9 라는 것, 파라미터를 세면 Base 는 110M 과 맞고 Large 는 340M 보다 1.1 ~ 1.9% 작다는 것을 짚어 두었다** | [NAACL19_BERT](notes/NAACL19_BERT_Pre_training_of_Deep_Bidirectional_Transformers_for_Language_Understanding.md) |
 
+### 다른 저장소에 노트가 있는 것
+
+**이 저장소의 `notes/` 에는 없고 `beyond-mvtec` 저장소(비공개)의 `papers/notes/` 에 있는 다섯 편이다.** 그 저장소가 비공개라 링크 대신 파일 이름 앞부분을 적는다. 모두 2026-11-03 에 읽었다.
+
+| 논문 | 게재처·연도 | 한 줄 | 왜 읽었는가 | 노트 |
+|---|---|---|---|---|
+| **MVTec AD** — A Comprehensive Real-World Dataset for Unsupervised Anomaly Detection | CVPR 2019 | 질감 5 · 물체 10 부류, 학습 3,629 장(정상만) · 시험 1,725 장에 픽셀 정답 마스크를 준 데이터셋. 평가는 문턱 하나를 정한 이미지 정확도 · 영역 겹침과 픽셀 ROC AUC 이고, **이미지 AUROC 와 PRO 는 없다.** 기준선 여섯 중 15 부류 모두에서 앞서는 것은 없다 | `beyond-mvtec` 의 질문이 이 데이터셋에서 매긴 설정 순위가 다른 데이터셋에서도 유지되는가여서, 「촬영 조건을 맞춘 정리된 데이터」 라는 전제를 원문으로 확인했다. **금속 너트 · 나사 · 헤이즐넛은 무작위 회전으로 찍었다고 논문이 적어 「모두 정렬된 데이터」 라는 말과 어긋난다는 것, 이미지 판정 규칙이 문장으로 없다는 것을 짚어 두었다** | `CVPR19_MVTecAD` |
+| **Uninformed Students** — Student-Teacher Anomaly Detection with Discriminative Latent Embeddings | CVPR 2020 (읽은 파일은 arXiv v2, 부록 포함) | ImageNet 조각으로 배운 **교사 망**의 128 차원 서술자를 정상 이미지로만 배운 **학생 망 3 개**가 흉내 내고, 회귀 오차와 학생끼리의 분산을 더해 픽셀 점수로 쓴다. MVTec AD 의 PRO 곡선 넓이는 수용장 65 한 크기로 0.857, 세 크기를 묶어 0.914 | PatchCore 가 성적표로 쓰는 PRO 의 정의가 이 편에 있고, `beyond-mvtec` 에서 PRO 를 직접 구현해야 한다. **연결성 · 문턱 개수 · FPR 평균 방식 · 적분 방식이 원문에 없다는 것을 짚어 두었다** | `CVPR20_Uninformed_Students` |
+| **PaDiM** — a Patch Distribution Modeling Framework for Anomaly Detection and Localization | ICPR Workshops 2021 (읽은 파일은 arXiv v1) | 얼린 CNN 의 layer1 · 2 · 3 특징을 이어 붙이고, 특징 지도의 **칸마다 가우시안 하나**를 맞춰 마할라노비스 거리로 점수를 매긴다. MVTec AD 에서 WRN-50-2 판이 픽셀 AUROC 97.5 · PRO 92.1 · 이미지 AUROC 95.3 | PatchCore 노트의 「오차 57% 감소」 의 비교 상대이고, 저자 공식 코드가 없어 `beyond-mvtec` 에서 직접 구현한다. **물체를 ±10° 돌리고 무작위로 자른 판에서 픽셀 AUROC 가 5.3 · PRO 가 19.0 떨어진다는 것, WRN-50 판 메모리가 SPADE 의 2.7 배라는 것을 짚어 두었다** | `ICPRW21_PaDiM` |
+| **VisA** — SPot-the-Difference Self-Supervised Pre-training for Anomaly Detection and Segmentation | ECCV 2022 (읽은 파일은 arXiv v1) | VisA 데이터셋(12 부류, 정상 9,621 + 이상 1,200 장)과 평가 규약 셋, 그리고 사전학습 정칙화 SPD 를 낸다. 1-class 에서 12 부류 평균 이미지 AUROC 가 PaDiM 87.8 · PatchCore 92.4 | `beyond-mvtec` 의 둘째 데이터셋. 공식 분할과 재현 대조값이 필요했다. **「VisA 는 정렬이 덜 되어 있다」 가 논문 문장으로는 12 부류 중 Capsules · Macaroni2 둘에만 뒷받침되고, 두 방법의 이미지 크기 · 자르기 · 층 · 코어셋 비율이 본문에 없다는 것을 짚어 두었다** | `ECCV22_VisA` |
+| **Real-IAD** — A Real-World Multi-View Dataset for Benchmarking Versatile Industrial Anomaly Detection | CVPR 2024 (읽은 파일은 arXiv v1) | 물건 30 종의 결함을 손으로 만들어 카메라 다섯 대로 찍은 데이터셋. 정상 99,721 + 이상 51,329 = 151,050 장. 단일 시점 30 부류 평균 이미지 AUROC 가 PatchCore 90.4 · PaDiM 86.6 | `beyond-mvtec` 의 셋째 데이터셋. 부류 구성 · 시점 · 평가 규약 · 대조값이 필요했다. **백본 · 층 · 코어셋 비율 · 학습과 시험 분할 · 반복 수가 논문에 없다는 것, 같은 숫자에 지표 이름이 둘(P-AUPRO · P-AUROC)이라는 것을 짚어 두었다** | `CVPR24_RealIAD` |
+
 ---
 
 ## 아직 안 읽음 — 큰 틀 (먼저, 이 순서대로)
 
-**앞 여섯 칸은 2026-11-04 에, 이어 정한 ViT · BERT 두 칸은 2026-11-05 에 다 읽었다. 그다음 큰 틀은 아직 정하지 않았다.** 로드맵 갈래 A(퍼셉트론 → 역전파 → DBN → CNN → AE → VAE → GAN → Diffusion)는 2026-11-03 까지 다 읽었고, 갈래 B(순차 데이터) 여섯 칸 중 여섯 칸(RNN · LSTM · GRU · seq2seq · Attention · Transformer)도 2026-11-04 에 다 읽어 「읽었다」 표에 올렸다. 앞 편의 한계를 다음 편이 받는다 — RNN 의 기울기 소실을 LSTM 이 받고, GRU 가 LSTM 을 줄이고, seq2seq 가 입력 전체를 벡터 하나에 담는 병목을 Attention 이 풀고, Transformer 가 Attention 만 남긴다.
+**지금 큰 틀은 확산 심화다(2026-11-06 에 정했다).** DDPM 노트에서 이어 간다 — 표본 뽑기 걸음 수를 줄이는 편, 확산과 점수 맞추기를 한 틀에 놓는 편, 잠재 공간으로 옮겨 계산을 줄이는 편 순서다. 앞서 정한 칸은 모두 읽어 「읽었다」 표에 있다: 로드맵 갈래 A(퍼셉트론 → 역전파 → DBN → CNN → AE → VAE → GAN → Diffusion)는 2026-11-03 까지, 갈래 B(RNN → LSTM → GRU → seq2seq → Attention → Transformer)는 2026-11-04 에, ViT · BERT 는 2026-11-05 에 읽었다.
 
-| 순서 | 논문 | 게재처·연도 | 로드맵 칸 | 원문을 구했는가 |
+| 순서 | 논문 | 게재처·연도 | 왜 읽으려 하는가 | 원문을 구했는가 |
 |---:|---|---|---|---|
-| 1 | **Finding Structure in Time** (Elman) | Cognitive Science 1990 | RNN | 구함 — 2026-11-04 에 노트를 썼다 |
-| 2 | **Long Short-Term Memory** (Hochreiter · Schmidhuber) | Neural Computation 1997 | LSTM | 구함 — 2026-11-04 에 노트를 썼다 |
-| 3 | **Learning Phrase Representations using RNN Encoder-Decoder for Statistical Machine Translation** (Cho 외) | EMNLP 2014 | GRU | 구함 — 2026-11-04 에 노트를 썼다 |
-| 4 | **Sequence to Sequence Learning with Neural Networks** (Sutskever 외) | NIPS 2014 | seq2seq | 구함 — 2026-11-04 에 노트를 썼다 |
-| 5 | **Neural Machine Translation by Jointly Learning to Align and Translate** (Bahdanau 외) | ICLR 2015 | Attention | 구함 — 2026-11-04 에 노트를 썼다 |
-| 6 | **Attention Is All You Need** (Vaswani 외) | NIPS 2017 | Transformer | 구함 — 2026-11-04 에 노트를 썼다 |
-| 7 | **An Image is Worth 16x16 Words** (Dosovitskiy 외) | ICLR 2021 | ViT | 구함 — 2026-11-05 에 노트를 썼다 |
-| 8 | **BERT: Pre-training of Deep Bidirectional Transformers** (Devlin 외) | NAACL 2019 | BERT (ViT 와 함께) | 구함 — 2026-11-05 에 노트를 썼다 |
+| 1 | **DDIM** — Denoising Diffusion Implicit Models (Song · Meng · Ermon) | ICLR 2021 | DDPM의 1000스텝을 10~50스텝으로 줄인다. 같은 학습 모델을 그대로 쓰므로 DDPM 다음에 바로 읽힌다 | 아직 |
+| 2 | **Score SDE** — Score-Based Generative Modeling through Stochastic Differential Equations (Song 외) | ICLR 2021 | DDPM 노트에 적은 점수 맞추기와의 관계를 받는 편. 확산을 연속 시간 확률 미분 방정식으로 적어 두 계열을 한 틀에 놓는다 | 아직 — 2026-11-06 에 후보로 골랐다. 읽고 이 자리에 맞는 편인지 가린다 |
+| 3 | **Latent Diffusion** — High-Resolution Image Synthesis with Latent Diffusion Models (Rombach 외) | CVPR 2022 | 픽셀이 아니라 오토인코더의 잠재 공간에서 확산을 돌린다. 오토인코더 · VAE 칸과 확산 칸이 만나는 자리 | 아직 — 2026-11-06 에 후보로 골랐다. 읽고 이 자리에 맞는 편인지 가린다 |
 
 ## 나중에 볼 세부 (노트마다 꼽은 후속 편)
 
@@ -58,7 +65,6 @@
 
 | 논문 | 게재처·연도 | 왜 읽으려 하는가 | 원문을 구했는가 |
 |---|---|---|---|
-| **PaDiM** — A Patch Distribution Modeling Framework for Anomaly Detection and Localization | ICPR Workshops 2021 | PatchCore 노트 — 「오차 57% 감소」의 비교 상대인데 PatchCore 가 그 값(97.9)을 재현하지 못했고 다시 구현한 값은 95.4 다. 위치마다 가우스를 두는 쪽과 뱅크 하나에 다 넣는 쪽의 차이를 원문에서 본다 | 아직 |
 | **SPADE** — Sub-Image Anomaly Detection with Deep Pyramid Correspondences | arXiv 2020 | PatchCore 노트 — PatchCore 가 WRN-50 을 고른 까닭이 이 편 · PaDiM 과 같은 백본을 쓰려는 것이었다. 최근접 이웃으로 조각을 맞대는 원형 | 아직 |
 | **WGAN-GP** — Improved Training of Wasserstein GANs | NeurIPS 2017 | Wasserstein GAN 노트 — 원문 스스로 무게 자르기를 「분명히 끔찍한」 방법이라 적는다. 립시츠 조건을 기울기 벌점으로 바꾸면 무엇이 달라지는지 본다 | 아직 — 2026-11-03 에 후보로 골랐다. 읽고 이 자리에 맞는 편인지 가린다 |
 | **Towards Principled Methods for Training GANs** (Arjovsky · Bottou) | ICLR 2017 | Wasserstein GAN 노트 — 원문 참고 문헌 1. 받침이 저차원 다양체에 있으면 완벽한 판별기가 있고 기울기가 사라진다는 앞 편 | 아직 |
@@ -70,7 +76,6 @@
 | **Residual Networks Behave Like Ensembles of Relatively Shallow Networks** (Veit 외) | NIPS 2016 | 사전 활성 ResNet 노트 — 식 (4) 를 받아 블록별 기여를 재는 편. 원 논문이 식 (5) 의 「1 +」 항을 직접 재지 않았고, ResNet 노트 23절 D(단계 끝 대 가운데 블록)와도 닿는다 | 아직 — 2026-11-03 에 후보로 골랐다. 읽고 이 자리에 맞는 편인지 가린다 |
 | **Deep Networks with Stochastic Depth** | ECCV 2016 | Wide ResNet 노트 25절 — 깊고 가는 망의 「블록 대부분이 하는 일이 적다」는 주장을 블록을 무작위로 건너뛰며 배워 재는 편. 폭 쪽 답(WRN)과 깊이 쪽 답을 나란히 본다 | 아직 |
 | **ResNeXt** — Aggregated Residual Transformations for Deep Neural Networks | CVPR 2017 | Wide ResNet 노트 25절 — 넓히는 방법을 채널 수 말고 **갈래 수(cardinality)** 로 바꾼 편. 같은 계산에서 폭 대 갈래 | 아직 — 2026-10-04 에 후보로 골랐다. 읽고 이 자리에 맞는 편인지 가린다 |
-| **Uninformed Students** — Student-Teacher Anomaly Detection with Discriminative Latent Embeddings | CVPR 2020 | PatchCore 노트 — PatchCore 가 성적표로 쓰는 PRO 지표의 정의가 이 편에 있다. 픽셀 AUROC 와 PRO 가 갈리는 자리(PatchCore 그림 4 에서 단계 1+2+3 이 PRO 만 0.71 높다)를 읽으려면 정의가 먼저다 | 아직 |
 | **코어셋 뽑기** — Active Learning for Convolutional Neural Networks: A Core-Set Approach (Sener · Savarese) | ICLR 2018 | PatchCore 노트 — 탐욕 코어셋의 출처로 인용한 편. 가장 먼 점을 하나씩 더하는 방법의 보장(원리의 원 출처는 Gonzalez 1985)이 PatchCore 의 덮는 반지름 식과 같은 것인지 본다 | 아직 |
 | **곱 양자화** — Product Quantization for Nearest Neighbor Search (Jégou 외) | TPAMI 2011 | PatchCore 노트 — 근사 최근접 탐색(IVFPQ)의 원리. 뱅크를 줄이는 쪽(코어셋)과 탐색을 줄이는 쪽(양자화)을 나란히 놓는다 | 아직 — 2026-11-03 에 후보로 골랐다. 읽고 이 자리에 맞는 편인지 가린다 |
 | **Fixup Initialization** — Residual Learning Without Normalization | ICLR 2019 | 사전 활성 ResNet 노트 — 사전 활성의 두 효과(항등 $f$ 로 최적화가 쉬움 · BN 이 가중치 입력을 정규화)가 원 논문에서 갈려 있지 않다. BN 없이 잔차 망을 배우는 편으로 BN 의 몫을 따로 본다 | 아직 — 2026-11-03 에 후보로 골랐다. 읽고 이 자리에 맞는 편인지 가린다 |
@@ -82,7 +87,6 @@
 | **하한을 조이는 편** — 후보: Importance Weighted Autoencoders | ICLR 2016 | VAE 노트 19절 셋 — 하한과 $\log p(x)$ 의 틈을 같은 모델에서 잰 자리가 없다. 표본 여럿으로 하한을 조이면 틈이 얼마나 주는지 본다 | 아직 — 2026-09-30 에 후보로 골랐다. 읽고 이 자리에 맞는 편인지 가린다 |
 | **대각 가우스 근사 사후분포를 넓힌 편** — 후보: Variational Inference with Normalizing Flows (다음으로 IAF, NeurIPS 2016) | ICML 2015 | VAE 노트 10절 · 18절 — 각주가 「대각 가우스는 한계가 아니다」라고 적지만 실험은 대각 가우스뿐이다 | 아직 — 2026-09-30 에 후보로 골랐다. 읽고 이 자리에 맞는 편인지 가린다 |
 | **이산 잠재 변수로 가는 편** — 후보: VQ-VAE / Gumbel-Softmax | NeurIPS 2017 / ICLR 2017 | VAE 노트 23절 · 18절 하나 — 재매개변수화가 연속 분포에만 된다. 이산 코드를 쓰면서 기울기를 어떻게 흘리는지 본다 | 아직 — 2026-09-30 에 후보로 골랐다. 읽고 이 자리에 맞는 편인지 가린다 |
-| **DDIM** — Denoising Diffusion Implicit Models | ICLR 2021 | DDPM의 1000스텝을 10~50스텝으로 줄인다. 같은 학습 모델을 그대로 쓰므로 DDPM 다음에 바로 읽힌다 | 아직 |
 | **AnoDDPM** | CVPR Workshops 2022 | 확산 모델을 이상 탐지에 쓴 편. 순방향으로 어디까지 보낼지(t₀)를 고르는 문제가 DDPM §3의 표와 바로 이어진다 | 아직 |
 | **같은 제목의 저널판** — Why Does Unsupervised Pre-training Help Deep Learning? | JMLR 2010 | 사전학습 노트 21절 — 2026-10-11 에 학회판(AISTATS 2010, 8 쪽)을 읽었다. 학회판의 본문-그림 어긋남 다섯 자리가 고쳐졌는지, 온라인 실험에 반복(seed)이 붙었는지 본다 | 아직 |
 | **Erhan 외 (2009b)** — The difficulty of training deep architectures and the effect of unsupervised pre-training | AISTATS 2009 | 사전학습 노트 4절 · 21절 — 정규화 가설과 식 (2) 의 출처이고, 무작위 초기화 400 번 · 「두 함수 구역이 겹치지 않는다」 를 잰 편 | 아직 |
