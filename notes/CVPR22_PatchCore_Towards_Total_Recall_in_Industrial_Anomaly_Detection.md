@@ -38,6 +38,7 @@
 - **조각 특징 (patch feature)**: 특징 지도 한 칸 $(h, w)$ 의 $c^*$ 차원 벡터. 그 칸의 수용장이 1 픽셀보다 넓으므로 이미지의 한 조각을 대표한다. 작은 예시로, 224 입력의 layer2 격자는 28 x 28 이라 이미지 하나가 조각 특징 784 개가 된다.
 - **이웃 크기 (patchsize)** $p$: 조각 특징 하나를 만들 때 평균하는 정사각 이웃의 한 변. **이미지 조각의 크기가 아니다** — 논문의 낱말이 「patchsize」라 헷갈리기 쉬워 이 노트는 「이웃 크기」로 부른다. 작은 예시로, $p = 3$ 이면 격자 9 칸을 평균한다.
 - **기억 뱅크 (memory bank)** $\mathcal{M}$: 학습 이미지에서 나온 조각 특징을 모두 모은 집합. 부류마다 하나다.
+  > **2026-11-07 UniAD(NeurIPS 2022)를 읽고 덧붙인다.** 「부류마다 하나다」 가 전제인 자리다. UniAD 가 모델 하나로 15 부류를 다루는 통합 설정을 내고 PaDiM 을 그 설정에서 돌렸지만(이미지 84.2 · 픽셀 89.5) PatchCore 는 표와 참고 문헌에 없다. 뱅크 하나에 15 부류를 넣은 값은 그 편에 없다.
 - **코어셋 (coreset)**: 큰 집합 $\mathcal{A}$ 에서 푼 문제의 답을 작은 부분 집합 $\mathcal{S}$ 로 근사할 수 있게 고른 $\mathcal{S}$.
 - **PatchCore-n%**: 뱅크를 원래 크기의 n% 로 줄인 것. 작은 예시로, PatchCore-1% 는 뱅크를 100 배 줄였다. 표에 따라 % 없이 `PatchCore-10` 으로도 적는다(같은 것).
 - **덮는 반지름 (내 이름)**: 식 (5) 의 $\max_m \min_n \lVert m - n \rVert$ — 뱅크의 모든 점이 가장 가까운 뽑힌 점까지 가는 거리 중 최댓값. 논문에는 이름이 없다.
@@ -155,6 +156,8 @@ $$\mathcal{M} = \bigcup_{x_i \in \mathcal{X}_N} \mathcal{P}_{s,p}(\phi_j(x_i)) \
 
 **왜 줄이는가.** $\mathcal{X}_N$ 이 커지면 뱅크가 커지고 시험 시간과 저장이 늘어난다. SPADE 는 이 비용 때문에 마지막 단계 전역 평균 특징으로 이미지를 먼저 고르는 단계를 둬야 했고, 그것이 저해상도 · ImageNet 쪽 표현을 끌어들인다고 적는다. **무작위로 줄이면** 정상 특징이 덮던 범위를 잃는다(15절에서 잰다).
 
+> **2026-11-07 SPADE 원문(arXiv v3)을 읽고 덧붙인다.** 먼저 고르는 단계의 손실을 잰 행은 SPADE 원문에 없다. 학습 전체를 갤러리로 쓴 행이 없고, 원문 표 7 은 kNN 10 장 대 무작위 10 장이다(평균 91.4 대 89.2, Grid 86.3 대 73.2. 캡션에 지표 이름이 없다). SPADE 는 이 단계를 비용(14쪽)과 함께 정확도(표 7)로도 내세운다. 「비용 때문에 둬야 했다」 는 PatchCore 쪽 표현이다.
+
 **무엇을 지키며 줄이는가.** 시험 점수가 최근접 거리이므로, 뽑힌 집합 $\mathcal{M}_C$ 가 원래 뱅크와 **같은 범위를 덮게** 한다 — 최소최대 시설 배치(minimax facility location) 코어셋.
 
 $$\mathcal{M}_C^* = \underset{\mathcal{M}_C \subset \mathcal{M}}{\arg\min} \ \max_{m \in \mathcal{M}} \ \min_{n \in \mathcal{M}_C} \lVert m - n \rVert_2 \qquad (5)$$
@@ -187,7 +190,11 @@ M ← M_C
 3. **$d^*$ 의 값이 없다.** 사영 뒤 차원이 몇인지 적혀 있지 않다.
 4. **고르는 데 걸린 시간이 없다.** 내 셈(셈 2)으로 평균 부류 뱅크에서 10% 를 고르면 반복 18,968 번에 반복마다 뱅크 전체 189,676 개와 거리를 재므로 거리 계산이 $3.60 \times 10^9$ 번이다(25% 면 $8.99 \times 10^9$). 표 5 의 시간은 추론 시간뿐이다.
 
+> **2026-11-07 Sener · Savarese 원문(arXiv v4)을 읽고 덧붙인다.** 빈칸 1 · 2 는 원전에는 없다. 원전 식 (5) 에는 $\lvert s^1 \rvert \le b$ 가 있고, 탐욕법은 이미 라벨이 있는 $s^0$ 에서 시작하므로 첫 걸음의 $\min$ 이 정의된다.
+
 **원리의 원 출처.** 「가장 먼 점을 하나씩 더하는」 탐욕법은 k-센터 문제의 2-근사로 Gonzalez(1985)가 낸 것이다. 이 논문은 [48] 을 인용하고 Gonzalez 를 인용하지 않는다(참고 문헌 60 건에 없다). 사영 쪽 원리는 Johnson & Lindenstrauss(1984)이고 이 논문은 증명을 쉽게 다시 쓴 Dasgupta & Gupta(2003, [11])를 인용한다. **사영 공간에서 고른 점이 원래 공간에서도 2-근사인지는 이 논문이 다루지 않는다.**
+
+> **2026-11-07 Sener · Savarese 원문(arXiv v4)을 읽고 덧붙인다.** (가) 그 편도 Gonzalez 를 인용하지 않는다(참고 문헌 51 건). 2-OPT 문장(6쪽)에는 인용이 없고, k-센터는 Wolf(2011), NP-난해는 Cook 외(1998)를 인용한다. **그래서 위의 「원 출처 Gonzalez(1985)」 는 두 논문 어디에서 온 것이 아니라 바깥 지식이고, 그 원문을 이 저장소에서 읽지 않았다.** (나) 보장의 기준은 덮는 반지름의 최적값이다. 원전은 사영을 다루지 않는다. 모든 쌍의 거리가 $(1 \pm \varepsilon)$ 로 보존되면 계수가 $2(1+\varepsilon)/(1-\varepsilon)$ 이다(내 유도, $\varepsilon$ = 0.1 에서 2.44). $d^*$ 이 원문에 없어 어느 $\varepsilon$ 인지는 말할 수 없다. (다) 원전의 정리 1 은 라벨과 학습 손실 0 위에 서므로 PatchCore 로 오지 않는다. 대신 반지름이 $r$ 이면 최근접 점수 오차가 $[0, r]$ 안이다(내 유도, 삼각 부등식).
 
 ---
 
@@ -288,6 +295,8 @@ $$\frac{e^{d^*}}{\sum_{m \in \mathcal{N}_b(m^*)} e^{d_m}} \le \frac{1}{b}, \qqua
 **Transistor 는 PatchCore 가 이미지 AUROC 100 인데 PRO 가 83.7 로 15 부류 중 가장 낮다.** 이미지는 다 맞히고 결함 자리를 덜 맞힌다는 뜻이다. Transistor 의 결함 종류(부품이 빠지거나 자리가 바뀜)와 연결 짓는 해석은 논문에 없다.
 
 표 S2 · S3 의 PatchCore 줄 평균은 모두 ±0.10 안에서 인쇄된 평균과 맞는다(셈 3).
+
+> **2026-11-07 SPADE 원문(arXiv v3)과 맞춰 본다.** 원문 표 S3 의 SPADE 행 중 Tile 75.6 은 SPADE 원문 표 3 · 6 의 75.9 와 다르다. 나머지 14 칸과 표 S2 의 15 칸은 같다. 평균은 어느 쪽이든 91.7 이다(내 계산 91.71 · 91.73). SPADE v1 · v2 는 읽지 않아 판 차이인지는 가리지 못했다.
 
 ---
 
@@ -627,9 +636,9 @@ DifferNet 은 16 장 이미지 AUROC 87.3 하나다. 나머지 줄(SPADE · PaDi
 | 논문 | 이 노트의 어느 자리에서 나오는가 | 무엇을 확인하고 싶은가 |
 |---|---|---|
 | **PaDiM** — A Patch Distribution Modeling Framework for Anomaly Detection and Localization (Defard 외, ICPR Workshops 2021, arXiv:2011.08785) | 3 · 10 · 13절 — 가장 가까운 비교 상대, 「PaDiM\*」 의 출처 | 부류마다 백본을 고른 97.9 가 어떤 설정인지. 위치별 가우스가 정렬에 얼마나 기대는지 |
-| **SPADE** — Sub-Image Anomaly Detection with Deep Pyramid Correspondences (Cohen & Hoshen, arXiv:2005.02357) | 3 · 6 · 16절 — 이미지를 먼저 고르는 단계 | 먼저 고르는 단계가 픽셀 성능을 얼마나 잃게 하는지 |
+| **SPADE** — Sub-Image Anomaly Detection with Deep Pyramid Correspondences (Cohen & Hoshen, arXiv:2005.02357) | 3 · 6 · 16절 — 이미지를 먼저 고르는 단계 | 먼저 고르는 단계가 픽셀 성능을 얼마나 잃게 하는지. **2026-11-07 에 읽었다. 잃는 값은 그 편에 없다(6절 인용 블록)** |
 | **Uninformed Students** (Bergmann 외, CVPR 2020) | 1 · 9절 — PRO 의 정의를 이 편에 미룬다 | PRO 를 어느 거짓 양성률까지 적분하는지. 연구에서 쓰는 PRO 와 같은 정의인지 |
-| **Active Learning for CNNs: A Core-Set Approach** (Sener & Savarese, ICLR 2018) — 원 출처 Gonzalez(1985)와 함께 | 6절 — 탐욕 코어셋의 출처 | 탐욕법의 보장(2-근사)이 무엇을 기준으로 한 것인지. 사영 뒤에도 남는지 |
+| **Active Learning for CNNs: A Core-Set Approach** (Sener & Savarese, ICLR 2018) — 원 출처 Gonzalez(1985)와 함께 | 6절 — 탐욕 코어셋의 출처 | 탐욕법의 보장(2-근사)이 무엇을 기준으로 한 것인지. 사영 뒤에도 남는지. **2026-11-07 에 읽었다. 답은 6절 끝 인용 블록** |
 | **Product Quantization for Nearest Neighbor Search** (Jégou, Douze, Schmid, TPAMI 2011) | 13절 — IVFPQ 의 원리 | 표 5 의 IVFPQ 가 이미지 AUROC 를 1.1 점 잃은 이유가 양자화 오차인지 |
 
 읽는 순서로는 **PaDiM 이 먼저**다. 표 1 의 비교 기준과 PatchCore 의 설계(위치 없는 뱅크)가 그 편과의 차이로 설명된다.
@@ -671,7 +680,7 @@ DifferNet 은 16 장 이미지 AUROC 87.3 하나다. 나머지 줄(SPADE · PaDi
 
 - Roth, K., Pemula, L., Zepeda, J., Schölkopf, B., Brox, T., and Gehler, P. (2022). Towards total recall in industrial anomaly detection. CVPR. arXiv:2106.08265 (v2, 2022-05). — 이 노트의 대상.
 - Bergman, L., Cohen, N., and Hoshen, Y. (2020). Deep nearest neighbor anomaly detection. arXiv:2002.10445. — DN2, 마지막 단계 kNN(참고 문헌 4).
-- Cohen, N. and Hoshen, Y. (2020). Sub-image anomaly detection with deep pyramid correspondences. arXiv:2005.02357. — SPADE(참고 문헌 10).
+- Cohen, N. and Hoshen, Y. (2020). Sub-image anomaly detection with deep pyramid correspondences. arXiv:2005.02357. — SPADE(참고 문헌 10). 2026-11-07 에 읽었다.
 - Defard, T., Setkov, A., Loesch, A., and Audigier, R. (2021). PaDiM: A patch distribution modeling framework for anomaly detection and localization. ICPR Workshops. — PaDiM(참고 문헌 14).
 - Bergmann, P., Fauser, M., Sattlegger, D., and Steger, C. (2019). MVTec AD — a comprehensive real-world dataset for unsupervised anomaly detection. CVPR. — 데이터. 부류별 이미지 수의 출처(참고 문헌 5).
 - Bergmann, P., Fauser, M., Sattlegger, D., and Steger, C. (2020). Uninformed students: Student-teacher anomaly detection with discriminative latent embeddings. CVPR. — PRO 의 정의(참고 문헌 6).
@@ -679,7 +688,7 @@ DifferNet 은 16 장 이미지 AUROC 87.3 하나다. 나머지 줄(SPADE · PaDi
 - Liu, W., Luo, W., Lian, D., and Gao, S. (2018). Future frame prediction for anomaly detection — a new baseline. CVPR. — STC(참고 문헌 32).
 - Rudolph, M., Wandt, B., and Rosenhahn, B. (2021). Same same but DifferNet. WACV. — DifferNet, MTD 규약(참고 문헌 42).
 - Gonzalez, T. F. (1985). Clustering to minimize the maximum intercluster distance. Theoretical Computer Science 38: 293-306. — 탐욕 max-min 뽑기의 원 출처. **이 논문의 참고 문헌에는 없다.**
-- Sener, O. and Savarese, S. (2018). Active learning for convolutional neural networks: A core-set approach. ICLR. — 이 논문이 따른 탐욕 코어셋(참고 문헌 48).
+- Sener, O. and Savarese, S. (2018). Active learning for convolutional neural networks: A core-set approach. ICLR. — 이 논문이 따른 탐욕 코어셋(참고 문헌 48). 2026-11-07 에 읽었다.
 - Sinha, S., Zhang, H., Goyal, A., Bengio, Y., Larochelle, H., and Odena, A. (2020). Small-GAN: Speeding up GAN training using core-sets. ICML. — 사영 뒤 탐욕(참고 문헌 49).
 - Agarwal, P. K., Har-Peled, S., and Varadarajan, K. R. (2004). Geometric approximation via coresets. Combinatorial and Computational Geometry 52. — 코어셋의 정의(참고 문헌 1. 원 논문의 저자 표기가 「Pankaj Agarwal, Sariel Har, Peled Kasturi, and R Varadarajan」으로 깨져 있다).
 - Johnson, W. B. and Lindenstrauss, J. (1984). Extensions of Lipschitz mappings into a Hilbert space. Contemporary Mathematics 26. — 무작위 사영의 원 출처. **이 논문의 참고 문헌에는 없다.**
