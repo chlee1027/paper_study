@@ -465,6 +465,8 @@ CIFAR10 test. 역방향 진행 단계 수(T−t+1)에 따른 누적 율과 왜�
 
 재구성 기반 이상 탐지에 확산 모델을 쓰는 연구(AnoDDPM, Wyatt 등 2022 등)는 이 논문의 두 식을 직접 가져다 쓴다. 정상 데이터로만 $\boldsymbol\epsilon_\theta$를 학습한 뒤, 검사 이미지를 순방향으로 어떤 $t_0$까지만 보내고(§3의 닫힌 형태 식) 역방향으로 복원해(알고리즘 2, 또는 $\hat{\mathbf{x}}_0$) 원본과의 차이를 이상 점수로 삼는다. 여기서 $t_0$의 선택이 §3의 표와 바로 연결된다. $t_0$가 작으면 결함까지 그대로 복원되고, 크면 정상 구조까지 바뀐다. 표에서 신호 계수가 0.63(t=300)에서 0.28(t=500)로 떨어지는 구간이 그 맞바꿈이 일어나는 자리다. 또 이 방식은 한 장을 검사할 때마다 역방향 스텝 수만큼 신경망을 통과하므로, §13의 샘플링 비용이 그대로 추론 지연으로 옮겨진다.
 
+> 2026-11-07(AnoDDPM 노트): 절차는 원문과 같고 원문은 $t_0$ 를 $\lambda$ 라 부른다. 고칠 자리 셋. (1) 제안 방법은 「두 식을 직접」 쓰는 것이 아니라 꼴은 같게 두고 $\epsilon$ 을 simplex 잡음으로 바꾼다. 가우스 판은 비교 상대이고 표 1 Dice 0.009 다. (2) 「신호 계수 0.63 ~ 0.28 구간이 맞바꿈 자리」 는 원문에 없다. 원문은 평가 데이터의 격자 탐색으로 $\lambda$ = 250 을 골랐고, 그림 4 봉우리는 simplex $\lambda$ = 140 · 246($\sqrt{\bar\alpha}$ 0.901 · 0.731), 가우스 544 · 598(0.222 · 0.163)로 그 구간 밖이다. 슬라이스 둘의 값이고 벡터 좌표로 내가 읽었다. (3) 지연은 원문이 $\mathcal{O}(\lambda)$ 만 적고 시간 수치는 없다.
+
 ---
 
 ## 15. 읽을 때 헷갈리는 지점
@@ -488,6 +490,6 @@ CIFAR10 test. 역방향 진행 단계 수(T−t+1)에 따른 누적 율과 왜�
 6. Song, Y. 등. Score-Based Generative Modeling through Stochastic Differential Equations. ICLR 2021. 2026-11-06 에 읽었다.
 7. Dhariwal, P., Nichol, A. Diffusion Models Beat GANs on Image Synthesis. NeurIPS 2021.
 8. Rombach, R. 등. High-Resolution Image Synthesis with Latent Diffusion Models. CVPR 2022. 2026-11-06 에 읽었다.
-9. Wyatt, J. 등. AnoDDPM: Anomaly Detection with Denoising Diffusion Probabilistic Models using Simplex Noise. CVPR Workshops 2022.
+9. Wyatt, J. 등. AnoDDPM: Anomaly Detection with Denoising Diffusion Probabilistic Models using Simplex Noise. CVPR Workshops 2022. 2026-11-07 에 읽었다.
 
 *표 1·2·3·4의 수치와 부록 B의 하이퍼파라미터는 arXiv 2006.11239 원문에서 옮겼다. §3의 ᾱ_t 표는 논문의 선형 스케줄을 직접 계산한 값이다. §14는 논문 밖의 해설이다.*
