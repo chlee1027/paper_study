@@ -732,6 +732,8 @@ $$-\frac{\hat\epsilon}{\sigma_t} = -\frac{\epsilon_\theta}{\sigma_t} + \nabla \l
 | **Variational Diffusion Models** (Kingma 외, 2021, [45]) | 6절 — 부록 B 의 표기와 SNR | 식 (9) 의 $t = 1$ 처리 |
 | **U-Net** (Ronneberger 외, MICCAI 2015, [71]) | 2 · 9절 — 골격의 원형 | 지름길 이어 붙이기가 파라미터에 주는 몫 |
 
+> 2026-11-08(U-Net 노트, 내가 센 것): 원형에서 이어 붙이기가 주는 파라미터 몫은 31,030,658 중 3,133,440, 10.1% 다. 이 값은 그 원형의 값이고 이 노트의 UNet 은 채널 배수와 주의가 달라 옮기지 않는다. 성능에 주는 몫은 U-Net 원문에서 답이 나오지 않았다.
+
 ---
 
 ## 29. 남는 질문
@@ -764,7 +766,7 @@ $$-\frac{\hat\epsilon}{\sigma_t} = -\frac{\epsilon_\theta}{\sigma_t} + \nabla \l
 - [23] Esser, P. 외 (2020). Taming transformers for high-resolution image synthesis. · [96] van den Oord, A. 외 (2017). Neural discrete representation learning. · [67] Razavi, A. 외 (2019). VQ-VAE-2. · [66] Ramesh, A. 외 (2021). Zero-shot text-to-image generation. — 앞 두 단계 방법. **읽지 않았다.**
 - [93] Vahdat, A. 외 (2021). Score-based generative modeling in latent space. — **읽지 않았다.**
 - [45] Kingma, D. P. 외 (2021). Variational diffusion models. — 부록 B 의 표기. **읽지 않았다.**
-- [71] Ronneberger, O. 외 (2015). U-Net. MICCAI. — **읽지 않았다.**
+- [71] Ronneberger, O. 외 (2015). U-Net. MICCAI. — 2026-11-08 에 읽었다(이 노트를 쓸 때는 읽지 않았다).
 - [72] Saharia, C. 외 (2021). Image super-resolution via iterative refinement. · [88] Suvorov, R. 외. LaMa. · [107] Zhao, S. 외. CoModGAN. · [105] Zhang, K. 외 (2021). Designing a practical degradation model. — 과제별 비교 상대. **읽지 않았다.**
 - [59] Nichol, A. 외. GLIDE. · [26] Gafni, O. 외 (2022). Make-A-Scene. · [17] Ding, M. 외 (2021). CogView. · [109] Zhou, Y. 외. LAFITE. — 표 2 의 상대. **읽지 않았다.**
 - [41] Karras, T. 외. StyleGAN. · [42] StyleGAN2. · [76] Sauer, A. 외 (2021). Projected GANs. · [43] Kim, D. 외 (2021). UDM. — 표 1 의 상대. **읽지 않았다.**

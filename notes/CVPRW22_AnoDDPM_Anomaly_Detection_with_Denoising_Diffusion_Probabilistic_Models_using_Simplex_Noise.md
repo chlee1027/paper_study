@@ -343,6 +343,8 @@ $$x_{t-1} = \frac{1}{\sqrt{\alpha_t}} \left( x_t - \frac{1 - \alpha_t}{\sqrt{1 -
 
 **Wide ResNet.** 원문의 U-Net 이 Wide ResNet 을 바탕으로 한다는 한 문장(653쪽)이 있다. PatchCore 가 쓰는 WRN-50-2 처럼 ImageNet 으로 배운 망을 얼려 쓰는 것과는 다르고, 이 U-Net 은 정상 MRI 로 처음부터 학습한다.
 
+> 2026-11-08(U-Net 노트): 이 편의 U-Net 도 원형(MICCAI 2015)과 이름 · U 자 · 이어 붙이기만 같다. 라벨 픽셀로 끝까지 배우는 원형과 달리 여기서는 라벨 없는 복원에 쓴다. 원형의 값(EM · 세포 IOU)을 이 편의 근거로 옮기지 않는다.
+
 **PatchCore.** 같은 칸에 놓을 수 없다. PatchCore 는 MVTec AD 전 부류의 수치를 내고 이 편은 그림 두 장이며, 배우는 방법(얼린 특징 대 처음부터 생성 모델)이 다르다. 맞댄 수는 원문에도 없다.
 
 ---
