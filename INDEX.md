@@ -46,6 +46,7 @@
 | **Mask R-CNN** — Mask R-CNN | ICCV 2017 (읽은 파일은 CVF 게재판 9 쪽. arXiv v3 은 부록이 더 있어 대조한 대목만 읽었다) | Faster R-CNN 의 부류 · 상자 가지 옆에 RoI 마다 이진 마스크를 내는 작은 FCN 을 **나란히** 더한다. 부류별 시그모이드로 마스크와 부류를 떼고, 양자화 없는 RoIAlign 을 쓴다. COCO test-dev mask AP 35.7(R101-FPN) · 37.1(X101-FPN), 박스 38.2 · 39.8, 195 ms + CPU 15 ms | 큰 틀 분할 · 검출의 셋째 칸. U-Net 의 픽셀 분할과 Faster R-CNN 의 상자가 만나는 자리. **표 2c 네 칸 중 정렬만 있는 칸이 없어 「유일한 요인」 은 칸 하나가 빈 판단이라는 것, C5 대 C4 는 머리가 함께 바뀐 비교라는 것, 마스크의 +0.9 · +1.1 은 「오로지 이득」 이고 키포인트의 -1.8 · -1.6 은 「조금」 이라 적는다는 것, 표의 AP 와 5 fps 가 다른 학습에서 나온다는 것, 표 3 의 $AP_L$ 만 진다는 것, 큰 물체 $AP_L$ 은 마스크가 박스보다 2.2 · 2.3 높다는 것, 표 전체에 흩어짐이 없다는 것을 짚어 두었다** | [ICCV17_MaskRCNN](notes/ICCV17_MaskRCNN_Mask_R_CNN.md) |
 | **YOLO** — You Only Look Once: Unified, Real-Time Object Detection | CVPR 2016 (읽은 파일은 CVF 게재판 10 쪽, 779-788쪽. arXiv v5 와 숫자 대조) | 제안 단계를 없애 이미지 전체를 한 번 통과시키고 7 x 7 칸마다 상자 둘과 부류 20 을 **제곱 오차 회귀 하나**로 낸다. VOC 2007 mAP 63.4 · 45 fps, Fast YOLO 52.7 · 155 fps, VOC 2012 57.9. Fast R-CNN 과 합쳐 75.0(+3.2) | 큰 틀 분할 · 검출의 넷째 칸이자 끝 칸. Faster R-CNN 표 5 가 흉내만 낸 한 단계를 실제 체계로 본다. **「덜 떨어진다」 는 비로만 맞고 점으로는 DPM 이 덜 빠진다는 것(Picasso -5.4 대 -5.9, People-Art -11.2 대 -14.2), 「2 배」 가 학습 데이터가 다른 값의 비(2.02)라는 것, Fast R-CNN 이 70.0 · 71.8 두 벌이고 Faster R-CNN 속도가 원논문과 다르다는 것, 「곧장 최적화」 와 「근사」 가 한 편에 있다는 것, 「작은 물체」 를 크기로 재지 않았고 「8 ~ 10%」 가 7.0 ~ 14.2 점이라는 것, 파라미터를 세니 271,703,550 이고 78% 가 완전 연결이라는 것을 짚어 두었다** | [CVPR16_YOLO](notes/CVPR16_YOLO_You_Only_Look_Once_Unified_Real_Time_Object_Detection.md) |
 | **DRAEM** — DRÆM: A discriminatively trained reconstruction embedding for surface anomaly detection | ICCV 2021, 8330-8339쪽 (읽은 파일은 CVF 게재판 10 쪽 + 보충 자료 8 쪽. arXiv 판과는 대조하지 않았다) | 정상 이미지에 펄린 잡음 모양 · DTD 무늬로 **가짜 결함**을 붙인다. 재구성 망이 결함을 지우고, U-Net 꼴 판별 망이 원본과 재구성을 나란히 받아 픽셀마다 이상을 가른다. 두 망을 한 손실로 함께 배운다. MVTec AD 이미지 AUROC 98.0 · 픽셀 AUROC 97.3 · 픽셀 AP 68.4(PaDiM 95.5 · 97.4 · 55.0), DAGM 이미지 AUROC 99.0. **어느 표에도 반복과 흩어짐이 없다** | 큰 틀 산업 이상 탐지 2막의 첫 칸이고, UniAD 노트가 남긴 물음(부류별 98.0 의 구성, 통합 설정의 질감 값)의 원 출처. **AP 차 13.4 점 중 7.5 점(56%)은 재구성 망을 뺀 Disc. 줄이 이미 낸다는 것, DAGM 위치 우위는 같은 절이 「재지 않았다」 고 적는데 초록이 수치 없이 쓴다는 것, 표 4 에서 MAD 의 CA 가 TPR · TNR 사이 밖이고 DRAEM 줄에서 거꾸로 낸 결함 비율이 0.31 로 다른 세 줄(0.123 ~ 0.129)과 다르다는 것, 「모든 부류에서 최고」 가 검출 6 · AP 4 부류에서 진다는 것, 단색 줄의 「최고 수준」 은 픽셀 AUROC 가 세 상대 아래라는 것, 그림 9 에 캡션의 「10 장」 점이 없다는 것, UniAD 의 통합 질감 99.12 는 부류별 99.12 와 합만 같다는 것을 짚어 두었다** | [ICCV21_DRAEM](notes/ICCV21_DRAEM_A_Discriminatively_Trained_Reconstruction_Embedding_for_Surface_Anomaly_Detection.md) |
+| **Reverse Distillation** — Anomaly Detection via Reverse Distillation from One-Class Embedding | CVPR 2022, 9737-9746쪽 (읽은 파일은 CVF 게재판 10 쪽. 보충 자료와 arXiv 판은 받지 않았다) | 얼린 WRN-50-2 를 선생으로, 그것을 뒤집은 복호기를 학생으로 둔다. 학생은 이미지 대신 선생 세 단계 특징을 합쳐 줄인 학습 병목(OCBE)만 받아 세 단계 특징을 되살리고, 자리마다 코사인 거리가 이상 지도다. MVTec AD 이미지 AUROC 98.5 · 픽셀 AUROC 97.8 · PRO 93.9. **어느 표에도 반복과 흩어짐이 없다** | 큰 틀 산업 이상 탐지 2막의 둘째 칸이고, UniAD 노트(증류 계열의 통합 값)와 DRAEM 노트(DRAEM 의 PRO)가 남긴 물음의 자리. **제목의 「거꾸로」 를 뺀 같은 백본의 보통 증류 줄이 없어 표가 가르는 것은 병목의 몫(+1.9 · +0.6)뿐이라는 것, 표 1 의 PaDiM · US 열이 DRAEM 표 1 과 30 칸 모두 같은데 DRAEM 을 인용하지 않았다는 것, 표 2 의 SPADE 평균 96.5 가 부류 값으로 96.03(원문 96.0)이라는 것, 부류별로는 이미지 이김 5 · 같음 3 · 짐 7, 픽셀 AUROC · PRO 이김 7 · 짐 8 이라는 것, 「2.5% 앞선다」 가 인쇄 평균으로 2.4 라는 것, 그림 5 의 「겹치지 않는 분포」 가 AUROC 100 이 아닌 11 부류와 어긋난다는 것, PaDiM 메모리 3,800 MB 가 공분산 크기 3,794.6 MB 와 맞는다는 것, DRAEM 과 맞대면 이미지 +0.48 · 픽셀 +0.50 이고 세 번째 지표가 AP 와 PRO 로 갈려 DRAEM 의 PRO 는 여전히 모른다는 것을 짚어 두었다** | [CVPR22_RD](notes/CVPR22_RD_Anomaly_Detection_via_Reverse_Distillation_from_One_Class_Embedding.md) |
 
 ### 다른 저장소에 노트가 있는 것
 
@@ -63,7 +64,11 @@
 
 ## 아직 안 읽음 — 큰 틀
 
-**지금 읽는 큰 틀은 산업 이상 탐지 2막(DRAEM → Reverse Distillation → SimpleNet → EfficientAD)이다.** 2026-11-10 에 골랐고 같은 날 첫 칸 DRAEM 을 읽었다. 남은 셋은 원문을 `papers/` 에 받아 두었다. Reverse Distillation(CVF)은 게재판이고 SimpleNet 은 arXiv v2, EfficientAD 는 부록이 붙은 arXiv v3 이다. EfficientAD arXiv v3 본문의 소수점 수치는 게재판과 모두 같았다.
+**지금 읽는 큰 틀은 산업 이상 탐지 2막(DRAEM → Reverse Distillation → SimpleNet → EfficientAD)이다.** 2026-11-10 에 골랐고 같은 날 첫 칸 DRAEM 을, 2026-11-11 에 둘째 칸 Reverse Distillation 을 읽었다. **다음 칸은 SimpleNet 이다.** 원문은 넷 모두 `papers/` 에 있다.
+
+> 2026-11-10 의 판: 「2026-11-10 에 골랐고 같은 날 첫 칸 DRAEM 을 읽었다. 남은 셋은 원문을 `papers/` 에 받아 두었다.」
+
+Reverse Distillation(CVF)은 게재판이고 SimpleNet 은 arXiv v2, EfficientAD 는 부록이 붙은 arXiv v3 이다. EfficientAD arXiv v3 본문의 소수점 수치는 게재판과 모두 같았다.
 
 > 2026-11-10 에 처음 쓴 판은 「EfficientAD(IEEE Xplore)는 게재판」이었다. 그 PDF 는 학교 라이선스 문구가 쪽마다 찍혀 있어 올리지 않았고, 같은 날 arXiv v3 으로 바꿨다.
 
@@ -173,7 +178,7 @@
 | **DiffusionAD** (Zhang 외) · **DDAD** (Mousakhan 외) — 후보 | TPAMI 2025 · arXiv 2023 | AnoDDPM 노트 8 · 19절 — 확산으로 MVTec 전 부류를 잰 편. 원문 참고 문헌에 없다 | 아직 — 2026-11-07 에 후보로 골랐다. 읽고 이 자리에 맞는 편인지 가린다 |
 | **Diffusion Models for Medical Anomaly Detection** (Wolleb 외) — 후보 | MICCAI 2022 | AnoDDPM 노트 17절 — 결정적 부호화 + 안내. 원문 참고 문헌에 없다 | 아직 — 2026-11-07 에 후보로 골랐다. 읽고 이 자리에 맞는 편인지 가린다 |
 | **DRAEM** (Zavrtanik 외) | ICCV 2021 | UniAD 노트 7 · 19절 — 원문 참고 문헌 52. 부류별 98.0 의 구성, 질감 칸이 통합에서도 99.12 로 버티는 까닭 | **2026-11-10 에 읽었다.** 위 「읽었다」 표. 이 줄은 지우지 않고 둔다 |
-| **Reverse Distillation** (Deng · Li) | CVPR 2022 | UniAD 노트 20절 — 원문 참고 문헌 13. 2절에 들지만 표에 없다. 증류 계열의 통합 값 | 아직 — 2026-11-10 에 큰 틀 산업 이상 탐지 2막의 둘째 칸으로 정했고 원문(CVF 게재판)을 받아 두었다 |
+| **Reverse Distillation** (Deng · Li) | CVPR 2022 | UniAD 노트 20절 — 원문 참고 문헌 13. 2절에 들지만 표에 없다. 증류 계열의 통합 값 | **2026-11-11 에 읽었다.** 위 「읽었다」 표. 부류별 학습뿐이라 통합 값은 없다. 이 줄은 지우지 않고 둔다 |
 | **ADTR** (You 외) | arXiv 2022 | UniAD 노트 20절 — 원문 참고 문헌 49. 같은 저자의 부류별 특징 재구성 | 아직 |
 | **통합 설정에서 PatchCore 를 잰 후속 편** — 후보, 편은 아직 안 골랐다 | | UniAD 노트 16절 — 원문 참고 문헌에 없다. 표 1 설정에 기억 뱅크를 넣은 값 | 아직 — 2026-11-07 에 후보로 적었다 |
 | **FCN** — Fully Convolutional Networks for Semantic Segmentation (Long · Shelhamer · Darrell) | CVPR 2015 | U-Net · Mask R-CNN 노트 — 고쳤다는 원형과 다항 마스크의 원형 | 아직 |
@@ -198,6 +203,12 @@
 | **An image synthesizer** (Perlin) | SIGGRAPH 1985 | DRAEM 노트 4 · 14절 — 가짜 결함 모양의 원 출처. AnoDDPM 노트가 꼽은 Perlin 2002 와 나란히 본다 | 아직 |
 | **DAGM 2007** — Weakly supervised learning for industrial optical inspection (Wieler · Hahn) | 2007 | DRAEM 노트 9절 — 시험 집합의 결함 비율. 노트의 0.130 은 내가 아는 값이고 원 출처로 확인하지 않았다 | 아직 |
 | **MAD** — Modeling the distribution of normal data in pre-trained deep features for anomaly detection (Rippel 외) | ICPR 2020 | DRAEM 노트 6 · 9절 — 표 1 · 4 의 상대. 표 4 의 CA 66.2 가 원 값인지 | 아직 |
+| **MKD** — Multiresolution knowledge distillation for anomaly detection (Salehi 외) | CVPR 2021 | Reverse Distillation 노트 3 · 9 · 10절 — 「non-distinguishing filters」 의 원 출처, 표 1 · 2 에서 128 열에만 있는 까닭 | 아직 |
+| **STPM** — Student-teacher feature pyramid matching for anomaly detection (Wang 외) | arXiv 2021 (원문 표기) | Reverse Distillation 노트 3 · 9절 — 같은 꼴 선생 · 학생의 여러 단계 맞춤. 「거꾸로」 를 뺀 줄에 가장 가까운 편 | 아직 |
+| **CutPaste** (Li 외) | CVPR 2021 | Reverse Distillation 노트 6 · 7 · 10절 — 표 1 · 2 의 둘째 자리, 그림 6 의 CutPaste 지도를 누가 만들었나 | 아직 |
+| **MetaFormer** — Learning unsupervised metaformer for anomaly detection (Wu 외) | ICCV 2021 | Reverse Distillation 노트 6 · 7절 — transistor PRO 92.6 의 조건 | 아직 |
+| **DAAD** — Divide-and-assemble (Hou 외) | ICCV 2021 | Reverse Distillation 노트 6절 — screw 98.7 의 조건 | 아직 |
+| **Similarity-preserving knowledge distillation** (Tung · Mori) | ICCV 2019 | Reverse Distillation 노트 4절 — 증류 손실로 코사인을 고른 근거 | 아직 |
 
 ---
 
