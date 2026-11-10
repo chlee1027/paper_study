@@ -63,7 +63,9 @@
 
 ## 아직 안 읽음 — 큰 틀
 
-**지금 읽는 큰 틀은 산업 이상 탐지 2막(DRAEM → Reverse Distillation → SimpleNet → EfficientAD)이다.** 2026-11-10 에 골랐고 같은 날 첫 칸 DRAEM 을 읽었다. 남은 셋은 원문을 `papers/` 에 받아 두었다. Reverse Distillation(CVF) · EfficientAD(IEEE Xplore)는 게재판이고 SimpleNet 은 arXiv v2 다.
+**지금 읽는 큰 틀은 산업 이상 탐지 2막(DRAEM → Reverse Distillation → SimpleNet → EfficientAD)이다.** 2026-11-10 에 골랐고 같은 날 첫 칸 DRAEM 을 읽었다. 남은 셋은 원문을 `papers/` 에 받아 두었다. Reverse Distillation(CVF)은 게재판이고 SimpleNet 은 arXiv v2, EfficientAD 는 부록이 붙은 arXiv v3 이다. EfficientAD arXiv v3 본문의 소수점 수치는 게재판과 모두 같았다.
+
+> 2026-11-10 에 처음 쓴 판은 「EfficientAD(IEEE Xplore)는 게재판」이었다. 그 PDF 는 학교 라이선스 문구가 쪽마다 찍혀 있어 올리지 않았고, 같은 날 arXiv v3 으로 바꿨다.
 
 > 2026-11-08 까지의 판: **정해 둔 큰 틀은 모두 읽었고, 그다음 큰 틀은 아직 정하지 않았다.** 로드맵 갈래 A(퍼셉트론 → 역전파 → DBN → CNN → AE → VAE → GAN → Diffusion)는 2026-11-03 까지, 갈래 B(RNN → LSTM → GRU → seq2seq → Attention → Transformer)는 2026-11-04 에, ViT · BERT 는 2026-11-05 에, 확산 심화(DDIM → Score SDE → Latent Diffusion)는 2026-11-06 에, 산업 이상 탐지(SPADE → 코어셋 → AnoDDPM → UniAD)는 2026-11-07 에 읽었다. 분할 · 검출(U-Net → Faster R-CNN → Mask R-CNN → YOLO)은 2026-11-08 에 읽었다.
 
