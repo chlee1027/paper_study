@@ -310,6 +310,8 @@ $\lambda_{coord} = 5$, $\lambda_{noobj} = 0.5$.
 
 **이 큰 틀(U-Net → Faster R-CNN → Mask R-CNN → YOLO)은 이 편으로 끝난다. 다음 큰 틀은 사용자가 정한다.** 아래는 이 노트 안에만 남겨 두는 후속 편이다.
 
+> 2026-11-10: 사용자가 다음 큰 틀로 산업 이상 탐지 2막(DRAEM → Reverse Distillation → SimpleNet → EfficientAD)을 골랐다. 첫 칸 DRAEM 노트를 같은 날 썼다.
+
 | 논문 | 이 노트의 어느 자리에서 나오는가 | 무엇을 확인하고 싶은가 | 원문 참고 문헌 |
 |---|---|---|---|
 | **Diagnosing error in object detectors** (Hoiem 외, ECCV 2012) | 7절 | 그림 4 판정 도구의 정의 | [19] |
