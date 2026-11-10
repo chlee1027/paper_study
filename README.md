@@ -2,13 +2,14 @@
 
 랩 과제(`lab-chlee1027`)와 별개로, **관심 있는 분야를 스스로 읽고 정리하고 돌려 보는 자리**다. 랩 저장소가 "이번 주 미팅에 가져갈 것"을 담는다면 여기는 "언젠가 쓰려고 읽어 둔 것"을 담는다.
 
-## 지금 있는 것 (2026-11-08)
+## 지금 있는 것 (2026-11-10)
 
-- **노트 서른일곱.** 읽는 순서는 퍼셉트론에서 DDPM 까지의 로드맵을 따르고, **노트마다 한계를 적은 뒤 그 한계를 푼 편을 다음으로 읽는다.** 편마다 한 줄 요약과 읽은 까닭은 `INDEX.md` 에 있다. 이상 탐지 논문 다섯 편(MVTec AD · Uninformed Students · PaDiM · VisA · Real-IAD)은 노트가 비공개 저장소 `beyond-mvtec` 에 있어 `INDEX.md` 에 줄만 둔다.
+- **노트 서른여덟.** 읽는 순서는 퍼셉트론에서 DDPM 까지의 로드맵을 따르고, **노트마다 한계를 적은 뒤 그 한계를 푼 편을 다음으로 읽는다.** 편마다 한 줄 요약과 읽은 까닭은 `INDEX.md` 에 있다. 이상 탐지 논문 다섯 편(MVTec AD · Uninformed Students · PaDiM · VisA · Real-IAD)은 노트가 비공개 저장소 `beyond-mvtec` 에 있어 `INDEX.md` 에 줄만 둔다.
 - **두 갈래가 길어졌다.** 깊은 망을 배워지게 만드는 장치(역전파 → DBN · 오토인코더 → 사전학습은 왜 돕는가 → AlexNet → VGG → BN → ResNet → 사전 활성 ResNet → Wide ResNet)와 생성 모델(오토인코더 → VAE → GAN → Wasserstein GAN → DDPM → DDIM → Score SDE → Latent Diffusion)이다. Wide ResNet 은 연구에서 쓰는 PatchCore 의 특징 추출기(WRN-50-2)의 원 논문이다.
-- **로드맵 두 갈래가 다 끝났다.** 갈래 A(이미지와 생성)는 2026-11-03 에, 갈래 B(RNN → LSTM → GRU → seq2seq → Attention → Transformer)는 2026-11-04 에 끝났다. 그다음 큰 틀로 정한 ViT 와 함께 읽은 BERT 도 2026-11-05 에 읽었다. 이어서 고른 확산 심화(DDIM → Score SDE → Latent Diffusion)도 2026-11-06 에 읽었다. 같은 날 정한 산업 이상 탐지(SPADE → 코어셋 → AnoDDPM → UniAD)도 2026-11-07 에 읽었다. 이어서 고른 분할 · 검출(U-Net → Faster R-CNN → Mask R-CNN → YOLO)도 2026-11-08 에 읽었다. 그다음 큰 틀은 아직 정하지 않았다.
+- **로드맵 두 갈래가 다 끝났다.** 갈래 A(이미지와 생성)는 2026-11-03 에, 갈래 B(RNN → LSTM → GRU → seq2seq → Attention → Transformer)는 2026-11-04 에 끝났다. 그다음 큰 틀로 정한 ViT 와 함께 읽은 BERT 도 2026-11-05 에 읽었다. 이어서 고른 확산 심화(DDIM → Score SDE → Latent Diffusion)도 2026-11-06 에 읽었다. 같은 날 정한 산업 이상 탐지(SPADE → 코어셋 → AnoDDPM → UniAD)도 2026-11-07 에 읽었다. 이어서 고른 분할 · 검출(U-Net → Faster R-CNN → Mask R-CNN → YOLO)도 2026-11-08 에 읽었다. 2026-11-10 에 그다음 큰 틀로 산업 이상 탐지 2막(DRAEM → Reverse Distillation → SimpleNet → EfficientAD)을 골라 첫 칸 DRAEM 을 읽었다.
 - **연구에서 쓰는 방법(PatchCore)을 원문으로 읽었다.** 깊은 망 갈래의 끝자리(Wide ResNet)를 얼려 쓰는 편이라, 백본과 단계를 고른 근거를 앞 노트들의 물음과 맞춰 봤다.
 - **산업 이상 탐지 네 편의 판본이 갈린다.** AnoDDPM(CVF) · UniAD(NeurIPS 본문 + 보충 자료)는 게재판이고, 코어셋은 머리글에 ICLR 2018 이 찍힌 arXiv v4(OpenReview 판은 로그인 요구로 못 받았다), SPADE 는 찾은 범위에서 학회판을 못 찾아 arXiv v3 다. **AnoDDPM 의 수치는 뇌 MRI 뿐이고 MVTec 은 가죽 이미지 둘의 그림이다.**
+- **산업 이상 탐지 2막의 원문 넷을 받아 두었다.** DRAEM(CVF 본문 + 보충 자료) · Reverse Distillation(CVF) · EfficientAD(IEEE Xplore)는 게재판이고, SimpleNet 은 arXiv v2 다. DRAEM 은 arXiv 판과 대조하지 않았다.
 - **분할 · 검출 네 편은 모두 게재판을 읽었다.** U-Net(Springer) · YOLO(CVF)는 arXiv 판과 숫자가 같았다. Faster R-CNN(NIPS) · Mask R-CNN(CVF)은 arXiv v3 이 표를 더 실은 다른 판이라, 대조한 대목만 읽고 노트에 따로 적었다.
 - **GAN 은 두 판을 다 읽었다.** 2020 년 개관판을 먼저 읽고 식 절반을 직접 유도해 적었고, 원판(NIPS 2014)을 읽어 그 유도를 하나씩 맞춰 봤다. 식 셋이 같았고, 개관판 노트에서 고친 자리는 그 노트 안에 날짜를 단 인용 블록으로 남겼다.
 - **실험 다섯.** 넷(퍼셉트론 · 역전파 · DBN · LeNet)은 결과까지 들어 있고, AlexNet 은 질문과 가설만 적었다. **2026-11-03 부터 새 실험은 돌리지 않고 논문의 실험을 분석하는 것으로 바꿨다**(아래 「실험 하나를 넣는 절차 셋」).

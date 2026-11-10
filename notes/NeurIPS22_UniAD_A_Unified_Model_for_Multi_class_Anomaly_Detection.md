@@ -506,8 +506,13 @@ MLP 를 부류별로도 돌렸더니(15 부류 평균) 정확도가 손실과 �
 - **FJ 없는 (4, 0) 은 몇인가.** 질의 없는 NMA 의 몫을 가르는 행이 없다.
 - **표 5 의 반복 수는 몇인가.** 0.1 점 차이의 순서를 매길 근거가 여기 걸린다.
 - **DRAEM 이 질감에서 통합으로도 무너지지 않는 까닭은 무엇인가.** DRAEM 원문이 필요하다.
+
+  > 2026-11-10(DRAEM 노트): DRAEM 원문에는 통합 설정 실험이 없어 이 물음에 답하지 않는다. 이 편의 통합 질감 평균 99.12 는 DRAEM 원문의 부류별 질감 평균 99.12 와 같지만, **부류 값은 다르고 합(495.6)만 같다.** 후보 설명(가짜 이상을 배경에도 붙여 판별 망이 부류에 덜 묶인다)은 DRAEM 노트 14절에 재지 않은 가설로 적었다.
+
 - **7.48M 은 무엇을 세지 않았나 · 검출 풀링 창은 얼마인가 · 머리 수는 몇인가.** 코드에 답이 있을 자리다. 이 노트는 코드를 보지 않았다.
 - **이 편의 PaDiM 칸(95.5 / 97.4)과 PatchCore 노트의 PaDiM 칸(95.3 / 97.5)의 차이는 어디서 오나.** PaDiM 원문과 맞춘다.
+
+  > 2026-11-10(DRAEM 노트): 이 편 표 1 의 부류별 PaDiM · US 칸은 DRAEM 표 1 과 같다(14 부류를 맞춰 봤고 bottle 은 대조하지 않았다). DRAEM 표 2 의 PaDiM 부류별 픽셀 AUROC 는 PaDiM 원 논문과 15 칸 중 4 칸만 같고 wood 가 0.8 다르다. PaDiM 원 논문에는 부류별 이미지 AUROC 가 없다. 곧 **95.5 / 97.4 는 DRAEM 저자들의 실행으로 읽히는 값**(DRAEM 그림 7 캡션 「our implementation」)이고, 95.3 / 97.5 는 PaDiM 원 논문 값이다. 95.5 는 그 표의 부류 평균 95.42 와도 0.08 어긋난다.
 
 ---
 
@@ -521,6 +526,8 @@ MLP 를 부류별로도 돌렸더니(15 부류 평균) 정확도가 손실과 �
 | **Reverse Distillation** (Deng · Li, CVPR 2022, 참고 문헌 13) | 2 절에 들지만 표에 없다 | 증류 계열이 통합에서 어떤지 |
 | **ADTR** (You 외, arXiv 2022, 참고 문헌 49) | 재구성 틀의 앞 편 | 같은 저자의 부류별 특징 재구성, 그림 2a 와 같은 곡선이 있는지 |
 | **후보 — 통합 설정에서 PatchCore 를 잰 후속 편.** 원문 참고 문헌에 없다. 읽고 맞는지 가린다 | 16 절 | 표 1 의 설정에 기억 뱅크를 넣은 값 |
+
+> 2026-11-10: DRAEM 을 읽었다(노트 `ICCV21_DRAEM`). 부류별 98.0 의 구성은 그 노트 6절, 질감 통합 값의 까닭은 원문에 통합 실험이 없어 답하지 못했다(14절).
 
 ---
 
@@ -537,7 +544,7 @@ MLP 를 부류별로도 돌렸더니(15 부류 평균) 정확도가 손실과 �
 - [28] Mishra, P. 외 (2021). VT-ADL. · [31] Pirnay, J. and Chai, K. (2021). InTra. · [50] Yunseung, L. and Pilsung, K. (2022). AnoViT. — 표 4. 읽지 않았다.
 - [33] Reiss, T. 외 (2021). PANDA. CVPR. · [37] Salehi, M. 외 (2021). MKD. CVPR. · [48] Yi, J. and Yoon, S. (2020). Patch SVDD. ACCV. — 표의 상대. 읽지 않았다.
 - [49] You, Z. 외 (2022). ADTR. arXiv:2209.01816. — 읽지 않았다.
-- [52] Zavrtanik, V. 외 (2021). DRAEM. ICCV. — 읽지 않았다.
+- [52] Zavrtanik, V. 외 (2021). DRAEM. ICCV. — 읽지 않았다. **2026-11-10 에 읽었다**(노트 `ICCV21_DRAEM`).
 - [40] Tan, M. and Le, Q. (2019). EfficientNet. ICML. — 백본. 읽지 않았다. 채널 수는 torchvision 짜임으로 셌다.
 - [42] Vaswani, A. 외 (2017). Attention is all you need. NIPS. — 2026-11-04 에 읽었다(Transformer 노트).
 - [3] Bengio, Y. 외 (2013). Generalized denoising auto-encoders. NeurIPS. · [43] Vincent, P. 외 (2008). Denoising autoencoders. ICML. — FJ 의 착상. 읽지 않았다. **Vincent 2008 은 색인의 「나중에 볼 세부」 에 있다.**
