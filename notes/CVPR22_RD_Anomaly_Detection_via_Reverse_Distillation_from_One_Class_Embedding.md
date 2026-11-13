@@ -311,7 +311,7 @@ $$S_{AL} = \sum_{i=1}^{L} \Psi(M^i) \qquad (3)$$
 
 **Wide ResNet · ResNet 노트.** 선생 WRN-50-2 의 1 ~ 3 단계는 24,862,528 개로 망 전체(68,883,240)의 36.1% 다(내 셈). PatchCore 가 2 · 3 단계를 쓰는 것과 견주면, RD 는 1 단계까지 쓰고 그 몫이 AD +0.5 · PRO +0.7 이다(표 7).
 
-**Uninformed Students 노트(`beyond-mvtec` 저장소).** 표 2 의 US PRO 열은 원 논문의 여러 수용장 묶음 값과 15 칸이 같다. 같은 증류 계열인데 US 는 이미지 · 픽셀 AUROC 를 내지 않아 표 1 의 US 열은 다른 사람이 돌린 값이다(6절).
+**[Uninformed Students 노트](https://github.com/chlee1027/beyond-mvtec/blob/main/papers/notes/CVPR20_Uninformed_Students_Student_Teacher_Anomaly_Detection_with_Discriminative_Latent_Embeddings.md)(`beyond-mvtec` 저장소).** 표 2 의 US PRO 열은 원 논문의 여러 수용장 묶음 값과 15 칸이 같다. 같은 증류 계열인데 US 는 이미지 · 픽셀 AUROC 를 내지 않아 표 1 의 US 열은 다른 사람이 돌린 값이다(6절).
 
 ---
 
