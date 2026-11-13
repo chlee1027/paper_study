@@ -16,7 +16,7 @@
 | 게재 | Nature 323, 533-536 (Letters to Nature), 1986년 10월 9일 |
 | 접수 · 게재 확정 | 1986년 5월 1일 접수, 7월 31일 확정 |
 | DOI | `10.1038/323533a0` |
-| 저자 사본 | https://www.cs.toronto.edu/~hinton/absps/naturebp.pdf |
+| 저자 사본 | https://www.cs.toronto.edu/\~hinton/absps/naturebp.pdf |
 | 코드 | 본문에 적혀 있지 않다 (1986년 논문이다) |
 | 지원 | System Development Foundation, Office of Naval Research |
 | Stored PDF | `papers/Nature86_Backprop_Learning_representations_by_back_propagating_errors.pdf` |
@@ -452,7 +452,7 @@ $t$는 **훑기 한 번마다 1씩** 늘어난다. α는 0과 1 사이의 값으
 | **가중치 공유를 구조로** | LeCun et al. "Backpropagation Applied to Handwritten Zip Code Recognition." Neural Computation, 1989 | 9절의 가중치 묶음을 이미지의 위치 이동에 맞춰 설계한다. 이 논문이 이름을 적은 Le Cun 본인이다 |
 | **표현 학습 쪽 (내 관심)** | 이 논문의 8절에서 은닉 유닛이 국적·세대·갈래를 만든 것이 **특징을 사람이 설계하지 않는다**는 계보의 시작이다 | 내 이상 탐지 연구에서 쓰는 사전학습 특징이 같은 계보 위에 있다 |
 
-**다음에 읽을 것은 Hinton, Osindero, Teh. "A Fast Learning Algorithm for Deep Belief Nets." Neural Computation 18(7), 1527-1554, 2006 이다** (저자 사본 https://www.cs.toronto.edu/~hinton/absps/fastnc.pdf). 역전파가 있어도 층이 깊어지면 학습이 되지 않던 시기를 다루는 편이라, **12절에서 계산해 본 $0.25^5$ 자리와 바로 이어진다.**
+**다음에 읽을 것은 Hinton, Osindero, Teh. "A Fast Learning Algorithm for Deep Belief Nets." Neural Computation 18(7), 1527-1554, 2006 이다** (저자 사본 https://www.cs.toronto.edu/\~hinton/absps/fastnc.pdf). 역전파가 있어도 층이 깊어지면 학습이 되지 않던 시기를 다루는 편이라, **12절에서 계산해 본 $0.25^5$ 자리와 바로 이어진다.**
 
 ---
 
@@ -478,7 +478,7 @@ $t$는 **훑기 한 번마다 1씩** 늘어난다. α는 0과 1 사이의 값으
 |---|---|
 | 1 : 2 : 4 구조는 항상 나오는가, 이 난수 씨앗에서만 나온 해인가 | **답이 섰다.** 씨앗 50개 중 푼 46개가 모두 같은 비(중앙값 1.00 : 1.98 : 3.94)와 같은 부호 대칭에 닿았다. 씨앗의 우연이 아니다 |
 | 미학습 4개를 맞힌 것은 얼마나 재현되는가 | **답이 섰고, 논문만큼은 아니었다.** 가장 잘 학습된 설정에서도 32번 중 17번이다. 다만 **논문의 설정값 그대로로는 학습 자체가 되지 않아** 다른 학습률에서 잰 값이라, 논문의 4/4와 나란히 놓을 수 없다 |
-| 가중치 감쇠가 없으면 그림 12의 축이 덜 읽히는가 | **순서를 매기지 못했다.** 감쇠를 켠 쪽의 국적 축 또렷함이 중앙값 0.775, 끈 쪽이 0.651로 켠 쪽이 높지만 **두 조건의 범위가 겹친다**(켬 0.437~0.909, 끔 0.486~0.886). 씨앗 사이의 변동이 조건 사이의 차이보다 크다 |
+| 가중치 감쇠가 없으면 그림 12의 축이 덜 읽히는가 | **순서를 매기지 못했다.** 감쇠를 켠 쪽의 국적 축 또렷함이 중앙값 0.775, 끈 쪽이 0.651로 켠 쪽이 높지만 **두 조건의 범위가 겹친다**(켬 0.437\~0.909, 끔 0.486\~0.886). 씨앗 사이의 변동이 조건 사이의 차이보다 크다 |
 | 연결을 몇 개 더 두면 우회로가 생기는가 | **답이 섰고, 반대 방향이었다.** 11.1절에 적었다 — 이 과제에서는 은닉 유닛을 2개에서 6개로 늘리자 갇히는 비율이 0.08에서 0.56으로 올라갔다 |
 
 **새로 생긴 물음 셋.**
