@@ -4,7 +4,7 @@
 
 ## 지금 있는 것 (2026-11-11)
 
-- **노트 서른아홉.** 읽는 순서는 퍼셉트론에서 DDPM 까지의 로드맵을 따르고, **노트마다 한계를 적은 뒤 그 한계를 푼 편을 다음으로 읽는다.** 편마다 한 줄 요약과 읽은 까닭은 `INDEX.md` 에 있다. 이상 탐지 논문 다섯 편(MVTec AD · Uninformed Students · PaDiM · VisA · Real-IAD)은 노트가 비공개 저장소 `beyond-mvtec` 에 있어 `INDEX.md` 에 줄만 둔다.
+- **노트 서른아홉.** 읽는 순서는 퍼셉트론에서 DDPM 까지의 로드맵을 따르고, **노트마다 한계를 적은 뒤 그 한계를 푼 편을 다음으로 읽는다.** 편마다 한 줄 요약과 읽은 까닭은 `INDEX.md` 에 있다. 이상 탐지 논문 다섯 편(MVTec AD · Uninformed Students · PaDiM · VisA · Real-IAD)은 노트가 [`beyond-mvtec`](https://github.com/chlee1027/beyond-mvtec) 저장소 `papers/notes/` 에 있어 `INDEX.md` 에 줄과 링크만 둔다.
 - **두 갈래가 길어졌다.** 깊은 망을 배워지게 만드는 장치(역전파 → DBN · 오토인코더 → 사전학습은 왜 돕는가 → AlexNet → VGG → BN → ResNet → 사전 활성 ResNet → Wide ResNet)와 생성 모델(오토인코더 → VAE → GAN → Wasserstein GAN → DDPM → DDIM → Score SDE → Latent Diffusion)이다. Wide ResNet 은 연구에서 쓰는 PatchCore 의 특징 추출기(WRN-50-2)의 원 논문이다.
 - **로드맵 두 갈래가 다 끝났다.** 갈래 A(이미지와 생성)는 2026-11-03 에, 갈래 B(RNN → LSTM → GRU → seq2seq → Attention → Transformer)는 2026-11-04 에 끝났다. 그다음 큰 틀로 정한 ViT 와 함께 읽은 BERT 도 2026-11-05 에 읽었다. 이어서 고른 확산 심화(DDIM → Score SDE → Latent Diffusion)도 2026-11-06 에 읽었다. 같은 날 정한 산업 이상 탐지(SPADE → 코어셋 → AnoDDPM → UniAD)도 2026-11-07 에 읽었다. 이어서 고른 분할 · 검출(U-Net → Faster R-CNN → Mask R-CNN → YOLO)도 2026-11-08 에 읽었다. 2026-11-10 에 그다음 큰 틀로 산업 이상 탐지 2막(DRAEM → Reverse Distillation → SimpleNet → EfficientAD)을 골라 첫 칸 DRAEM 을 읽었고, 2026-11-11 에 둘째 칸 Reverse Distillation 을 읽었다.
 - **연구에서 쓰는 방법(PatchCore)을 원문으로 읽었다.** 깊은 망 갈래의 끝자리(Wide ResNet)를 얼려 쓰는 편이라, 백본과 단계를 고른 근거를 앞 노트들의 물음과 맞춰 봤다.
