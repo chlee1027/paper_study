@@ -338,11 +338,18 @@ $$S_{AL} = \sum_{i=1}^{L} \Psi(M^i) \qquad (3)$$
 - **코사인 거리가 크기만 바뀐 결함을 놓치는가?** 13절 7.
 - **반복 seed 의 흩어짐은?** 표 6 의 0.1 차를 가르려면 필요하다.
 
+> 2026-11-14: SimpleNet 을 읽었다(노트 `CVPR23_SimpleNet`). 세 가지가 이 절에 닿는다.
+> - **「DRAEM 의 PRO」 는 여전히 풀리지 않았다.** SimpleNet 은 I-AUROC · P-AUROC 만 내고 PRO 를 내지 않는다. EfficientAD 에서 다시 찾는다.
+> - **「보통 증류」 줄은 그 편에도 없다.** 그 편은 증류 계열이 아니다.
+> - **이 편의 표가 그 편 상대 값의 출처로 쓰였다.** SimpleNet 표 1 의 RevDist · CutPaste 열이 이 편 표 1 · 2 와 칸마다 같고, 그 편 표 5 의 CIFAR-10 다섯 칸이 이 편 표 4 와 같다. 그 편 PaDiM I 열의 질감 다섯은 이 편 표 1 의 PaDiM 열(= DRAEM 의 구현값)이고, 물체 열 칸과 평균 셋은 이 편 표 1 의 MetaFormer 열이다. 이 편 표 1 의 CutPaste 평균 어긋남(96.16 → 96.1)도 그대로 옮겨졌다.
+
 ---
 
 ## 17. 다음에 읽을 것
 
 **이 큰 틀(DRAEM → Reverse Distillation → SimpleNet → EfficientAD)의 다음 칸은 SimpleNet(CVPR 2023)이다.** 아래는 이 노트 안에서 나온 후속 편이다.
+
+> 2026-11-14: SimpleNet 을 읽었다(노트 `CVPR23_SimpleNet`). 이 큰 틀의 다음 칸이자 마지막 칸은 EfficientAD 다.
 
 | 논문 | 이 노트의 어느 자리에서 나오는가 | 무엇을 확인하고 싶은가 | 원문 참고 문헌 |
 |---|---|---|---|
