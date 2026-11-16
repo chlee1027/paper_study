@@ -14,6 +14,7 @@
 | Conference / Journal | ICML 2015 (Proceedings of the 32nd International Conference on Machine Learning, Lille), JMLR W&CP 37권 |
 | Year | 2015 |
 | arXiv | 1502.03167 (이 파일은 학회판이라 arXiv 번호가 적혀 있지 않다) |
+| 원 출처 | [PMLR 37:448-456 (ICML 2015)](https://proceedings.mlr.press/v37/ioffe15.html) · [arXiv 1502.03167](https://arxiv.org/abs/1502.03167) (2026-11-17 두 주소가 열리고 저자 · 제목이 맞는 것을 확인) |
 | 코드 | 본문에 코드 주소가 없다 |
 | Stored PDF | `papers/ICML15_BN_Batch_Normalization_Accelerating_Deep_Network_Training_by_Reducing_Internal_Covariate_Shift.pdf` (바탕화면에서 받은 이름은 `ioffe15.pdf`) |
 | 왜 읽었는가 | AlexNet 노트가 남긴 자리 — **LRN 의 상수 넷을 검증으로 골랐다고만 적고 이득이 −1.4% 였는데, 오늘날 LRN 을 안 쓰는 이유**가 어디서 갈리는지 본다. 그리고 로드맵에서 역전파 · DBN · AE 노트가 계속 붙들고 온 물음(깊은 망이 왜 안 배워지는가)의 한 답이다 |

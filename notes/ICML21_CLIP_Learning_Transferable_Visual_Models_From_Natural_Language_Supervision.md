@@ -16,6 +16,7 @@
 | Conference / Journal | **ICML 2021**, PMLR 139 (첫 쪽 여백에 찍혀 있다) |
 | Year | 2021 |
 | DOI | 파일에 찍혀 있지 않다 |
+| 원 출처 | [PMLR 139:8748-8763 (ICML 2021)](https://proceedings.mlr.press/v139/radford21a.html) · [arXiv 2103.00020](https://arxiv.org/abs/2103.00020) (2026-11-17 두 주소가 열리고 저자 · 제목이 맞는 것을 확인) |
 | 코드 | 초록에 `github.com/OpenAI/CLIP` 이 적혀 있고 「코드와 사전학습 무게를 공개한다」 고 적는다. **이 노트는 코드를 보지 않았다** |
 | Stored PDF | 본문 · 보충 자료 두 파일. 경로는 23절 |
 | 왜 읽었는가 | 2026-11-17 에 고른 큰 틀 「CLIP 계열 제로샷 이상 탐지(CLIP → WinCLIP → AnomalyCLIP)」 의 첫 칸. 이 저장소의 이상 탐지 여덟 편(PatchCore 에서 EfficientAD 까지)은 모두 장면마다 정상 이미지로 따로 배운다. 뒤 두 편은 그 전제를 없애고 CLIP 의 이미지-글 유사도로 판정한다. 그 판정의 원 출처를 먼저 읽는다 |

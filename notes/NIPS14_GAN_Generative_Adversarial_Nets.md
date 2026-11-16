@@ -15,6 +15,7 @@
 | 소속 | 여덟 모두 Université de Montréal (DIRO). 각주로 Goodfellow 는 「지금은 Google 연구원이지만 이 일은 UdeM 학생 때 했다」, Pouget-Abadie 는 École Polytechnique 에서, Ozair 는 IIT Delhi 에서 방문 중이었다고 적는다 |
 | Conference / Journal | Advances in Neural Information Processing Systems 27 (NIPS 2014) |
 | Year | 2014. 파일 정보의 주제 칸이 「Neural Information Processing Systems」, 수정일이 2014-12-02 |
+| 원 출처 | [NIPS 2014 발표집](https://papers.nips.cc/paper_files/paper/2014/hash/f033ed80deb0234979a61f95710dbe25-Abstract.html) · [arXiv 1406.2661](https://arxiv.org/abs/1406.2661) (arXiv 판 제목은 「Generative Adversarial Networks」. 2026-11-17 두 주소가 열리고 저자가 맞는 것을 확인) |
 | 코드 | 각주 1: 「모든 코드와 초매개변수는 `github.com/goodfeli/adversarial` 에 있다」 |
 | Stored PDF | `papers/NIPS14_GAN_Generative_Adversarial_Nets.pdf` (바탕화면에서 받은 이름은 `NIPS-2014-generative-adversarial-nets-Paper.pdf`) |
 | 왜 읽었는가 | 앞서 읽은 CACM 2020 개관판에 가치 함수 · 증명 · 알고리즘 · 실험이 없어 그 노트의 식 절반이 내 유도였다. 그 노트가 「다음에 읽을 것」 첫째로 이 원판을 올렸다 |
