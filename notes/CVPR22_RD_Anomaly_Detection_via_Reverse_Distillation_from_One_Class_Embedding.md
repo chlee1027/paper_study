@@ -343,6 +343,11 @@ $$S_{AL} = \sum_{i=1}^{L} \Psi(M^i) \qquad (3)$$
 > - **「보통 증류」 줄은 그 편에도 없다.** 그 편은 증류 계열이 아니다.
 > - **이 편의 표가 그 편 상대 값의 출처로 쓰였다.** SimpleNet 표 1 의 RevDist · CutPaste 열이 이 편 표 1 · 2 와 칸마다 같고, 그 편 표 5 의 CIFAR-10 다섯 칸이 이 편 표 4 와 같다. 그 편 PaDiM I 열의 질감 다섯은 이 편 표 1 의 PaDiM 열(= DRAEM 의 구현값)이고, 물체 열 칸과 평균 셋은 이 편 표 1 의 MetaFormer 열이다. 이 편 표 1 의 CutPaste 평균 어긋남(96.16 → 96.1)도 그대로 옮겨졌다.
 
+
+> 2026-11-16: EfficientAD 를 읽었다(노트 `WACV24_EfficientAD`). 세 가지가 이 절에 닿는다.
+> - **「같은 꼴 학생의 보통 증류」 에 가장 가까운 줄은 그 편 표 3 의 $p_{hard}$ = 0 (EfficientAD-M 94.9)과 표 4 의 「PDN」 줄(EfficientAD-S 93.2)이다.** 다만 선생이 WRN50 이 아니라 WRN-101 특징을 증류한 작은 PDN 이고, 두 줄 모두 자기부호기 갈래를 함께 쓰며, 값이 세 모음(MVTec AD · VisA · MVTec LOCO) 평균이다. 「거꾸로」 의 몫은 여전히 갈리지 않는다.
+> - **「DRAEM 의 PRO」 는 이 큰 틀 안에서 풀리지 않았다.** 그 편 표에 DRAEM 이 없고 DSR 이 있다.
+> - **그 편의 참고 문헌 74 건에 이 편이 없다.** 그 편의 선생 · 학생 비교 상대는 Uninformed Students 와 AST 둘이다.
 ---
 
 ## 17. 다음에 읽을 것
@@ -350,6 +355,9 @@ $$S_{AL} = \sum_{i=1}^{L} \Psi(M^i) \qquad (3)$$
 **이 큰 틀(DRAEM → Reverse Distillation → SimpleNet → EfficientAD)의 다음 칸은 SimpleNet(CVPR 2023)이다.** 아래는 이 노트 안에서 나온 후속 편이다.
 
 > 2026-11-14: SimpleNet 을 읽었다(노트 `CVPR23_SimpleNet`). 이 큰 틀의 다음 칸이자 마지막 칸은 EfficientAD 다.
+
+
+> 2026-11-16: EfficientAD 를 읽었다(노트 `WACV24_EfficientAD`). 이 큰 틀(DRAEM → Reverse Distillation → SimpleNet → EfficientAD)은 끝났고, 다음 큰 틀은 아직 정하지 않았다.
 
 | 논문 | 이 노트의 어느 자리에서 나오는가 | 무엇을 확인하고 싶은가 | 원문 참고 문헌 |
 |---|---|---|---|

@@ -371,6 +371,9 @@ $f_{s_f \times s_f}$ 는 평균 거르개. **$s_f$ 의 값은 적혀 있지 않�
 > - **「DRAEM 의 PRO」 는 여전히 풀리지 않았다.** SimpleNet 은 PRO 를 내지 않는다. 그 편 표 1 의 DRAEM 열(I · P)은 이 노트 6 · 7절 표와 30 칸이 모두 같다. EfficientAD 에서 다시 찾는다.
 > - **transistor 는 증강이 없는 방법 사이에서도 갈린다.** SimpleNet(증강 없음)의 transistor 픽셀 AUROC 는 97.6 으로 그 편 표 1 에서 가장 높고, PaDiM 97.5 · PatchCore 96.3 이 뒤따른다. RD 는 92.5, 이 편은 90.9 다. 얼린 특징의 거리나 판별로 점수를 내는 쪽이 높고 되살리는 쪽이 낮게 놓인다. 서로 다른 논문의 한 번 실행 값이라 원인은 가르지 않는다.
 
+
+> 2026-11-16: EfficientAD 를 읽었다(노트 `WACV24_EfficientAD`). 이 절에 닿는 것은 하나다.
+> - **「DRAEM 의 PRO」 는 이 큰 틀 안에서 풀리지 않았다.** EfficientAD 의 표에 DRAEM 은 없고, 같은 저자의 다음 편 DSR(ECCV 2022)이 들어 있다. EfficientAD 가 DSR 공식 코드로 다시 돌린 MVTec AD 값은 이미지 AU-ROC 98.1(DSR 원문 98.2) · AU-PRO(FPR 30%) 90.8 이다. DRAEM 의 PRO 는 DSR 원문이나 여러 방법을 다시 돌린 벤치마크 편에서 찾는다.
 ---
 
 ## 17. 다음에 읽을 것
@@ -380,6 +383,9 @@ $f_{s_f \times s_f}$ 는 평균 거르개. **$s_f$ 의 값은 적혀 있지 않�
 > 2026-11-11: Reverse Distillation 을 읽었다(노트 `CVPR22_RD`). 이 큰 틀의 다음 칸은 SimpleNet 이다.
 
 > 2026-11-14: SimpleNet 을 읽었다(노트 `CVPR23_SimpleNet`). 이 큰 틀의 다음 칸이자 마지막 칸은 EfficientAD 다.
+
+
+> 2026-11-16: EfficientAD 를 읽었다(노트 `WACV24_EfficientAD`). 이 큰 틀(DRAEM → Reverse Distillation → SimpleNet → EfficientAD)은 끝났고, 다음 큰 틀은 아직 정하지 않았다.
 
 | 논문 | 이 노트의 어느 자리에서 나오는가 | 무엇을 확인하고 싶은가 | 원문 참고 문헌 |
 |---|---|---|---|

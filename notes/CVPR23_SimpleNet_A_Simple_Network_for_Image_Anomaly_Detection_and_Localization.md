@@ -398,11 +398,20 @@ $$\mathcal{L} = \min_{\theta, \psi} \sum_{x^i \in \mathcal{X}_{train}} \sum_{h,w
 - **SimpleNet 의 PRO 는 얼마인가?** 이 편에 없다. 다른 편이 다시 돌린 값이 있으면 출처와 함께 적는다.
 - **반복 seed 의 흩어짐은?** 표 3 의 0.2 차를 가르려면 필요하다.
 
+
+> 2026-11-16: EfficientAD 를 읽었다(노트 `WACV24_EfficientAD`). 네 가지가 이 절에 닿는다.
+> - **「그 편이 SimpleNet 을 어떻게 돌렸나」: 공식 코드로 다시 돌렸다.** 공식 코드는 학습 중 시험 이미지로 거듭 평가해 그 최댓값을 낸다고 그 편이 적는다. 그것을 끈 마지막 모형의 MVTec AD 이미지 AU-ROC 는 98.2 로 이 편 99.6 보다 1.4 낮다. 16절 5(평가한 모형의 에폭)가 그 편의 말로 풀린다. 코드는 보지 않았다. 가운데 자르기를 껐는지는 그 편에 적혀 있지 않다.
+> - **「SimpleNet 의 PRO」: 그 편의 설정에서 AU-PRO(FPR 30%)는 MVTec AD 89.6 · VisA 68.9 · LOCO 64.6 이다.** 같은 표의 PatchCore 는 92.7 · 79.7 · 70.4 다. VisA · LOCO 의 이미지 AU-ROC(87.9 · 77.6)는 열 방법 중 9 위다.
+> - **「DRAEM 의 PRO」 는 이 큰 틀 안에서 풀리지 않았다.** 그 편 표에 DRAEM 이 없다.
+> - **「이미지 공간 가짜 결함과 견준 줄」 은 그 편에도 없다.** 그 편은 가짜 이상 계열이 아니다.
 ---
 
 ## 20. 다음에 읽을 것
 
 **이 큰 틀(DRAEM → Reverse Distillation → SimpleNet → EfficientAD)의 다음 칸이자 마지막 칸은 EfficientAD(WACV 2024)다.** 아래는 이 노트 안에서 나온 후속 편이다.
+
+
+> 2026-11-16: EfficientAD 를 읽었다(노트 `WACV24_EfficientAD`). 이 큰 틀(DRAEM → Reverse Distillation → SimpleNet → EfficientAD)은 끝났고, 다음 큰 틀은 아직 정하지 않았다.
 
 | 논문 | 이 노트의 어느 자리에서 나오는가 | 무엇을 확인하고 싶은가 | 원문 참고 문헌 |
 |---|---|---|---|
