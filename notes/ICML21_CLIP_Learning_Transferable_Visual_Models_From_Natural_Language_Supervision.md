@@ -292,11 +292,15 @@ FairFace 인종 레이블에 「criminal」 · 「animal」 같은 모욕적 낱
 - **CLIP 사전학습 데이터에 MVTec AD · VisA 이미지가 들어 있었나?** 읽은 범위(4절 · 부록 C 의 글과 그림 17 의 이름표)에 산업 이상 탐지 데이터셋 이름은 나오지 않았다. 35 개의 전체 목록은 읽지 않은 부록 표에 있을 수 있다.
 - **Flowers102 · GTSRB 의 클래스 이름은 어디서 왔나?** 읽지 않은 부록 A.1 · 표 2 나 코드에 있을 수 있다.
 
+> 2026-11-17 WinCLIP(CVPR 2023)을 읽고 앞 세 물음에 답한 것. (1) 조각 단위: WinCLIP 은 중간 특징이 아니라 **창으로 가린 이미지를 CLIP 에 다시 넣어** 창마다 클래스 토큰을 얻는다. ViT 의 마지막 층 조각 토큰을 그대로 쓰면 MVTec AD 0 장 pAUROC 가 22.4 로 우연 아래였다. (2) 글: 상태 낱말 11 개(정상 7 · 결함 4) x 문장 틀 22 개를 쪽마다 평균한다. 이 편의 ImageNet 80 개 묶음은 그 과제에서 AUROC 를 +0.1(MVTec AD) · −1.1(VisA) 바꿨고, 상태 낱말 묶음이 +15.8 을 냈다. 22 개 틀 가운데 18 개는 이 편의 80 개 목록에 있는 문장이다. (3) 질감: 0 장 분류에서는 MVTec AD 질감 다섯이 평균 99.64 로 물체 열(87.90)보다 높아 경고가 나타나지 않았고, 분할의 작은 결함 실패로 나타났다. 다만 WinCLIP 의 기본 백본은 OpenAI CLIP 이 아니라 OpenCLIP 의 LAION-400M ViT-B/16+ 라, 이 노트의 WIT 관련 관찰이 그대로 옮겨지지는 않는다. 넷째 물음(사전학습 데이터에 MVTec AD · VisA 가 있었나)은 WinCLIP 도 확인하지 않았다.
+
 ---
 
 ## 21. 다음에 읽을 것
 
 **이 큰 틀(CLIP → WinCLIP → AnomalyCLIP)의 다음 칸은 WinCLIP(CVPR 2023)이다.** 원문은 `papers/` 에 있다. 아래는 이 노트 안에서 나온 후속 편이다.
+
+> 2026-11-17: WinCLIP 은 같은 날 CVF 공개판(본문 + 보충 자료)으로 읽었다. 남은 칸은 AnomalyCLIP 이다.
 
 | 논문 | 이 노트의 어느 자리에서 나오는가 | 무엇을 확인하고 싶은가 | 원문 참고 문헌 |
 |---|---|---|---|
@@ -320,7 +324,7 @@ FairFace 인종 레이블에 「criminal」 · 「animal」 같은 모욕적 낱
 - Taori, R. 외 (2020). Measuring robustness to natural distribution shifts. — **읽지 않았다.**
 - Kornblith, S. 외 (2019). Do better ImageNet models transfer better? — **읽지 않았다.** 12 개 선형 탐침 묶음의 출처.
 - Radford, A. 외 (2019). GPT-2. — **읽지 않았다.** 글 부호기 구조의 출처.
-- 이 편 밖: Jeong, J. 외 (2023). WinCLIP. CVPR. · Zhou, Q. 외 (2024). AnomalyCLIP. ICLR. — 이 큰 틀의 다음 두 칸, 원문을 받아 두었다.
+- 이 편 밖: Jeong, J. 외 (2023). WinCLIP. CVPR. · Zhou, Q. 외 (2024). AnomalyCLIP. ICLR. — 이 큰 틀의 다음 두 칸, 원문을 받아 두었다. WinCLIP 은 2026-11-17 에 CVF 공개판(본문 + 보충 자료)으로 읽었다.
 
 ---
 
