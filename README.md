@@ -1,58 +1,64 @@
-# study — 읽은 논문과 직접 돌려 본 실험을 모아 두는 곳
+# paper_study — 논문 노트와 재현 실험
 
-랩 과제(`lab-chlee1027`)와 별개로, **관심 있는 분야를 스스로 읽고 정리하고 돌려 보는 자리**다. 랩 저장소가 "이번 주 미팅에 가져갈 것"을 담는다면 여기는 "언젠가 쓰려고 읽어 둔 것"을 담는다.
+딥러닝 기초부터 생성 모델, 산업 이미지 이상 탐지까지 논문을 원문으로 읽고 정리한 노트와, 논문의 실험을 직접 다시 돌려 본 기록이다. **노트마다 그 논문의 한계를 적고, 그 한계를 푼 논문을 다음에 읽는다.**
 
-## 지금 있는 것 (2026-11-18)
+## 한눈에 (2026-11-18)
 
-- **노트 마흔넷.** 읽는 순서는 퍼셉트론에서 DDPM 까지의 로드맵을 따르고, **노트마다 한계를 적은 뒤 그 한계를 푼 편을 다음으로 읽는다.** 편마다 한 줄 요약과 읽은 까닭은 `INDEX.md` 에 있다. 이상 탐지 논문 다섯 편(MVTec AD · Uninformed Students · PaDiM · VisA · Real-IAD)은 노트가 [`beyond-mvtec`](https://github.com/chlee1027/beyond-mvtec) 저장소 `papers/notes/` 에 있어 `INDEX.md` 에 줄과 링크만 둔다.
-- **두 갈래가 길어졌다.** 깊은 망을 배워지게 만드는 장치(역전파 → DBN · 오토인코더 → 사전학습은 왜 돕는가 → AlexNet → VGG → BN → ResNet → 사전 활성 ResNet → Wide ResNet)와 생성 모델(오토인코더 → VAE → GAN → Wasserstein GAN → DDPM → DDIM → Score SDE → Latent Diffusion)이다. Wide ResNet 은 연구에서 쓰는 PatchCore 의 특징 추출기(WRN-50-2)의 원 논문이다.
-- **로드맵 두 갈래가 다 끝났다.** 갈래 A(이미지와 생성)는 2026-11-03 에, 갈래 B(RNN → LSTM → GRU → seq2seq → Attention → Transformer)는 2026-11-04 에 끝났다. 그다음 큰 틀로 정한 ViT 와 함께 읽은 BERT 도 2026-11-05 에 읽었다. 이어서 고른 확산 심화(DDIM → Score SDE → Latent Diffusion)도 2026-11-06 에 읽었다. 같은 날 정한 산업 이상 탐지(SPADE → 코어셋 → AnoDDPM → UniAD)도 2026-11-07 에 읽었다. 이어서 고른 분할 · 검출(U-Net → Faster R-CNN → Mask R-CNN → YOLO)도 2026-11-08 에 읽었다. 2026-11-10 에 그다음 큰 틀로 산업 이상 탐지 2막(DRAEM → Reverse Distillation → SimpleNet → EfficientAD)을 골라 첫 칸 DRAEM 을 읽었고, 2026-11-11 에 둘째 칸 Reverse Distillation 을, 2026-11-14 에 셋째 칸 SimpleNet 을, 2026-11-16 에 마지막 칸 EfficientAD 를 읽었다. **2026-11-17 에 다음 큰 틀로 CLIP 계열 제로샷 이상 탐지(CLIP → WinCLIP → AnomalyCLIP)를 골라 같은 날 첫 칸 CLIP 과 둘째 칸 WinCLIP 을, 2026-11-18 에 마지막 칸 AnomalyCLIP 을 읽었다.** 그다음 큰 틀은 아직 정하지 않았다.
-- **연구에서 쓰는 방법(PatchCore)을 원문으로 읽었다.** 깊은 망 갈래의 끝자리(Wide ResNet)를 얼려 쓰는 편이라, 백본과 단계를 고른 근거를 앞 노트들의 물음과 맞춰 봤다.
-- **산업 이상 탐지 네 편의 판본이 갈린다.** AnoDDPM(CVF) · UniAD(NeurIPS 본문 + 보충 자료)는 게재판이고, 코어셋은 머리글에 ICLR 2018 이 찍힌 arXiv v4(OpenReview 판은 로그인 요구로 못 받았다), SPADE 는 찾은 범위에서 학회판을 못 찾아 arXiv v3 다. **AnoDDPM 의 수치는 뇌 MRI 뿐이고 MVTec 은 가죽 이미지 둘의 그림이다.**
-- **산업 이상 탐지 2막의 원문 넷을 받아 두었다.** DRAEM(CVF 본문 + 보충 자료) · Reverse Distillation(CVF)은 게재판이고, SimpleNet 은 arXiv v2, EfficientAD 는 부록 A\~F 가 붙은 arXiv v3(27쪽)다. DRAEM 은 arXiv 판과 대조하지 않았다. **EfficientAD arXiv v3 본문(1\~8쪽, 참고문헌 앞까지)의 소수점 수치 172개는 게재판(WACV 2024)과 모두 같았다(arXiv 번호와 게재판 DOI 의 숫자는 뺀 수).** 글자가 다른 자리는 저자 소속 하나(게재판에만 TU Munich), arXiv 에만 있는 문장 둘(hard feature loss 가 정상 이미지의 점수 이상치를 막는다는 문장, 총손실이 세 손실의 합이라는 문장), 「AU-ROC computed on pixel anomaly scores」가 게재판에서 「AU-ROC」로 줄어든 자리, 「Appendix X」가 게재판에서 「the supplementary material」인 자리, 인용 번호(참고문헌 수가 달라 번호가 밀린다)다.
+- **노트 44편.** 편마다 한 줄 요약과 읽은 까닭은 [`INDEX.md`](INDEX.md) 에 있다.
 
-  > 2026-11-10 에 처음 쓴 판은 「EfficientAD(IEEE Xplore)는 게재판」이었다. 그 PDF 는 모든 쪽에 학교 라이선스 문구가 찍혀 있어 공개 저장소에 올리지 않았고, 같은 날 arXiv v3 으로 바꿨다.
-- **분할 · 검출 네 편은 모두 게재판을 읽었다.** U-Net(Springer) · YOLO(CVF)는 arXiv 판과 숫자가 같았다. Faster R-CNN(NIPS) · Mask R-CNN(CVF)은 arXiv v3 이 표를 더 실은 다른 판이라, 대조한 대목만 읽고 노트에 따로 적었다.
-- **GAN 은 두 판을 다 읽었다.** 2020 년 개관판을 먼저 읽고 식 절반을 직접 유도해 적었고, 원판(NIPS 2014)을 읽어 그 유도를 하나씩 맞춰 봤다. 식 셋이 같았고, 개관판 노트에서 고친 자리는 그 노트 안에 날짜를 단 인용 블록으로 남겼다.
-- **실험 다섯.** 넷(퍼셉트론 · 역전파 · DBN · LeNet)은 결과까지 들어 있고, AlexNet 은 질문과 가설만 적었다. **2026-11-03 부터 새 실험은 돌리지 않고 논문의 실험을 분석하는 것으로 바꿨다**(아래 「실험 하나를 넣는 절차 셋」).
+  | 묶음 | 편 수 | 흐름 |
+  |---|---|---|
+  | 산업 이상 탐지 | 12 | SPADE · 코어셋 → PatchCore, UniAD, AnoDDPM / DRAEM → Reverse Distillation → SimpleNet → EfficientAD / CLIP → WinCLIP → AnomalyCLIP |
+  | 깊은 망을 학습시키는 장치 | 9 | 역전파 → DBN → 사전학습은 왜 돕는가 → AlexNet → VGG → BN → ResNet → 사전 활성 ResNet → Wide ResNet |
+  | 순차 데이터에서 Transformer 까지 | 8 | RNN → LSTM → GRU → seq2seq → Attention → Transformer → ViT · BERT |
+  | 생성 모델 | 8 | 오토인코더 → VAE → GAN → Wasserstein GAN → DDPM → DDIM → Score SDE → Latent Diffusion |
+  | 분할 · 검출 | 4 | U-Net → Faster R-CNN → Mask R-CNN → YOLO |
+  | 그 밖 | 3 | 퍼셉트론 · LeNet · GAN 개관판(CACM 2020) |
 
-## 무엇을 넣는가
+  이상 탐지 데이터셋·기준선 논문 다섯 편(MVTec AD · Uninformed Students · PaDiM · VisA · Real-IAD)의 노트는 [`beyond-mvtec`](https://github.com/chlee1027/beyond-mvtec) 저장소 `papers/notes/` 에 있고, `INDEX.md` 에는 줄과 링크만 둔다.
+- **노트 한 편의 틀.** 읽은 범위(읽지 않은 절의 수치는 옮기지 않는다) · 용어 정의 · 식 유도 · 표와 그림마다의 실험 분석(바꾼 변인, 고정한 것, 반복 횟수와 흩어짐, 주장의 세기) · 한계와 다음 편. 파라미터 수 세기, 표의 숫자로 다시 계산하기, 그림 눈금 읽기 같은 확인은 노트 안에 계산과 함께 적는다.
+- **재현 실험 다섯.** 퍼셉트론 · 역전파 · DBN · LeNet 은 결과까지 있고, AlexNet 은 질문과 가설만 적었다. 결과 한 줄은 `INDEX.md` 의 「돌려 본 것」에 있다. 2026-11-03 부터 새 실험은 돌리지 않고, 논문이 낸 실험을 표 · 그림마다 분석하는 쪽으로 바꿨다.
+- **원문 판본을 노트마다 밝힌다.** 게재판과 arXiv 판이 다른 논문은 어느 판을 읽었고 어디를 대조했는지 노트 머리 표에 적는다. 예를 들어 EfficientAD 는 부록이 붙은 arXiv v3 을 읽고, 본문의 소수점 수치 172개가 게재판(WACV 2024)과 같은지 하나씩 대조했다.
+
+날짜순 진행 기록은 [`HISTORY.md`](HISTORY.md) 에 있다.
+
+## 폴더
 
 | 폴더 | 무엇 |
 |---|---|
-| `papers/` | 논문 원문 PDF. 내 컴퓨터에만 두고 저장소에는 올리지 않는다(아래 「큰 파일」) |
-| `notes/` | 그 논문의 요약 노트. 논문 하나에 노트 하나 |
-| `figures/<논문 이름>/` | 논문에서 뽑아 둔 그림. 노트가 본문에 싣는다 |
-| `experiments/` | 직접 돌려 본 것. 노트북과 코드와 결과 파일 |
-| `templates/` | 노트와 실험 기록의 틀. 새로 만들 때 복사해 쓴다 |
-| `INDEX.md` | 읽은 것 한 줄 색인. 주제별로 묶는다 |
-| `RULES.md` | 글 쓰는 규칙. 노트를 쓰기 전에 본다 |
+| `notes/` | 논문 노트. 논문 하나에 노트 하나 |
+| `figures/<논문 이름>/` | 노트가 싣는 그림. 논문 그림을 잘라 인용한 것(`paper_fig*.png`)과, 표 · 그림 · 개념도를 직접 다시 그린 것(`.svg`, 그린 코드 `.py` 와 함께) |
+| `experiments/` | 직접 돌려 본 실험. 노트북 · 결과 CSV · 그림 |
+| `templates/` | 노트와 실험 기록의 틀 |
+| `INDEX.md` | 읽은 것 · 읽을 것 색인. 주제별 묶음 |
+| `RULES.md` | 글 쓰는 규칙 |
+| `papers/` | 논문 원문 PDF 를 두는 로컬 자리. 저장소에는 올리지 않는다(아래 「저작권」) |
 
 ## 논문 하나를 넣는 절차 넷
 
-1. **PDF를 `papers/`에 넣는다.** 이름은 `<게재처><연도>_<이름>_<제목을_밑줄로>.pdf` 형식이다. 예시: `KBS26_QueCo_Query_Conditioned_Consensus.pdf`. 게재처가 없는 사전 공개본은 `arXiv26_...`으로 적는다. `.gitignore` 가 막아 PDF 는 커밋되지 않으니, 받은 주소(arXiv · DOI · 발표집)를 노트 표에 꼭 적는다.
-2. **`templates/note.md`를 복사해 `notes/`에 같은 이름으로 둔다.** 확장자만 `.md`다.
-3. **노트를 채운다.** 표의 `읽은 범위` 칸을 먼저 채우고 시작한다 — **읽지 않은 절의 내용은 노트에 적지 않는다.**
-4. **`INDEX.md`에 한 줄을 더한다.** 노트가 없는 줄은 만들지 않는다.
+1. **PDF 를 `papers/` 에 넣는다.** 이름은 `<게재처><연도>_<이름>_<제목을_밑줄로>.pdf` 형식이다. 예시: `KBS26_QueCo_Query_Conditioned_Consensus.pdf`. 게재처가 없는 사전 공개본은 `arXiv26_...` 으로 적는다. `.gitignore` 가 막아 PDF 는 커밋되지 않으니, 받은 주소(arXiv · DOI · 발표집)를 노트 표에 꼭 적는다.
+2. **`templates/note.md` 를 복사해 `notes/` 에 같은 이름으로 둔다.** 확장자만 `.md` 다.
+3. **노트를 채운다.** 표의 `읽은 범위` 칸을 먼저 채우고 시작한다. **읽지 않은 절의 내용은 노트에 적지 않는다.**
+4. **`INDEX.md` 에 한 줄을 더한다.** 노트가 없는 줄은 만들지 않는다.
 
 ## 실험 하나를 넣는 절차 셋
 
-> **2026-11-03 부터 직접 돌리는 실험은 하지 않는다.** 실험을 돌릴 여건이 없어, 새 노트는 「돌려 볼 것」 절을 두지 않고 논문이 낸 실험을 표 · 그림마다 분석하는 「실험 분석」 절을 둔다(`templates/note.md`). GPU 없이 되는 확인(파라미터 세기, 표 숫자로 다시 계산하기, 그림 눈금 읽기)은 계속한다. 아래 절차는 이미 있는 실험 폴더 다섯의 기록으로 남겨 둔다. 앞 노트 18편의 「돌려 볼 것」 절도 고치지 않는다.
+> 2026-11-03 부터 새 실험은 돌리지 않는다. 새 노트는 「돌려 볼 것」 절 대신 「실험 분석」 절을 둔다(`templates/note.md`). 아래 절차는 이미 있는 실험 폴더 다섯의 기록으로 남겨 둔다. 그 전에 쓴 노트 18편의 「돌려 볼 것」 절도 고치지 않는다.
 
 1. `experiments/<짧은_이름>/` 폴더를 만든다.
-2. `templates/experiment.md`를 복사해 그 폴더의 `README.md`로 둔다. **질문과 가설을 돌리기 전에 적는다.**
-3. 돌린 뒤 결과 파일과 노트북을 같은 폴더에 넣고 `README.md`의 결과·판정 칸을 채운다.
+2. `templates/experiment.md` 를 복사해 그 폴더의 `README.md` 로 둔다. **질문과 가설을 돌리기 전에 적는다.**
+3. 돌린 뒤 결과 파일과 노트북을 같은 폴더에 넣고 `README.md` 의 결과 · 판정 칸을 채운다.
 
 ## 규칙 셋
 
-- **원문 없이 노트를 쓰지 않는다.** 초록만 읽고 적은 것은 노트가 아니라 `INDEX.md`의 "아직 안 읽음" 줄이다.
+- **원문 없이 노트를 쓰지 않는다.** 초록만 읽고 적은 것은 노트가 아니라 `INDEX.md` 의 「아직 안 읽음」 줄이다.
 - **읽은 범위를 항상 적는다.** 방법 절까지 읽었으면 그렇게 적고, 평가 절의 수치를 노트에 옮기지 않는다.
-- **결과 파일은 이 저장소가 정본이다.** 바탕화면 사본만 최신인 상태로 두지 않는다.
+- **결과 파일은 이 저장소가 정본이다.** 다른 곳에 둔 사본만 최신인 상태로 두지 않는다.
 
-글을 쓸 때의 규칙은 `RULES.md`에 있다.
+글을 쓸 때의 규칙은 `RULES.md` 에 있다.
 
-## 큰 파일
+## 저작권과 큰 파일
 
-데이터셋과 모델 가중치는 넣지 않는다(`.gitignore`가 막는다). **논문 원문 PDF 도 저작권이 저자 · 출판사에 있어 이 저장소로 배포하지 않는다**(`.gitignore` 의 `papers/**/*.pdf`). 노트의 `Stored PDF` 칸에 적힌 `papers/...` 경로는 내 컴퓨터의 사본 자리이고, 읽는 사람은 노트 표에 적힌 원 출처(arXiv · DOI · 발표집 주소)에서 받는다.
-
-> 2026-11-17 까지의 판: 「PDF는 넣되 **한 편이 30MB를 넘으면 넣기 전에 한 번 생각한다** — 저장소는 지운 파일도 기록에 남긴다.」 이 판으로 올린 PDF 46 편은 2026-11-17 에 추적에서 뺐지만, 앞 커밋의 기록에는 남아 있다.
+- **논문 원문 PDF 는 배포하지 않는다.** 저작권이 저자 · 출판사에 있기 때문이다(`.gitignore` 의 `papers/**/*.pdf`). 노트의 `Stored PDF` 칸에 적힌 `papers/...` 경로는 로컬 사본의 자리이고, 읽는 사람은 노트 표에 적힌 원 출처(arXiv · DOI · 발표집 주소)에서 받는다. 예전에 올렸던 PDF 는 2026-11-18 에 저장소 기록 전체에서 지웠다(`HISTORY.md`).
+- **논문 그림은 노트에서 설명하는 데 필요한 것만 잘라 싣고**, 그림마다 노트 본문에 원 논문의 그림 번호를 적는다.
+- 데이터셋과 모델 가중치는 넣지 않는다(`.gitignore` 가 막는다).
