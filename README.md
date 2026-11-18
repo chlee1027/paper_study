@@ -4,7 +4,7 @@
 
 ## 한눈에 (2026-11-18)
 
-- **노트 44편.** 편마다 한 줄 요약과 읽은 까닭은 [`INDEX.md`](INDEX.md) 에 있다.
+- **노트 45편.** 편마다 한 줄 요약과 읽은 까닭은 [`INDEX.md`](INDEX.md) 에 있다.
 
   | 묶음 | 편 수 | 흐름 |
   |---|---|---|
@@ -13,6 +13,7 @@
   | 순차 데이터에서 Transformer 까지 | 8 | RNN → LSTM → GRU → seq2seq → Attention → Transformer → ViT · BERT |
   | 생성 모델 | 8 | 오토인코더 → VAE → GAN → Wasserstein GAN → DDPM → DDIM → Score SDE → Latent Diffusion |
   | 분할 · 검출 | 4 | U-Net → Faster R-CNN → Mask R-CNN → YOLO |
+  | 시계열 이상 탐지 | 1 | 칼만 필터 (다음 칸 Telemanom) |
   | 그 밖 | 3 | 퍼셉트론 · LeNet · GAN 개관판(CACM 2020) |
 
   이상 탐지 데이터셋·기준선 논문 다섯 편(MVTec AD · Uninformed Students · PaDiM · VisA · Real-IAD)의 노트는 [`beyond-mvtec`](https://github.com/chlee1027/beyond-mvtec) 저장소 `papers/notes/` 에 있고, `INDEX.md` 에는 줄과 링크만 둔다.
