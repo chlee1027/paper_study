@@ -69,7 +69,21 @@
 
 ## 아직 안 읽음 — 큰 틀
 
-**정해 둔 큰 틀은 모두 읽었고, 그다음 큰 틀은 아직 정하지 않았다.** CLIP 계열 제로샷 이상 탐지(CLIP → WinCLIP → AnomalyCLIP)는 2026-11-17 에 골라 같은 날 첫 칸 CLIP 과 둘째 칸 WinCLIP 을, 2026-11-18 에 마지막 칸 AnomalyCLIP 을 읽었다. 이 저장소의 이상 탐지 여덟 편은 모두 장면마다 정상 이미지로 따로 배운다. 이 갈래는 그 전제를 없애, 학습 이미지 없이 「정상 · 결함」 을 적은 글과 이미지를 맞대어 판정한다. CLIP 은 게재판(PMLR v139, 본문 16 쪽 + 부록 25 쪽), WinCLIP 은 CVF 게재판(본문 11 쪽 + 보충 자료 11 쪽), AnomalyCLIP 은 arXiv v8(31 쪽)로 읽었다.
+**다음 큰 틀은 시계열 이상 탐지 · 고장 예측이다.** 2026-11-18 에 골랐고, 2026-11-25 뒤에 첫 칸부터 읽는다.
+
+| 칸 | 논문 | 왜 이 자리 |
+|---|---|---|
+| 1 | Kalman, 「A New Approach to Linear Filtering and Prediction Problems」, Journal of Basic Engineering 82(1), 1960 | 상태를 예측하고 관측과의 차이(잔차)로 고친다. 뒤 세 편이 모두 「예측하고 어긋남을 잰다」는 틀을 쓴다 |
+| 2 | Hundman 외, 「Detecting Spacecraft Anomalies Using LSTMs and Nonparametric Dynamic Thresholding」, KDD 2018 (Telemanom) | 칼만의 선형 예측을 LSTM 으로 바꾸고, 잔차에 문턱을 데이터에서 정한다 |
+| 3 | Su 외, 「Robust Anomaly Detection for Multivariate Time Series through Stochastic Recurrent Neural Network」, KDD 2019 (OmniAnomaly) | 예측 대신 복원 확률로 잰다. VAE 노트와 이어진다 |
+| 4 | Xu 외, 「Anomaly Transformer: Time Series Anomaly Detection with Association Discrepancy」, ICLR 2022 | 순환망을 Transformer 로 바꾸고, 시점끼리의 주의 분포가 어긋나는 정도를 점수로 쓴다 |
+| 덧 | Wu · Keogh, 「Current Time Series Anomaly Detection Benchmarks are Flawed and are Creating the Illusion of Progress」, IEEE TKDE 2021 | 2 · 3 · 4 가 쓴 벤치마크 자체를 따진다. 넷을 다 읽은 뒤 읽는다 |
+
+이 저장소의 이상 탐지 노트는 모두 이미지를 다룬다. 이 갈래는 시점마다 센서 값 여럿이 한 줄로 오는 데이터를 다룬다. 원문 판본은 받을 때 노트 머리 표에 적는다.
+
+> 2026-11-18 시계열 이상 탐지를 고르기 전의 판: 「**정해 둔 큰 틀은 모두 읽었고, 그다음 큰 틀은 아직 정하지 않았다.**」
+
+CLIP 계열 제로샷 이상 탐지(CLIP → WinCLIP → AnomalyCLIP)는 2026-11-17 에 골라 같은 날 첫 칸 CLIP 과 둘째 칸 WinCLIP 을, 2026-11-18 에 마지막 칸 AnomalyCLIP 을 읽었다. 이 저장소의 이상 탐지 여덟 편은 모두 장면마다 정상 이미지로 따로 배운다. 이 갈래는 그 전제를 없애, 학습 이미지 없이 「정상 · 결함」 을 적은 글과 이미지를 맞대어 판정한다. CLIP 은 게재판(PMLR v139, 본문 16 쪽 + 부록 25 쪽), WinCLIP 은 CVF 게재판(본문 11 쪽 + 보충 자료 11 쪽), AnomalyCLIP 은 arXiv v8(31 쪽)로 읽었다.
 
 > 2026-11-18 AnomalyCLIP 을 읽기 전의 판: 「**지금 읽는 큰 틀은 CLIP 계열 제로샷 이상 탐지(CLIP → WinCLIP → AnomalyCLIP)다.** 2026-11-17 에 골랐고 같은 날 첫 칸 CLIP 과 둘째 칸 WinCLIP 을 읽었다. **다음 칸이자 마지막 칸은 AnomalyCLIP 이다.**」 · 「CLIP 은 게재판(...), WinCLIP 은 CVF 게재판(...)을 받아 두었다.」
 
