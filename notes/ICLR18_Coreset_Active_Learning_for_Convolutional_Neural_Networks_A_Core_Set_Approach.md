@@ -407,7 +407,7 @@ $C$ = 3 · 5 · 10 · 100 에서 임의 표본 60,000 개로 찾은 Frobenius �
 
 ## 12. PatchCore 와 맞춰 보기 — 물음의 답
 
-앞서 읽은 PatchCore(CVPR 2022)는 뱅크를 줄일 때 다음을 쓴다. 조각 특징 뱅크 $\mathcal{M}$ 에서 $\mathcal{M}_C^* = \arg\min_{\mathcal{M}_C \subset \mathcal{M}} \max_{m \in \mathcal{M}} \min_{n \in \mathcal{M}_C} \lVert m - n \rVert_2$ (그 논문의 식 5) 를 목적으로 두고, 무작위 사영 $\psi$ 뒤의 거리로 「지금까지 고른 것에서 가장 먼 점 더하기」 를 $l$ 번 한다(그 논문의 알고리즘 1).
+앞서 읽은 PatchCore(CVPR 2022)는 뱅크를 줄일 때 다음을 쓴다. 조각 특징 뱅크 $\mathcal{M}$ 에서 $\mathcal{M}_C^{st} = \arg\min_{\mathcal{M}_C \subset \mathcal{M}} \max_{m \in \mathcal{M}} \min_{n \in \mathcal{M}_C} \lVert m - n \rVert_2$ (그 논문의 식 5) 를 목적으로 두고, 무작위 사영 $\psi$ 뒤의 거리로 「지금까지 고른 것에서 가장 먼 점 더하기」 를 $l$ 번 한다(그 논문의 알고리즘 1).
 
 ![같은 식 다른 쓰임](../figures/ICLR18_Coreset/fig09_vs_patchcore.svg)
 
@@ -421,13 +421,13 @@ $C$ = 3 · 5 · 10 · 100 에서 임의 표본 60,000 개로 찾은 Frobenius �
 |---|---:|---:|---:|---:|
 | 계수 | 2.21 | 2.44 | 3.00 | 6.00 |
 
-PatchCore 는 사영 차원 $d^*$ 을 적지 않으므로 $\varepsilon$ 을 몰라 **어느 칸인지 말할 수 없다.** 또 위 조건이 모든 쌍에서 서는지는 $d^*$ 에 달렸다.
+PatchCore 는 사영 차원 $d^{st}$ 을 적지 않으므로 $\varepsilon$ 을 몰라 **어느 칸인지 말할 수 없다.** 또 위 조건이 모든 쌍에서 서는지는 $d^{st}$ 에 달렸다.
 
 **(라) 정리 1 은 PatchCore 로 오지 않는다.** 정리 1 은 라벨 · 학습 손실 0 · 소프트맥스 위 $l_2$ 손실 위에 서는데 PatchCore 에는 라벨도 학습도 소프트맥스도 없다. **대신 반지름의 뜻이 더 곧다 (내 유도, 가정은 삼각 부등식뿐이다).** $\mathcal{M}_C$ 의 덮는 반지름이 $r$ 이면 시험 특징 $z$ 의 최근접 거리에 대해
 
 $$0 \le \min_{n \in \mathcal{M}_C} \lVert z - n \rVert - \min_{m \in \mathcal{M}} \lVert z - m \rVert \le r$$
 
-이다. $\mathcal{M}_C \subset \mathcal{M}$ 이라 왼쪽이 서고, $z$ 의 최근접 $m^*$ 를 $r$ 안에서 덮는 $n$ 을 잡으면 오른쪽이 선다. 작은 예시로 $r = 2$ 이고 온전한 뱅크 점수가 10 이면 줄인 뱅크 점수는 10 이상 12 이하다. 재가중 앞의 이미지 점수(조각 최댓값)도 같은 범위를 받는다. **곧 PatchCore 에서 탐욕법이 지키는 것은 손실이 아니라 점수의 오차다.** 뒤집을 수 있는 것은 점수 차이가 $r$ 이하인 판정이다. PatchCore 도 이 편도 $r$ 값을 적지 않아 크기는 말할 수 없다.
+이다. $\mathcal{M}_C \subset \mathcal{M}$ 이라 왼쪽이 서고, $z$ 의 최근접 $m^{st}$ 를 $r$ 안에서 덮는 $n$ 을 잡으면 오른쪽이 선다. 작은 예시로 $r = 2$ 이고 온전한 뱅크 점수가 10 이면 줄인 뱅크 점수는 10 이상 12 이하다. 재가중 앞의 이미지 점수(조각 최댓값)도 같은 범위를 받는다. **곧 PatchCore 에서 탐욕법이 지키는 것은 손실이 아니라 점수의 오차다.** 뒤집을 수 있는 것은 점수 차이가 $r$ 이하인 판정이다. PatchCore 도 이 편도 $r$ 값을 적지 않아 크기는 말할 수 없다.
 
 **(마) 강건성.** 이 편은 탐욕법이 이상점을 먼저 고른다는 약점을 $\Xi$ 로 다루고 PatchCore 는 탐욕 단계만 쓰며 이상점을 다루지 않는다. 학습 정상 이미지에 이상한 조각이 섞여 있으면 먼저 뱅크로 들어가고 그 값이 점수의 기준을 낮춘다(내 판단, 어느 쪽도 재지 않았다).
 
@@ -474,14 +474,14 @@ $$0 \le \min_{n \in \mathcal{M}_C} \lVert z - n \rVert - \min_{m \in \mathcal{M}
 - **덮는 반지름과 정확도는 실제로 함께 움직이는가.** 이 편은 재지 않았다. 알고리즘을 바꿔 반지름만 달라지게 하고 정확도를 재는 편이 필요하다.
 - **식 (6) 을 어떻게 줄여 풀었는가.** 원문의 코드가 있으면 볼 자리다. 이 노트는 코드를 찾지 않았다.
 - **불확실성과 덮기를 함께 쓰면 어떻게 되는가.** 저자가 열린 문제로 남겼다.
-- **PatchCore 의 사영 차원에서 $\varepsilon$ 은 얼마인가.** 원문에 $d^*$ 이 없어 구현을 봐야 한다.
+- **PatchCore 의 사영 차원에서 $\varepsilon$ 은 얼마인가.** 원문에 $d^{st}$ 이 없어 구현을 봐야 한다.
 
 **다음에 읽을 것.** 큰 틀의 순서(AnoDDPM → UniAD)를 따르고 아래는 이 노트 안에 남기는 세부다.
 
 | 논문 | 이 노트의 어느 자리에서 나오는가 | 무엇을 확인하고 싶은가 | 원문 참고 문헌에 있는가 |
 |---|---|---|---|
 | **Clustering to minimize the maximum intercluster distance** (Gonzalez) — Theoretical Computer Science 1985 | 5 · 12절 — 2-OPT 의 원 출처로 알려진 편 | 탐욕 2-근사가 실제로 이 편의 결과인지, $s^0$ 가 있는 꼴을 다루는지 | **없다** |
-| **Small-GAN** (Sinha 외) — ICML 2020 | 12절 (다) — PatchCore 가 사영을 가져온 편 | 사영 뒤 보장을 적는지, $d^*$ 를 어떻게 정하는지 | 없다(PatchCore 의 참고 문헌에 있다) |
+| **Small-GAN** (Sinha 외) — ICML 2020 | 12절 (다) — PatchCore 가 사영을 가져온 편 | 사영 뒤 보장을 적는지, $d^{st}$ 를 어떻게 정하는지 | 없다(PatchCore 의 참고 문헌에 있다) |
 | **Algorithms for facility location problems with outliers** (Charikar 외) — SODA 2001 — 후보 | 5절 — $\Xi > 0$ 에서 구간이 깨지는 자리 | 이상점 있는 k-센터의 근사 보장. 읽고 이 자리에 맞는 편인지 가린다 | 없다 |
 | **Active nearest neighbors in changing environments** (Berlind & Urner) — ICML 2015 | 6절 — 증명 기법의 출처 | 라벨이 결정적이 아닐 때 남는 항을 어떻게 다루는지 | 있다 |
 | **Deep Bayesian Active Learning with Image Data** (Gal 외) — arXiv 2017 | 8.2절 — DBAL 의 원 편 | 큰 묶음에서 효과가 사라진다는 말이 원 편의 설정과 맞는지 | 있다 |

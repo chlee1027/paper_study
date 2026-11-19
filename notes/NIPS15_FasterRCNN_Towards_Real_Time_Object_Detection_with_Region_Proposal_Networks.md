@@ -81,7 +81,7 @@ R-CNN 은 제안마다 망을 돌렸고, SPPnet · Fast R-CNN 은 합성곱을 �
 
 **④ 손실.**
 
-$$L(\{p_i\}, \{t_i\}) = \frac{1}{N_{cls}} \sum_i L_{cls}(p_i, p_i^*) + \lambda \frac{1}{N_{reg}} \sum_i p_i^* L_{reg}(t_i, t_i^*) \qquad (1)$$
+$$L(\{p_i\}, \{t_i\}) = \frac{1}{N_{cls}} \sum_i L_{cls}(p_i, p_i^{st}) + \lambda \frac{1}{N_{reg}} \sum_i p_i^{st} L_{reg}(t_i, t_i^{st}) \qquad (1)$$
 
 $L_{cls}$ 는 두 부류 로그 손실, $L_{reg}$ 는 smooth L1 이다. 보정값은 $t_x = (x - x_a)/w_a$, $t_y = (y - y_a)/h_a$, $t_w = \log(w/w_a)$, $t_h = \log(h/h_a)$ 로 앵커에 맞춰 잰다. 각주 3 은 $\lambda = 10$, $N_{cls} = 256$, $N_{reg} \sim 2{,}400$ 이라 적고 「roughly equally weighted」 고 한다. 내가 나누면 $(10/2400)/(1/256) = 1.07$ 이다. **NIPS 판에는 $\lambda$ 를 바꾼 표가 없다.** v3 표 9 가 그 표다(12절).
 
