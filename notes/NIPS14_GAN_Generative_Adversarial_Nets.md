@@ -40,7 +40,7 @@
 - **판별기 (discriminative model, discriminator)** $D(x; \theta_d)$: 스칼라 하나를 내는 다층 퍼셉트론. $D(x)$ 는 「$x$ 가 $p_g$ 가 아니라 데이터에서 왔을 확률」이다. 작은 예시로, $D(x) = 0.9$ 면 진짜일 확률을 0.9 로 본다.
 - **가치 함수 (value function)** $V(D, G)$: 식 (1). 판별기는 올리고 생성기는 내린다.
 - **최소최대 게임 (minimax two-player game)**: 한 사람의 이득이 다른 사람의 손해인 두 사람 게임. 끝나는 자리는 **안장점** — 한 사람의 전략에 대해서는 최소, 다른 사람의 전략에 대해서는 최대인 점(2절).
-- **최적 판별기** $D^{st}_G$: $G$ 를 고정했을 때 $V$ 를 가장 크게 하는 $D$. 식 (2).
+- **최적 판별기** $D^{\ast}_G$: $G$ 를 고정했을 때 $V$ 를 가장 크게 하는 $D$. 식 (2).
 - **가상 학습 기준 (virtual training criterion)** $C(G) = \max_D V(G, D)$: 판별기가 늘 최적이라고 보고 생성기만의 함수로 다시 적은 것. 식 (4).
 - **KL 발산 · 젠슨-섀넌 발산 (JSD)**: $\text{KL}(P \Vert Q) = \mathbb{E}_P[\log P/Q]$. $\text{JSD}(P \Vert Q) = \frac{1}{2}\text{KL}(P \Vert M) + \frac{1}{2}\text{KL}(Q \Vert M)$, $M = \frac{1}{2}(P + Q)$. JSD 는 0 에서 $\log 2 = 0.693$ nat 사이. 작은 예시로, $\mathcal{N}(0,1)$ 과 $\mathcal{N}(1,1)$ 의 JSD 는 0.111 nat 이다.
 - **Parzen 창 추정 (Gaussian Parzen window)**: 생성 표본 하나마다 표준편차 $\sigma$ 인 가우스를 얹어 평균 낸 것을 밀도로 쓰는 방법. 작은 예시로, 표본이 $\{-1, 1\}$ 둘이고 $\sigma = 1$ 이면 $x = 0$ 의 밀도는 $\mathcal{N}(0; -1, 1)$ 과 $\mathcal{N}(0; 1, 1)$ 의 평균인 0.242 다.
@@ -129,9 +129,9 @@ $$\min_G \max_D V(D, G) = \mathbb{E}_{x \sim p_\text{data}(x)}\left[\log D(x)\ri
 
 | 장면 | 원문 캡션 | 내 계산 (위 그림) |
 |---|---|---|
-| (a) | **수렴에 가까운** 적대 쌍: $p_g$ 가 $p_\text{data}$ 와 비슷하고 $D$ 는 **부분적으로만 정확한** 분류기 | $p_g = \mathcal{N}(1.0, 0.7^2)$, JSD 0.265. $D$ 는 $D^{st}$ 에 물결을 얹어 흉내 냈다 |
-| (b) | 안쪽 고리에서 $D$ 를 배워 $D^{st}(x) = \frac{p_\text{data}(x)}{p_\text{data}(x) + p_g(x)}$ 로 수렴 | 같은 $p_g$, $D^{st}(0) = 0.795$ |
-| (c) | $G$ 를 갱신하면 $D$ 의 기울기가 $G(z)$ 를 **데이터로 분류될 가능성이 큰 곳**으로 흐르게 한다 | $p_g = \mathcal{N}(0.45, 0.6^2)$, JSD 0.082, $D^{st}(0) = 0.614$ |
+| (a) | **수렴에 가까운** 적대 쌍: $p_g$ 가 $p_\text{data}$ 와 비슷하고 $D$ 는 **부분적으로만 정확한** 분류기 | $p_g = \mathcal{N}(1.0, 0.7^2)$, JSD 0.265. $D$ 는 $D^{\ast}$ 에 물결을 얹어 흉내 냈다 |
+| (b) | 안쪽 고리에서 $D$ 를 배워 $D^{\ast}(x) = \frac{p_\text{data}(x)}{p_\text{data}(x) + p_g(x)}$ 로 수렴 | 같은 $p_g$, $D^{\ast}(0) = 0.795$ |
+| (c) | $G$ 를 갱신하면 $D$ 의 기울기가 $G(z)$ 를 **데이터로 분류될 가능성이 큰 곳**으로 흐르게 한다 | $p_g = \mathcal{N}(0.45, 0.6^2)$, JSD 0.082, $D^{\ast}(0) = 0.614$ |
 | (d) | 몇 걸음 뒤, $G$ 와 $D$ 의 용량이 충분하면 둘 다 더 나아질 수 없는 점 — $p_g = p_\text{data}$, $D(x) = \frac{1}{2}$ | JSD 0, $D = 0.5$ |
 
 > **개관판과 다른 자리.** CACM 개관판의 같은 그림 캡션은 (a) 를 「**초기화 때**의 쌍 — $p_\text{model}$ 은 단위 가우스, $D$ 는 무작위 초기화된 깊은 신경망」이라고 적는다. 원판의 (a) 는 「**수렴에 가까운** 쌍」이다. 두 판의 그림을 겹쳐 보지는 않았고 **캡션만 대조했다.** 그리고 원판 캡션에는 개관판의 「직관을 위한 만화(cartoon)」라는 말이 없지만, 곡선에 잰 값이 붙어 있지 않고 (a) 의 판별기가 물결 모양으로 그려져 있어 **손으로 그린 그림으로 읽힌다**(앞 노트 24절 물음 넷의 답 — 원판도 실제 학습 곡선이라고 적지 않는다).
@@ -179,10 +179,10 @@ $$\min_G \max_D V(D, G) = \mathbb{E}_{x \sim p_\text{data}(x)}\left[\log D(x)\ri
 
 **「같은 고정점」을 내가 확인한 것.** 원문은 이 문장에 증명을 붙이지 않는다. 두 갈래로 확인했다.
 
-- **고정점 자체.** $p_g = p_\text{data}$ 이면 식 (2) 로 $D^{st} = \frac{1}{2}$ 이 **상수**다. $D$ 가 상수면 $\mathbb{E}_z[\log D(G(z))]$ 도 $\mathbb{E}_z[\log(1 - D(G(z)))]$ 도 $\theta_g$ 에 대한 기울기가 0 이다. 곧 두 꼴 모두 그 자리에서 멈춘다.
-- **대안 꼴의 가상 기준.** $D = D^{st}_G$ 를 넣으면 대안이 줄이는 값은
+- **고정점 자체.** $p_g = p_\text{data}$ 이면 식 (2) 로 $D^{\ast} = \frac{1}{2}$ 이 **상수**다. $D$ 가 상수면 $\mathbb{E}_z[\log D(G(z))]$ 도 $\mathbb{E}_z[\log(1 - D(G(z)))]$ 도 $\theta_g$ 에 대한 기울기가 0 이다. 곧 두 꼴 모두 그 자리에서 멈춘다.
+- **대안 꼴의 가상 기준.** $D = D^{\ast}_G$ 를 넣으면 대안이 줄이는 값은
 
-$$\mathbb{E}_{x \sim p_g}\left[-\log D^{st}_G(x)\right] = \text{KL}(p_g \Vert p_\text{data}) - \text{KL}(p_g \Vert M) + \log 2 \qquad (\text{내 유도 1})$$
+$$\mathbb{E}_{x \sim p_g}\left[-\log D^{\ast}_G(x)\right] = \text{KL}(p_g \Vert p_\text{data}) - \text{KL}(p_g \Vert M) + \log 2 \qquad (\text{내 유도 1})$$
 
 이다($M = \frac{1}{2}(p_\text{data} + p_g)$). KL 은 둘째 자리에 대해 볼록하므로 $\text{KL}(p_g \Vert M) \le \frac{1}{2}\text{KL}(p_g \Vert p_\text{data})$ 이고, 그래서 이 값은 $\log 2 + \frac{1}{2}\text{KL}(p_g \Vert p_\text{data})$ 이상이다. **최소는 $p_g = p_\text{data}$ 하나이고 값은 $\log 2$** 다.
 
@@ -209,7 +209,7 @@ $$\mathbb{E}_{x \sim p_g}\left[-\log D^{st}_G(x)\right] = \text{KL}(p_g \Vert p
 
 **명제 1.** $G$ 를 고정하면 최적 판별기는
 
-$$D^{st}_G(x) = \frac{p_\text{data}(x)}{p_\text{data}(x) + p_g(x)} \qquad (2)$$
+$$D^{\ast}_G(x) = \frac{p_\text{data}(x)}{p_\text{data}(x) + p_g(x)} \qquad (2)$$
 
 **원문의 증명.** $G$ 가 주어지면 $D$ 는 $V(G, D)$ 를 최대화한다. $z$ 에 대한 적분을 $x$ 에 대한 적분으로 바꿔 적으면
 
@@ -237,7 +237,7 @@ $(a, b) \in \mathbb{R}^2 \setminus \{0, 0\}$ 에 대해 함수 $y \mapsto a \log
 
 ![정리 1](../figures/NIPS14_GAN/fig05_theorem1_kl.svg)
 
-$D^{st}_G$ 를 식 (1) 에 넣으면 생성기만의 기준이 된다.
+$D^{\ast}_G$ 를 식 (1) 에 넣으면 생성기만의 기준이 된다.
 
 $$C(G) = \max_D V(G, D) = \mathbb{E}_{x \sim p_\text{data}}\left[\log \frac{p_\text{data}(x)}{p_\text{data}(x) + p_g(x)}\right] + \mathbb{E}_{x \sim p_g}\left[\log \frac{p_g(x)}{p_\text{data}(x) + p_g(x)}\right] \qquad (4)$$
 
@@ -245,13 +245,13 @@ $$C(G) = \max_D V(G, D) = \mathbb{E}_{x \sim p_\text{data}}\left[\log \frac{p_\t
 
 **정리 1.** 가상 학습 기준 $C(G)$ 의 전역 최소는 **$p_g = p_\text{data}$ 일 때, 그리고 그때만** 닿는다. 그 자리에서 $C(G) = -\log 4$ 다.
 
-**원문의 증명.** $p_g = p_\text{data}$ 이면 $D^{st}_G = \frac{1}{2}$ 이므로 $C(G) = \log \frac{1}{2} + \log \frac{1}{2} = -\log 4$. 이것이 가장 좋은 값이고 그 자리에서만 닿음을 보이려고, $\mathbb{E}_{p_\text{data}}[-\log 2] + \mathbb{E}_{p_g}[-\log 2] = -\log 4$ 를 $C(G) = V(D^{st}_G, G)$ 에서 빼면
+**원문의 증명.** $p_g = p_\text{data}$ 이면 $D^{\ast}_G = \frac{1}{2}$ 이므로 $C(G) = \log \frac{1}{2} + \log \frac{1}{2} = -\log 4$. 이것이 가장 좋은 값이고 그 자리에서만 닿음을 보이려고, $\mathbb{E}_{p_\text{data}}[-\log 2] + \mathbb{E}_{p_g}[-\log 2] = -\log 4$ 를 $C(G) = V(D^{\ast}_G, G)$ 에서 빼면
 
 $$C(G) = -\log(4) + \text{KL}\left(p_\text{data} \,\Big\Vert\, \frac{p_\text{data} + p_g}{2}\right) + \text{KL}\left(p_g \,\Big\Vert\, \frac{p_\text{data} + p_g}{2}\right) \qquad (5)$$
 
 $$C(G) = -\log(4) + 2 \cdot \text{JSD}\left(p_\text{data} \Vert p_g\right) \qquad (6)$$
 
-JSD 는 늘 0 이상이고 두 분포가 같을 때만 0 이므로 $C^{st} = -\log 4$ 가 전역 최소이고 유일한 해는 $p_g = p_\text{data}$ 다.
+JSD 는 늘 0 이상이고 두 분포가 같을 때만 0 이므로 $C^{\ast} = -\log 4$ 가 전역 최소이고 유일한 해는 $p_g = p_\text{data}$ 다.
 
 **수로 맞춘 것.** 위 그림은 $p_\text{data} = \mathcal{N}(0, 1)$, $p_g = \mathcal{N}(m, 1.5^2)$ 로 두고 식 (5) 의 두 KL 을 따로 적분한 것이다. **분산을 다르게 둔 것은 두 KL 이 같아지지 않게 하려는 것**이다(분산이 같으면 대칭이라 둘이 같다).
 
@@ -272,7 +272,7 @@ JSD 는 늘 0 이상이고 두 분포가 같을 때만 0 이므로 $C^{st} = -\
 
 ![증명의 사슬](../figures/NIPS14_GAN/fig06_proof_chain.svg)
 
-**명제 2.** $G$ 와 $D$ 가 충분한 용량을 갖고, 알고리즘 1 의 매 걸음에서 판별기가 주어진 $G$ 에 대해 **최적에 닿도록** 허용되고, $p_g$ 가 기준 $\mathbb{E}_{p_\text{data}}[\log D^{st}_G(x)] + \mathbb{E}_{p_g}[\log(1 - D^{st}_G(x))]$ 를 개선하도록 갱신되면, $p_g$ 는 $p_\text{data}$ 로 수렴한다.
+**명제 2.** $G$ 와 $D$ 가 충분한 용량을 갖고, 알고리즘 1 의 매 걸음에서 판별기가 주어진 $G$ 에 대해 **최적에 닿도록** 허용되고, $p_g$ 가 기준 $\mathbb{E}_{p_\text{data}}[\log D^{\ast}_G(x)] + \mathbb{E}_{p_g}[\log(1 - D^{\ast}_G(x))]$ 를 개선하도록 갱신되면, $p_g$ 는 $p_\text{data}$ 로 수렴한다.
 
 **원문의 증명(요지).** $V(G, D) = U(p_g, D)$ 를 $p_g$ 의 함수로 본다. $U(p_g, D)$ 는 $p_g$ 에 대해 볼록하다(정확히는 **선형**이다 — $p_g$ 가 적분 안에 한 번만 곱해져 있다). 볼록 함수들의 상한(supremum)의 부분 미분은 최대가 닿은 점에서의 함수의 미분을 포함한다. 곧 $f(x) = \sup_{\alpha} f_\alpha(x)$ 이고 $f_\alpha$ 가 모두 볼록이면, $\beta = \arg\sup_\alpha f_\alpha(x)$ 일 때 $\partial f_\beta(x) \in \partial f$ 다. 이것은 **최적 $D$ 에서 $p_g$ 에 대한 기울기 하강을 하는 것과 같다.** $\sup_D U(p_g, D)$ 는 $p_g$ 에 대해 볼록이고 정리 1 로 유일한 전역 최적을 가지므로, **충분히 작은 갱신**으로 $p_g$ 가 $p_x$ 로 수렴한다.
 
@@ -460,8 +460,8 @@ $$\hat p(x) = \frac{1}{n} \sum_{j=1}^{n} \mathcal{N}\left(x;\, G(z^{(j)}),\, \si
 | 앞 노트의 자리 | 앞 노트에 적은 것 | 원판 | 판정 |
 |---|---|---|---|
 | 7절 식 (b) | $V = \mathbb{E}_{p_\text{data}}[\log D] + \mathbb{E}_{p(z)}[\log(1 - D(G(z)))]$, $\min_G \max_D$ | 식 (1) 과 같다. 무게 $\frac{1}{2}$ 없음. $z$ 의 분포를 원판은 $p_z(z)$ 로 적는다 | **같다** |
-| 8절 식 (c) 와 유도 | $D^{st} = p_\text{data} / (p_\text{data} + p_\text{model})$. $a \log y + b \log(1-y)$ 를 미분해 0 으로 | 명제 1 · 식 (2) 와 같다. 원판은 미분 대신 「그 함수는 $a/(a+b)$ 에서 최대」라고 바로 적고, **받침의 합집합 밖은 정의할 필요가 없다**는 조건을 붙인다 | **같다** (원판의 받침 조건이 더 있다) |
-| 9절 식 (d) | $V(D^{st}, G) = -\log 4 + 2 \cdot \text{JSD}$ | 정리 1 · 식 (5)(6) 과 같다. 원판은 KL 둘의 합(식 5)을 먼저 적고 JSD 로 묶는다. 「그때만」(유일성)까지 정리에 들어 있다 | **같다** |
+| 8절 식 (c) 와 유도 | $D^{\ast} = p_\text{data} / (p_\text{data} + p_\text{model})$. $a \log y + b \log(1-y)$ 를 미분해 0 으로 | 명제 1 · 식 (2) 와 같다. 원판은 미분 대신 「그 함수는 $a/(a+b)$ 에서 최대」라고 바로 적고, **받침의 합집합 밖은 정의할 필요가 없다**는 조건을 붙인다 | **같다** (원판의 받침 조건이 더 있다) |
+| 9절 식 (d) | $V(D^{\ast}, G) = -\log 4 + 2 \cdot \text{JSD}$ | 정리 1 · 식 (5)(6) 과 같다. 원판은 KL 둘의 합(식 5)을 먼저 적고 JSD 로 묶는다. 「그때만」(유일성)까지 정리에 들어 있다 | **같다** |
 | 10절 포화 기울기 | 로짓에 대한 기울기 $\sigma(a)$ 대 $1 - \sigma(a)$, 99 배 | 원판은 식 없이 문장 셋. 「초기 $D$ 가 확신 있게 거부 → 포화」의 방향은 같다 | **방향은 같고 식은 여전히 내 것** |
 | 18절 둘 | 「실제로 쓰는 쪽(NS-GAN)의 이론이 이 파일에 없다」 | 원판 3절에 「**같은 고정점**」이라는 한 문장이 있다. 증명은 없다 | **고쳐 적을 것** — 「고정점이 같다는 주장만 있고 수렴 분석은 없다」 |
 | 24절 물음 넷의 그림 4 (a) | (개관판 캡션을 옮겨) 「무작위 초기화된 깊은 신경망」 | 원판 그림 1 (a) 는 「**수렴에 가까운** 쌍, $D$ 는 부분적으로만 정확」 | **두 판의 캡션이 다르다** — 앞 노트에 적어 둘 것 |

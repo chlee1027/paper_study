@@ -83,17 +83,17 @@
 
 **SMLD.** 잡음 크기 $\sigma_\text{min} = \sigma_1 < \dots < \sigma_N = \sigma_\text{max}$ 마다 가중 합으로 배운다.
 
-$$\theta^{st} = \arg\min_\theta \sum_{i=1}^{N} \sigma_i^2 \, \mathbb{E}_{p_\text{data}(\mathbf{x})} \mathbb{E}_{p_{\sigma_i}(\tilde{\mathbf{x}} \mid \mathbf{x})} \left[ \lVert \mathbf{s}_\theta(\tilde{\mathbf{x}}, \sigma_i) - \nabla_{\tilde{\mathbf{x}}} \log p_{\sigma_i}(\tilde{\mathbf{x}} \mid \mathbf{x}) \rVert_2^2 \right] \qquad (1)$$
+$$\theta^{\ast} = \arg\min_\theta \sum_{i=1}^{N} \sigma_i^2 \, \mathbb{E}_{p_\text{data}(\mathbf{x})} \mathbb{E}_{p_{\sigma_i}(\tilde{\mathbf{x}} \mid \mathbf{x})} \left[ \lVert \mathbf{s}_\theta(\tilde{\mathbf{x}}, \sigma_i) - \nabla_{\tilde{\mathbf{x}}} \log p_{\sigma_i}(\tilde{\mathbf{x}} \mid \mathbf{x}) \rVert_2^2 \right] \qquad (1)$$
 
 뽑을 때는 $i = N, \dots, 1$ 차례로 $M$ 걸음씩 랑주뱅을 돌린다.
 
-$$\mathbf{x}_i^m = \mathbf{x}_i^{m-1} + \epsilon_i \mathbf{s}_{\theta^{st}}(\mathbf{x}_i^{m-1}, \sigma_i) + \sqrt{2\epsilon_i} \mathbf{z}_i^m \qquad (2)$$
+$$\mathbf{x}_i^m = \mathbf{x}_i^{m-1} + \epsilon_i \mathbf{s}_{\theta^{\ast}}(\mathbf{x}_i^{m-1}, \sigma_i) + \sqrt{2\epsilon_i} \mathbf{z}_i^m \qquad (2)$$
 
 **DDPM.** 같은 꼴로 적는다. 이 편의 $\alpha_i$ 는 누적곱이다.
 
-$$\theta^{st} = \arg\min_\theta \sum_{i=1}^{N} (1 - \alpha_i) \mathbb{E}_{p_\text{data}(\mathbf{x})} \mathbb{E}_{p_{\alpha_i}(\tilde{\mathbf{x}} \mid \mathbf{x})} \left[ \lVert \mathbf{s}_\theta(\tilde{\mathbf{x}}, i) - \nabla_{\tilde{\mathbf{x}}} \log p_{\alpha_i}(\tilde{\mathbf{x}} \mid \mathbf{x}) \rVert_2^2 \right] \qquad (3)$$
+$$\theta^{\ast} = \arg\min_\theta \sum_{i=1}^{N} (1 - \alpha_i) \mathbb{E}_{p_\text{data}(\mathbf{x})} \mathbb{E}_{p_{\alpha_i}(\tilde{\mathbf{x}} \mid \mathbf{x})} \left[ \lVert \mathbf{s}_\theta(\tilde{\mathbf{x}}, i) - \nabla_{\tilde{\mathbf{x}}} \log p_{\alpha_i}(\tilde{\mathbf{x}} \mid \mathbf{x}) \rVert_2^2 \right] \qquad (3)$$
 
-$$\mathbf{x}_{i-1} = \frac{1}{\sqrt{1 - \beta_i}} (\mathbf{x}_i + \beta_i \mathbf{s}_{\theta^{st}}(\mathbf{x}_i, i)) + \sqrt{\beta_i} \mathbf{z}_i \qquad (4)$$
+$$\mathbf{x}_{i-1} = \frac{1}{\sqrt{1 - \beta_i}} (\mathbf{x}_i + \beta_i \mathbf{s}_{\theta^{\ast}}(\mathbf{x}_i, i)) + \sqrt{\beta_i} \mathbf{z}_i \qquad (4)$$
 
 **맞춰 본 것 셋 (내가 유도).**
 
@@ -111,7 +111,7 @@ $$d\mathbf{x} = \left[ \mathbf{f}(\mathbf{x}, t) - g(t)^2 \nabla_\mathbf{x} \log
 
 식 (6) 에서 $dt$ 는 음의 작은 시간이고 $\bar{\mathbf{w}}$ 는 거꾸로 흐르는 위너 과정이다. **식 (6) 은 Anderson(1982)의 결과를 옮긴 것이고 이 편이 유도하지 않는다.** 학습은 시간을 뽑아 잡음 제거 점수 맞추기를 한다.
 
-$$\theta^{st} = \arg\min_\theta \mathbb{E}_t \left\{ \lambda(t) \mathbb{E}_{\mathbf{x}(0)} \mathbb{E}_{\mathbf{x}(t) \mid \mathbf{x}(0)} \left[ \lVert \mathbf{s}_\theta(\mathbf{x}(t), t) - \nabla_{\mathbf{x}(t)} \log p_{0t}(\mathbf{x}(t) \mid \mathbf{x}(0)) \rVert_2^2 \right] \right\} \qquad (7)$$
+$$\theta^{\ast} = \arg\min_\theta \mathbb{E}_t \left\{ \lambda(t) \mathbb{E}_{\mathbf{x}(0)} \mathbb{E}_{\mathbf{x}(t) \mid \mathbf{x}(0)} \left[ \lVert \mathbf{s}_\theta(\mathbf{x}(t), t) - \nabla_{\mathbf{x}(t)} \log p_{0t}(\mathbf{x}(t) \mid \mathbf{x}(0)) \rVert_2^2 \right] \right\} \qquad (7)$$
 
 $\lambda(t) \propto 1 / \mathbb{E}\lVert \nabla \log p_{0t} \rVert^2$ 를 「typically」 쓴다. 섭동 핵이 필요한데 $\mathbf{f}$ 가 아핀이면 가우시안이고, 아니면 Kolmogorov 식을 풀거나 SDE 를 흉내 내 뽑은 뒤 sliced score matching 으로 바꾼다(부록 A).
 
@@ -219,7 +219,7 @@ $$\log p_0(\mathbf{x}(0)) = \log p_T(\mathbf{x}(T)) + \int_0^T \nabla \cdot \til
 
 앞으로 가는 이산화가 $\mathbf{x}_{i+1} = \mathbf{x}_i + \mathbf{f}_i(\mathbf{x}_i) + \mathbf{G}_i \mathbf{z}_i$ (식 45)라면 거꾸로 확산은 같은 꼴로 적는다.
 
-$$\mathbf{x}_i = \mathbf{x}_{i+1} - \mathbf{f}_{i+1}(\mathbf{x}_{i+1}) + \mathbf{G}_{i+1} \mathbf{G}_{i+1}^\mathsf{T} \mathbf{s}_{\theta^{st}}(\mathbf{x}_{i+1}, i + 1) + \mathbf{G}_{i+1} \mathbf{z}_{i+1} \qquad (46)$$
+$$\mathbf{x}_i = \mathbf{x}_{i+1} - \mathbf{f}_{i+1}(\mathbf{x}_{i+1}) + \mathbf{G}_{i+1} \mathbf{G}_{i+1}^\mathsf{T} \mathbf{s}_{\theta^{\ast}}(\mathbf{x}_{i+1}, i + 1) + \mathbf{G}_{i+1} \mathbf{z}_{i+1} \qquad (46)$$
 
 확률 흐름 쪽(부록 D.3)은 잡음을 빼고 $\mathbf{G}\mathbf{G}^\mathsf{T}$ 에 $\frac{1}{2}$ 을 곱한다. 식 (43) · (44).
 

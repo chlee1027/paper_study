@@ -300,12 +300,12 @@ critic 의 무게 $w$ 가 콤팩트 공간 $\mathcal{W}$ 에 있으면 모든 $f
 | $f(-5)$ · $f(5)$ | −0.276 · 0.199 |
 | 판별기, $x = -0.5$ · $0$ · $0.5$ 이상 | 0.971 · 0.027 · 픽셀 하나(0.003) 아래 |
 
-**내가 계산한 것.** 분산이 같은 두 가우스에서 원 GAN 식 (2) 의 최적 판별기는 $D^{st}(x) = \sigma(-10x)$ 다(로짓 $= \log p_r/p_g = -10x$). 가짜 중심 $x = 5$ 에서
+**내가 계산한 것.** 분산이 같은 두 가우스에서 원 GAN 식 (2) 의 최적 판별기는 $D^{\ast}(x) = \sigma(-10x)$ 다(로짓 $= \log p_r/p_g = -10x$). 가짜 중심 $x = 5$ 에서
 
 | 생성기 비용 | $x$ 에 대한 기울기 크기 | 값 |
 |---|---|---:|
-| M-GAN, $\log(1 - D^{st})$ | $10 \cdot D^{st}$ | $1.9 \times 10^{-21}$ |
-| NS-GAN, $-\log D^{st}$ | $10 \cdot (1 - D^{st})$ | 10.0 |
+| M-GAN, $\log(1 - D^{\ast})$ | $10 \cdot D^{\ast}$ | $1.9 \times 10^{-21}$ |
+| NS-GAN, $-\log D^{\ast}$ | $10 \cdot (1 - D^{\ast})$ | 10.0 |
 | 1-립시츠 최적 critic, $f(x) = -x$ | 1 | 1 |
 
 **짚을 셋.**
@@ -480,7 +480,7 @@ $$d_\mathcal{F}(P_r, P_\theta) = \sup_{f \in \mathcal{F}} \mathbb{E}_{x \sim P_r
 
 **설정.** EBGAN 의 판별기는 $L_D(D, g_\theta) = \mathbb{E}_{P_r}[D(x)] + \mathbb{E}_z[[m - D(g_\theta(z))]^+]$ 를 내리고($D \ge 0$), 생성기는 $L_G = \mathbb{E}_z[D(g_\theta(z))] - \mathbb{E}_{P_r}[D(x)]$ 를 내린다. 원 EBGAN 은 생성기 손실에 첫 항만 썼는데, 둘째 항이 $\theta$ 와 무관해 같다고 적는다.
 
-**정리 4.** 최적 판별기 $D^{st}$ 가 있고 $L_G(D^{st}, g_\theta) = \frac{m}{2}\,\delta(P_r, P_\theta)$.
+**정리 4.** 최적 판별기 $D^{\ast}$ 가 있고 $L_G(D^{\ast}, g_\theta) = \frac{m}{2}\,\delta(P_r, P_\theta)$.
 
 **증명의 길.** $D$ 를 $\min(D, m)$ 으로 잘라도 $L_D$ 가 커지지 않으니 $[0, m]$ 안에서 찾으면 된다. 그 안에서 $L_D = m + \mathbb{E}_{P_r}[D] - \mathbb{E}_{P_\theta}[D]$ 이고, $D = \frac{m}{2}f + \frac{m}{2}$ 로 바꾸면 $-1 \le f \le 1$ 위의 문제가 된다. 그리고 식 (7)
 
@@ -509,7 +509,7 @@ $$\inf_{-1 \le f(x) \le 1} \mathbb{E}_{P_r}[f(x)] - \mathbb{E}_{P_\theta}[f(x)] 
 
 원문 각주 3 이 「우리가 어떻게 $W$ 를 최적화해야 한다는 생각에 닿았는지」 를 여기 적었다며 「수학이 두렵지 않은 독자」 에게 권한다. 요지:
 
-- 콤팩트 $\mathcal{X}$ 위의 연속 유계 함수 공간 $C_b(\mathcal{X})$ 에 상한 노름을 주면 노름 공간이고, 그 쌍대 $C_b(\mathcal{X})^{st}$ 에 쌍대 노름을 준다.
+- 콤팩트 $\mathcal{X}$ 위의 연속 유계 함수 공간 $C_b(\mathcal{X})$ 에 상한 노름을 주면 노름 공간이고, 그 쌍대 $C_b(\mathcal{X})^{\ast}$ 에 쌍대 노름을 준다.
 - $\Phi(P)(f) = \mathbb{E}_{x \sim P}[f(x)]$ 로 확률 분포를 쌍대 공간 안에 넣으면(리스 표현 정리), **TV 거리가 쌍대 공간의 노름 거리**가 된다(21절의 두 배 단서와 함께).
 - 노름 위상은 아주 세서 $\theta \mapsto P_\theta$ 가 연속인 경우가 많지 않을 것이다. 정리 2 로 TV 와 JS 는 같은 위상이니 JS 도 아주 센 거리다.
 - 쌍대 공간에는 센 위상(노름)과 **약* 위상**이 있고, $\text{Prob}(\mathcal{X})$ 에서 센 위상은 TV 가, 약* 위상은 $W$ 등이 준다.
@@ -584,7 +584,7 @@ $$\inf_{-1 \le f(x) \le 1} \mathbb{E}_{P_r}[f(x)] - \mathbb{E}_{P_\theta}[f(x)] 
 | 그림 2 | critic 이 가짜 쪽에서 높다 | 식 (3) 의 $f$ 는 진짜 쪽에서 높아야 한다. $-f$ 를 그린 것으로 읽힌다 |
 | 그림 1 캡션 대 축 | 캡션 $\rho(P_\theta, P_0)$, 축 $W(P_r, P_\theta)$ · $JSD(P_r \Vert P_\theta)$ | 같은 것을 다른 기호로 |
 | 부록 D 정리 4 · 식 (7) | $L_G = \frac{m}{2}\delta$, $\inf = -\delta$ | $\delta = \sup_A$ 정의로는 $L_G = m\delta$, $\inf = -2\delta$ (21절, 내 확인) |
-| 부록 D 정리 4 증명 | $m + \frac{m}{2}\mathbb{E}_{P_r}[D^{st}(x)] - \mathbb{E}_{P_\theta}[f^{st}(x)]$ | 두 항 모두 $f^{st}$ 이고 괄호로 묶어야 한다 |
+| 부록 D 정리 4 증명 | $m + \frac{m}{2}\mathbb{E}_{P_r}[D^{\ast}(x)] - \mathbb{E}_{P_\theta}[f^{\ast}(x)]$ | 두 항 모두 $f^{\ast}$ 이고 괄호로 묶어야 한다 |
 | 부록 D 끝 | 「$\mathbb{E}\mathbb{E}_{x \sim P_r}$」, 「$\delta(P_r, P_g)$」 | E 가 두 번, $P_g$ 와 $P_\theta$ 가 섞임 |
 | 따름정리 1 증명 | $L(\theta, Z) \le \lVert \nabla_{\theta, x} g_\theta(z) \rVert + \epsilon$ | $\nabla_{\theta, z}$ |
 | 따름정리 1 증명 | $L^H \prod_{i=H}^{K} \lVert W_i \rVert$ | $\prod_{i=1}^{H}$ |
